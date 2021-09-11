@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pay.mapper.FamilyPayMapper">
+    
+    <resultMap type="FamilyPay" id="FamilyPayResult">
+        <result property="id"    column="id"    />
+        <result property="payMenber"    column="pay_menber"    />
+        <result property="payDate"    column="pay_date"    />
+        <result property="payCost"    column="pay_cost"    />
+        <result property="payTypeCode"    column="pay_type_code"    />
+        <result property="payDetail"    column="pay_detail"    />
+        <result property="operatorCode"    column="operator_code"    />
+        <result property="bookkeeperCode"    column="bookkeeper_code"    />
+        <result property="createDate"    column="create_date"    />
+    </resultMap>
+
+    <sql id="selectFamilyPayVo">
+        select id, pay_menber, pay_date, pay_cost, pay_type_code, pay_detail, operator_code, bookkeeper_code, create_date from family_pay
+    </sql>
+
+    <select id="selectFamilyPayList" parameterType="FamilyPay" resultMap="FamilyPayResult">
+        <include refid="selectFamilyPayVo"/>
+        <where>  
+            <if test="payMenber != null  and payMenber != ''"> and pay_menber = #{payMenber}</if>
+            <if test="payDate != null "> and pay_date = #{payDate}</if>
+            <if test="payTypeCode != null  and payTypeCode != ''"> and pay_type_code = #{payTypeCode}</if>
+            <if test="operatorCode != null  and operatorCode != ''"> and operator_code = #{operatorCode}</if>
+            <if test="bookkeeperCode != null  and bookkeeperCode != ''"> and bookkeeper_code = #{bookkeeperCode}</if>
+            <if test="params.beginCreateDate != null and params.beginCreateDate != '' and params.endCreateDate != null and params.endCreateDate != ''"> and create_date between #{params.beginCreateDate} and #{params.endCreateDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectFamilyPayById" parameterType="Long" resultMap="FamilyPayResult">
+        <include refid="selectFamilyPayVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFamilyPay" parameterType="FamilyPay" useGeneratedKeys="true" keyProperty="id">
+        insert into family_pay
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="payMenber != null">pay_menber,</if>
+            <if test="payDate != null">pay_date,</if>
+            <if test="payCost != null">pay_cost,</if>
+            <if test="payTypeCode != null and payTypeCode != ''">pay_type_code,</if>
+            <if test="payDetail != null">pay_detail,</if>
+            <if test="operatorCode != null and operatorCode != ''">operator_code,</if>
+            <if test="bookkeeperCode != null and bookkeeperCode != ''">bookkeeper_code,</if>
+            <if test="createDate != null">create_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="payMenber != null">#{payMenber},</if>
+            <if test="payDate != null">#{payDate},</if>
+            <if test="payCost != null">#{payCost},</if>
+            <if test="payTypeCode != null and payTypeCode != ''">#{payTypeCode},</if>
+            <if test="payDetail != null">#{payDetail},</if>
+            <if test="operatorCode != null and operatorCode != ''">#{operatorCode},</if>
+            <if test="bookkeeperCode != null and bookkeeperCode != ''">#{bookkeeperCode},</if>
+            <if test="createDate != null">#{createDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFamilyPay" parameterType="FamilyPay">
+        update family_pay
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="payMenber != null">pay_menber = #{payMenber},</if>
+            <if test="payDate != null">pay_date = #{payDate},</if>
+            <if test="payCost != null">pay_cost = #{payCost},</if>
+            <if test="payTypeCode != null and payTypeCode != ''">pay_type_code = #{payTypeCode},</if>
+            <if test="payDetail != null">pay_detail = #{payDetail},</if>
+            <if test="operatorCode != null and operatorCode != ''">operator_code = #{operatorCode},</if>
+            <if test="bookkeeperCode != null and bookkeeperCode != ''">bookkeeper_code = #{bookkeeperCode},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFamilyPayById" parameterType="Long">
+        delete from family_pay where id = #{id}
+    </delete>
+
+    <delete id="deleteFamilyPayByIds" parameterType="String">
+        delete from family_pay where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

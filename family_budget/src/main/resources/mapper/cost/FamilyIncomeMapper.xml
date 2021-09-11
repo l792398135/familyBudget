@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pay.mapper.FamilyIncomeMapper">
+    
+    <resultMap type="FamilyIncome" id="FamilyIncomeResult">
+        <result property="id"    column="id"    />
+        <result property="incomeMenber"    column="income_menber"    />
+        <result property="incomeDate"    column="income_date"    />
+        <result property="incomeCost"    column="income_cost"    />
+        <result property="incomeTypeCode"    column="income_type_code"    />
+        <result property="incomeDetail"    column="income_detail"    />
+        <result property="operatorCode"    column="operator_code"    />
+        <result property="bookkeeperCode"    column="bookkeeper_code"    />
+        <result property="createDate"    column="create_date"    />
+    </resultMap>
+
+    <sql id="selectFamilyIncomeVo">
+        select id, income_menber, income_date, income_cost, income_type_code, income_detail, operator_code, bookkeeper_code, create_date from family_income
+    </sql>
+
+    <select id="selectFamilyIncomeList" parameterType="FamilyIncome" resultMap="FamilyIncomeResult">
+        <include refid="selectFamilyIncomeVo"/>
+        <where>  
+            <if test="incomeMenber != null  and incomeMenber != ''"> and income_menber = #{incomeMenber}</if>
+            <if test="incomeDate != null  and incomeDate != ''"> and income_date = #{incomeDate}</if>
+            <if test="incomeTypeCode != null  and incomeTypeCode != ''"> and income_type_code = #{incomeTypeCode}</if>
+            <if test="operatorCode != null  and operatorCode != ''"> and operator_code = #{operatorCode}</if>
+            <if test="bookkeeperCode != null  and bookkeeperCode != ''"> and bookkeeper_code = #{bookkeeperCode}</if>
+            <if test="params.beginCreateDate != null and params.beginCreateDate != '' and params.endCreateDate != null and params.endCreateDate != ''"> and create_date between #{params.beginCreateDate} and #{params.endCreateDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectFamilyIncomeById" parameterType="Long" resultMap="FamilyIncomeResult">
+        <include refid="selectFamilyIncomeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFamilyIncome" parameterType="FamilyIncome" useGeneratedKeys="true" keyProperty="id">
+        insert into family_income
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="incomeMenber != null">income_menber,</if>
+            <if test="incomeDate != null">income_date,</if>
+            <if test="incomeCost != null">income_cost,</if>
+            <if test="incomeTypeCode != null">income_type_code,</if>
+            <if test="incomeDetail != null">income_detail,</if>
+            <if test="operatorCode != null">operator_code,</if>
+            <if test="bookkeeperCode != null">bookkeeper_code,</if>
+            <if test="createDate != null">create_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="incomeMenber != null">#{incomeMenber},</if>
+            <if test="incomeDate != null">#{incomeDate},</if>
+            <if test="incomeCost != null">#{incomeCost},</if>
+            <if test="incomeTypeCode != null">#{incomeTypeCode},</if>
+            <if test="incomeDetail != null">#{incomeDetail},</if>
+            <if test="operatorCode != null">#{operatorCode},</if>
+            <if test="bookkeeperCode != null">#{bookkeeperCode},</if>
+            <if test="createDate != null">#{createDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFamilyIncome" parameterType="FamilyIncome">
+        update family_income
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="incomeMenber != null">income_menber = #{incomeMenber},</if>
+            <if test="incomeDate != null">income_date = #{incomeDate},</if>
+            <if test="incomeCost != null">income_cost = #{incomeCost},</if>
+            <if test="incomeTypeCode != null">income_type_code = #{incomeTypeCode},</if>
+            <if test="incomeDetail != null">income_detail = #{incomeDetail},</if>
+            <if test="operatorCode != null">operator_code = #{operatorCode},</if>
+            <if test="bookkeeperCode != null">bookkeeper_code = #{bookkeeperCode},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFamilyIncomeById" parameterType="Long">
+        delete from family_income where id = #{id}
+    </delete>
+
+    <delete id="deleteFamilyIncomeByIds" parameterType="String">
+        delete from family_income where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

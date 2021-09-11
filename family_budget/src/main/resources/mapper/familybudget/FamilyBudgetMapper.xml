@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.budget.mapper.FamilyBudgetMapper">
+    
+    <resultMap type="FamilyBudget" id="FamilyBudgetResult">
+        <result property="familyMemberCode"    column="family_member_code"    />
+        <result property="feeTypeCode"    column="fee_type_code"    />
+        <result property="budgetCost"    column="budget_cost"    />
+        <result property="dateCode"    column="date_code"    />
+    </resultMap>
+
+    <sql id="selectFamilyBudgetVo">
+        select family_member_code, fee_type_code, budget_cost, date_code from family_budget
+    </sql>
+
+    <select id="selectFamilyBudgetList" parameterType="FamilyBudget" resultMap="FamilyBudgetResult">
+        <include refid="selectFamilyBudgetVo"/>
+        <where>  
+            <if test="familyMemberCode != null  and familyMemberCode != ''"> and family_member_code = #{familyMemberCode}</if>
+            <if test="feeTypeCode != null  and feeTypeCode != ''"> and fee_type_code = #{feeTypeCode}</if>
+            <if test="dateCode != null  and dateCode != ''"> and date_code = #{dateCode}</if>
+        </where>
+    </select>
+    
+    <select id="selectFamilyBudgetByFamilyMemberCode" parameterType="String" resultMap="FamilyBudgetResult">
+        <include refid="selectFamilyBudgetVo"/>
+        where family_member_code = #{familyMemberCode}
+    </select>
+        
+    <insert id="insertFamilyBudget" parameterType="FamilyBudget">
+        insert into family_budget
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="familyMemberCode != null">family_member_code,</if>
+            <if test="feeTypeCode != null">fee_type_code,</if>
+            <if test="budgetCost != null">budget_cost,</if>
+            <if test="dateCode != null">date_code,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="familyMemberCode != null">#{familyMemberCode},</if>
+            <if test="feeTypeCode != null">#{feeTypeCode},</if>
+            <if test="budgetCost != null">#{budgetCost},</if>
+            <if test="dateCode != null">#{dateCode},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFamilyBudget" parameterType="FamilyBudget">
+        update family_budget
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="feeTypeCode != null">fee_type_code = #{feeTypeCode},</if>
+            <if test="budgetCost != null">budget_cost = #{budgetCost},</if>
+            <if test="dateCode != null">date_code = #{dateCode},</if>
+        </trim>
+        where family_member_code = #{familyMemberCode}
+    </update>
+
+    <delete id="deleteFamilyBudgetByFamilyMemberCode" parameterType="String">
+        delete from family_budget where family_member_code = #{familyMemberCode}
+    </delete>
+
+    <delete id="deleteFamilyBudgetByFamilyMemberCodes" parameterType="String">
+        delete from family_budget where family_member_code in 
+        <foreach item="familyMemberCode" collection="array" open="(" separator="," close=")">
+            #{familyMemberCode}
+        </foreach>
+    </delete>
+
+</mapper>
