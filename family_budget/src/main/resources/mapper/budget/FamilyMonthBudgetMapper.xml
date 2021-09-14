@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pay.mapper.FamilyMonthBudgetMapper">
+    
+    <resultMap type="FamilyMonthBudget" id="FamilyMonthBudgetResult">
+        <result property="id"    column="id"    />
+        <result property="budgetType"    column="budget_type"    />
+        <result property="budgetDate"    column="budget_date"    />
+        <result property="budgetCost"    column="budget_cost"    />
+        <result property="budgetRemarks"    column="budget_remarks"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="createUser"    column="create_user"    />
+    </resultMap>
+
+    <sql id="selectFamilyMonthBudgetVo">
+        select id, budget_type, budget_date, budget_cost, budget_remarks, create_date, create_user from family_month_budget
+    </sql>
+
+    <select id="selectFamilyMonthBudgetList" parameterType="FamilyMonthBudget" resultMap="FamilyMonthBudgetResult">
+        <include refid="selectFamilyMonthBudgetVo"/>
+        <where>  
+            <if test="budgetType != null  and budgetType != ''"> and budget_type = #{budgetType}</if>
+            <if test="budgetDate != null "> and budget_date = #{budgetDate}</if>
+            <if test="params.beginCreateDate != null and params.beginCreateDate != '' and params.endCreateDate != null and params.endCreateDate != ''"> and create_date between #{params.beginCreateDate} and #{params.endCreateDate}</if>
+            <if test="createUser != null  and createUser != ''"> and create_user = #{createUser}</if>
+        </where>
+    </select>
+    
+    <select id="selectFamilyMonthBudgetById" parameterType="Long" resultMap="FamilyMonthBudgetResult">
+        <include refid="selectFamilyMonthBudgetVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFamilyMonthBudget" parameterType="FamilyMonthBudget">
+        insert into family_month_budget
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="budgetType != null and budgetType != ''">budget_type,</if>
+            <if test="budgetDate != null">budget_date,</if>
+            <if test="budgetCost != null">budget_cost,</if>
+            <if test="budgetRemarks != null">budget_remarks,</if>
+            <if test="createDate != null">create_date,</if>
+            <if test="createUser != null">create_user,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="budgetType != null and budgetType != ''">#{budgetType},</if>
+            <if test="budgetDate != null">#{budgetDate},</if>
+            <if test="budgetCost != null">#{budgetCost},</if>
+            <if test="budgetRemarks != null">#{budgetRemarks},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="createUser != null">#{createUser},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFamilyMonthBudget" parameterType="FamilyMonthBudget">
+        update family_month_budget
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="budgetType != null and budgetType != ''">budget_type = #{budgetType},</if>
+            <if test="budgetDate != null">budget_date = #{budgetDate},</if>
+            <if test="budgetCost != null">budget_cost = #{budgetCost},</if>
+            <if test="budgetRemarks != null">budget_remarks = #{budgetRemarks},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFamilyMonthBudgetById" parameterType="Long">
+        delete from family_month_budget where id = #{id}
+    </delete>
+
+    <delete id="deleteFamilyMonthBudgetByIds" parameterType="String">
+        delete from family_month_budget where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

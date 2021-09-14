@@ -1,6 +1,7 @@
 package com.ruoyi.pay.service.impl;
 
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.pay.mapper.FamilyMonthBudgetMapper;
 import com.ruoyi.pay.mapper.FamilyPayMapper;
 import com.ruoyi.pay.mapper.FamilyReportMapper;
 import com.ruoyi.pay.service.IFamilyReportService;
@@ -23,9 +24,13 @@ public class FamilyReportServiceImpl implements IFamilyReportService {
     public Map<String, Object> getMonthData() {
         BigDecimal localMonthPay = familyReportMapper.getLocalMonthPay();
         BigDecimal preMonthIncome = familyReportMapper.getPreMonthIncome();
+        BigDecimal localMonthBudget = familyReportMapper.getLoaclMonthBudget();
+        BigDecimal localMonthIncome = familyReportMapper.getLocalMonthIncome();
         Map<String, Object> result = new HashMap<>();
         result.put("localMonthPay",localMonthPay);
         result.put("preMonthIncome",preMonthIncome);
+        result.put("localMonthBudget",localMonthBudget);
+        result.put("localMonthIncome",localMonthIncome);
         return result;
     }
 

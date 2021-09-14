@@ -16,6 +16,12 @@ public interface FamilyReportMapper {
     @Select("select sum(income_cost) from family_income fi where date_format(income_date ,'%Y-%m') = date_format(DATE_SUB(curdate(), INTERVAL 1 MONTH),'%Y-%m') ")
     BigDecimal getPreMonthIncome();
 
+    @Select("select sum(income_cost) from family_income fi where date_format(income_date ,'%Y-%m') = date_format(curdate(),'%Y-%m') ")
+    BigDecimal getLocalMonthIncome();
+
+    @Select("select sum(budget_cost) from family_month_budget where date_format(budget_date ,'%Y-%m') = date_format(curdate(),'%Y-%m')")
+    BigDecimal getLoaclMonthBudget();
+
     List<TopNVO> topN1();
 
     List<TopNVO> topN2();
@@ -27,4 +33,6 @@ public interface FamilyReportMapper {
     List<TopNVO> topN5();
 
     List<TopNVO> topN6();
+
+
 }

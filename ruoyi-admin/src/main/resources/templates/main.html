@@ -22,22 +22,22 @@
                 </div>
             </div>
         </div>
-<!--        <div class="col-sm-3">-->
-<!--            <div class="ibox">-->
-<!--                <div class="ibox-content">-->
-<!--                    <h5 class="m-b-md">本月预算</h5>-->
-<!--                    <h1 class="no-margins" id="localMonthBudeget">0.00</h1>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="col-sm-3">-->
-<!--            <div class="ibox">-->
-<!--                <div class="ibox-content">-->
-<!--                    <h5 class="m-b-md">本月收入</h5>-->
-<!--                    <h1 class="no-margins" id="monthBudget">0.00</h1>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+        <div class="col-sm-3">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5 class="m-b-md">本月预算</h5>
+                    <h1 class="no-margins" id="localMonthBudeget">0.00</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5 class="m-b-md">本月收入</h5>
+                    <h1 class="no-margins" id="localMonthIncome">0.00</h1>
+                </div>
+            </div>
+        </div>
         <div class="col-sm-3">
             <div class="ibox">
                 <div class="ibox-content">
@@ -111,9 +111,12 @@
     var prefix = ctx + "report";
 
     function getMonthData(data) {
-        $("#localMonthPay").text(data.data.localMonthPay)
-        $("#preMonthIncome").text(data.data.preMonthIncome)
+        if (data.data.localMonthPay!=null){$("#localMonthPay").text(data.data.localMonthPay)}
+        if (data.data.preMonthIncome!=null){$("#preMonthIncome").text(data.data.preMonthIncome)}
+        if (data.data.localMonthBudget!=null){$("#localMonthBudeget").text(data.data.localMonthBudget)}
+        if (data.data.localMonthIncome!=null){$("#localMonthIncome").text(data.data.localMonthIncome)}
     }
+
 
     function localMonthPay(data){
         console.log(data)
