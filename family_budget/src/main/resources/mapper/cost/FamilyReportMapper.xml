@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pay.mapper.FamilyReportMapper">
+
+    <select id="topN1" resultType="com.ruoyi.pay.vo.TopNVO">
+--     # 本月收入排行
+    select dict.dict_label name ,tmp.men code ,tmp.sum num from (
+    select income_menber men,sum(income_cost ) sum from family_income fi
+    where date_format(income_date ,'%Y-%m') = date_format(curdate(),'%Y-%m')
+    group by income_menber order by sum(income_cost) desc
+    ) tmp left join sys_dict_data dict on tmp.men =dict.dict_value  and dict.dict_type = "family_menber"
+    </select>
+
+    <select id="topN2" resultType="com.ruoyi.pay.vo.TopNVO">
+-- # 上月收入排行
+select dict.dict_label name ,tmp.men code ,tmp.sum num from (
+select income_menber men,sum(income_cost ) sum from family_income fi
+where date_format(income_date ,'%Y-%m') = date_format(DATE_SUB(curdate(), INTERVAL 1 MONTH),'%Y-%m')
+group by income_menber
+) tmp left join sys_dict_data dict on tmp.men =dict.dict_value  and dict.dict_type = "family_menber"
+order by sum desc
+    </select>
+
+    <select id="topN3" resultType="com.ruoyi.pay.vo.TopNVO">
+-- # 当月支出排行
+select dict.dict_label name ,tmp.men code ,tmp.sum num from (
+select pay_menber men,sum(pay_cost ) sum from family_pay fp
+where date_format(pay_date ,'%Y-%m') = date_format(curdate() ,'%Y-%m')
+group by pay_menber
+) tmp left join sys_dict_data dict on tmp.men =dict.dict_value  and dict.dict_type = "family_menber"
+order by sum desc
+    </select>
+
+    <select id="topN4" resultType="com.ruoyi.pay.vo.TopNVO">
+-- # 当月科目排行
+select dict.dict_label name ,tmp.men code ,tmp.sum num from (
+	select pay_type_code men,sum(pay_cost ) sum from family_pay fp
+	where date_format(pay_date ,'%Y-%m') = date_format(curdate() ,'%Y-%m')
+	group by pay_type_code
+	) tmp left join sys_dict_data dict on tmp.men =dict.dict_value  and dict.dict_type = "budget_type"
+order by sum desc
+    </select>
+
+    <select id="topN5" resultType="com.ruoyi.pay.vo.TopNVO">
+-- # 当月经办排行
+select dict.dict_label name ,tmp1.op code ,tmp1.count num from (
+	select operator_code op,count(1) count from (
+		select operator_code from family_income fi
+		where date_format(income_date ,'%Y-%m') = date_format(curdate() ,'%Y-%m')
+		union all
+		select operator_code from family_pay fp
+		where date_format(pay_date ,'%Y-%m') = date_format(curdate() ,'%Y-%m')
+	) tmp group by tmp.operator_code
+) tmp1 left join sys_dict_data dict on tmp1.op =dict.dict_value  and dict.dict_type = "family_menber"
+order by num desc
+    </select>
+
+    <select id="topN6" resultType="com.ruoyi.pay.vo.TopNVO">
+-- #当月记录排行
+select dict.dict_label name ,tmp1.op code ,tmp1.count num from (
+	select bookkeeper_code op,count(1) count from (
+		select bookkeeper_code from family_income fi
+		where date_format(create_date ,'%Y-%m') = date_format(curdate() ,'%Y-%m')
+		union all
+		select bookkeeper_code from family_pay fp
+		where date_format(create_date ,'%Y-%m') = date_format(curdate() ,'%Y-%m')
+	) tmp group by tmp.bookkeeper_code order by count(1) desc
+) tmp1 left join sys_dict_data dict on tmp1.op =dict.dict_value  and dict.dict_type = "family_menber"
+order by num desc
+    </select>
+
+
+</mapper>

@@ -19,7 +19,7 @@
                 <label class="col-sm-3 control-label is-required">支出日期：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
-                        <input name="payDate" class="form-control" placeholder="yyyy-MM-dd" type="text" required>
+                        <input name="payDate" class="form-control"  placeholder="yyyy-MM-dd" type="text" required>
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
@@ -79,8 +79,10 @@
         $("input[name='payDate']").datetimepicker({
             format: "yyyy-mm-dd",
             minView: "month",
+            todayBtn: true,
             autoclose: true
         });
+        $("input[name='payDate']").val(new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate())
 
         $("input[name='createDate']").datetimepicker({
             format: "yyyy-mm-dd",

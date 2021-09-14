@@ -988,6 +988,24 @@ var table = {
                 };
                 $.ajax(config)
             },
+            submit1: function(url, type, dataType, data, callback) {
+                var config = {
+                    url: url,
+                    type: type,
+                    dataType: dataType,
+                    data: data,
+                    beforeSend: function () {
+                        $.modal.loading("正在处理中，请稍后...");
+                    },
+                    success: function(result) {
+                        if (typeof callback == "function") {
+                            callback(result);
+                        }
+                        $.operate.successQuiet(result);
+                    }
+                };
+                $.ajax(config)
+            },
             // post请求传输
             post: function(url, data, callback) {
                 $.operate.submit(url, "post", "json", data, callback);
@@ -995,6 +1013,9 @@ var table = {
             // get请求传输
             get: function(url, callback) {
                 $.operate.submit(url, "get", "json", "", callback);
+            },
+            get1: function(url, callback) {
+                $.operate.submit1(url, "get", "json", "", callback);
             },
             // 详细信息
             detail: function(id, width, height) {
@@ -1257,6 +1278,10 @@ var table = {
                 }  else {
                     $.modal.alertError(result.msg);
                 }
+                $.modal.closeLoading();
+                $.modal.enable();
+            },
+            successQuiet:function(result) {
                 $.modal.closeLoading();
                 $.modal.enable();
             },

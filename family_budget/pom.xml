@@ -11,7 +11,11 @@
 
     <artifactId>family_budget</artifactId>
     <dependencies>
-
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-models</artifactId>
+            <version>1.6.2</version>
+        </dependency>
         <!-- 通用工具-->
         <dependency>
             <groupId>com.ruoyi</groupId>
