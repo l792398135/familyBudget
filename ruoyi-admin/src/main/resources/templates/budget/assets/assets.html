@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('附件列表')" />
+    <th:block th:include="include :: header('固定资产列表')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -11,27 +11,26 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <label>业务类型：</label>
-                                <select name="businessType">
-                                    <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
-                                </select>
+                                <label>名称：</label>
+                                <input type="text" name="name"/>
                             </li>
                             <li>
-                                <label>业务Id：</label>
-                                <input type="text" name="businessId"/>
+                                <label>使用人员：</label>
+                                <input type="text" name="useMenber"/>
                             </li>
                             <li>
-                                <label>文件路径：</label>
-                                <input type="text" name="filePath"/>
+                                <label>使用情况：</label>
+                                <input type="text" name="usage"/>
+                            </li>
+                            <li class="select-time">
+                                <label>购入时间：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginBuyDate]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endBuyDate]"/>
                             </li>
                             <li>
-                                <label>真实的文件名：</label>
-                                <input type="text" name="fileNameReal"/>
-                            </li>
-                            <li>
-                                <label>显示用的文件名：</label>
-                                <input type="text" name="fileNameShow"/>
+                                <label>责任人：</label>
+                                <input type="text" name="responsibler"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -43,18 +42,18 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-<!--                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:attachment:add">-->
-<!--                    <i class="fa fa-plus"></i> 添加-->
-<!--                </a>-->
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:attachment:edit">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="budget:assets:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="budget:assets:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:attachment:remove">
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="budget:assets:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-<!--                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:attachment:export">-->
-<!--                    <i class="fa fa-download"></i> 导出-->
-<!--                </a>-->
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="budget:assets:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -63,9 +62,9 @@
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:attachment:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:attachment:remove')}]];
-        var prefix = ctx + "system/attachment";
+        var editFlag = [[${@permission.hasPermi('budget:assets:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('budget:assets:remove')}]];
+        var prefix = ctx + "budget/assets";
 
         $(function() {
             var options = {
@@ -74,38 +73,58 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
-                modalName: "附件",
+                modalName: "固定资产",
                 columns: [{
                     checkbox: true
                 },
                 {
                     field: 'id',
-                    title: 'id',
+                    title: '',
                     visible: false
                 },
                 {
-                    field: 'businessType',
-                    title: '业务类型'
+                    field: 'name',
+                    title: '名称'
                 },
                 {
-                    field: 'businessId',
-                    title: '业务Id'
+                    field: 'model',
+                    title: '规格型号'
                 },
                 {
-                    field: 'filePath',
-                    title: '文件路径'
+                    field: 'useMenber',
+                    title: '使用人员'
                 },
                 {
-                    field: 'fileNameReal',
-                    title: '真实的文件名'
+                    field: 'usage',
+                    title: '使用情况'
                 },
                 {
-                    field: 'fileNameShow',
-                    title: '显示用的文件名'
+                    field: 'num',
+                    title: '数量'
                 },
                 {
-                    field: 'fileSize',
-                    title: '文件大小'
+                    field: 'buyDate',
+                    title: '购入时间'
+                },
+                {
+                    field: 'buyCost',
+                    title: '购入费用'
+                },
+                {
+                    field: 'position',
+                    title: '存放地点'
+                },
+                {
+                    field: 'responsibler',
+                    title: '责任人'
+                },
+                {
+                    field: 'remark',
+                    title: '备注'
+                },
+                {
+                    field: 'imgUrl',
+                    title: '图片'
                 },
                 {
                     title: '操作',

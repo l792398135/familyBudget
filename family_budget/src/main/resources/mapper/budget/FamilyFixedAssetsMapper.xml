@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pay.mapper.FamilyFixedAssetsMapper">
+    
+    <resultMap type="FamilyFixedAssets" id="FamilyFixedAssetsResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="model"    column="model"    />
+        <result property="useMenber"    column="use_menber"    />
+        <result property="usage"    column="usage"    />
+        <result property="num"    column="num"    />
+        <result property="buyDate"    column="buy_date"    />
+        <result property="buyCost"    column="buy_cost"    />
+        <result property="position"    column="position"    />
+        <result property="responsibler"    column="responsibler"    />
+        <result property="remark"    column="remark"    />
+        <result property="imgUrl"    column="imgUrl"    />
+    </resultMap>
+
+    <sql id="selectFamilyFixedAssetsVo">
+        select id, name, model, use_menber, usage, num, buy_date, buy_cost, position, responsibler, remark, imgUrl from family_fixed_assets
+    </sql>
+
+    <select id="selectFamilyFixedAssetsList" parameterType="FamilyFixedAssets" resultMap="FamilyFixedAssetsResult">
+        <include refid="selectFamilyFixedAssetsVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="useMenber != null  and useMenber != ''"> and use_menber = #{useMenber}</if>
+            <if test="usage != null  and usage != ''"> and usage = #{usage}</if>
+            <if test="params.beginBuyDate != null and params.beginBuyDate != '' and params.endBuyDate != null and params.endBuyDate != ''"> and buy_date between #{params.beginBuyDate} and #{params.endBuyDate}</if>
+            <if test="responsibler != null  and responsibler != ''"> and responsibler = #{responsibler}</if>
+        </where>
+    </select>
+    
+    <select id="selectFamilyFixedAssetsById" parameterType="Long" resultMap="FamilyFixedAssetsResult">
+        <include refid="selectFamilyFixedAssetsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFamilyFixedAssets" parameterType="FamilyFixedAssets" useGeneratedKeys="true" keyProperty="id">
+        insert into family_fixed_assets
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="model != null">model,</if>
+            <if test="useMenber != null">use_menber,</if>
+            <if test="usage != null and usage != ''">usage,</if>
+            <if test="num != null">num,</if>
+            <if test="buyDate != null">buy_date,</if>
+            <if test="buyCost != null">buy_cost,</if>
+            <if test="position != null">position,</if>
+            <if test="responsibler != null">responsibler,</if>
+            <if test="remark != null">remark,</if>
+            <if test="imgUrl != null">imgUrl,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="model != null">#{model},</if>
+            <if test="useMenber != null">#{useMenber},</if>
+            <if test="usage != null and usage != ''">#{usage},</if>
+            <if test="num != null">#{num},</if>
+            <if test="buyDate != null">#{buyDate},</if>
+            <if test="buyCost != null">#{buyCost},</if>
+            <if test="position != null">#{position},</if>
+            <if test="responsibler != null">#{responsibler},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="imgUrl != null">#{imgUrl},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFamilyFixedAssets" parameterType="FamilyFixedAssets">
+        update family_fixed_assets
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="model != null">model = #{model},</if>
+            <if test="useMenber != null">use_menber = #{useMenber},</if>
+            <if test="usage != null and usage != ''">usage = #{usage},</if>
+            <if test="num != null">num = #{num},</if>
+            <if test="buyDate != null">buy_date = #{buyDate},</if>
+            <if test="buyCost != null">buy_cost = #{buyCost},</if>
+            <if test="position != null">position = #{position},</if>
+            <if test="responsibler != null">responsibler = #{responsibler},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="imgUrl != null">imgUrl = #{imgUrl},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFamilyFixedAssetsById" parameterType="Long">
+        delete from family_fixed_assets where id = #{id}
+    </delete>
+
+    <delete id="deleteFamilyFixedAssetsByIds" parameterType="String">
+        delete from family_fixed_assets where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

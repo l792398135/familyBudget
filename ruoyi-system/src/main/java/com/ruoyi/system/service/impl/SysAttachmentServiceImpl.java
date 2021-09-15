@@ -1,6 +1,9 @@
 package com.ruoyi.system.service.impl;
 
+import java.io.File;
 import java.util.List;
+
+import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,6 +82,18 @@ public class SysAttachmentServiceImpl implements ISysAttachmentService
     @Override
     public int deleteSysAttachmentByIds(String ids)
     {
+        String[] strings = Convert.toStrArray(ids);
+        for (String string : strings) {
+            int i = Integer.parseInt(string);
+            SysAttachment sysAttachment = sysAttachmentMapper.selectSysAttachmentById(i);
+            String fileNameReal = sysAttachment.getFileNameReal();
+            String filePath = RuoYiConfig.getUploadPath();
+            String substring = fileNameReal.substring(15);
+            File file = new File(filePath + substring);
+            if (file.isFile()){
+                file.delete();
+            }
+        }
         return sysAttachmentMapper.deleteSysAttachmentByIds(Convert.toStrArray(ids));
     }
 
