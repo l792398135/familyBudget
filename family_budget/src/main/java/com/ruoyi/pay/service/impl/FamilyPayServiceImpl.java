@@ -2,6 +2,8 @@ package com.ruoyi.pay.service.impl;
 
 import java.util.Date;
 import java.util.List;
+
+import com.ruoyi.common.utils.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.pay.mapper.FamilyPayMapper;
@@ -55,6 +57,7 @@ public class FamilyPayServiceImpl implements IFamilyPayService
     public int insertFamilyPay(FamilyPay familyPay)
     {
         familyPay.setCreateDate(new Date());
+        familyPay.setBookkeeperCode(ShiroUtils.getLoginName());
         return familyPayMapper.insertFamilyPay(familyPay);
     }
 

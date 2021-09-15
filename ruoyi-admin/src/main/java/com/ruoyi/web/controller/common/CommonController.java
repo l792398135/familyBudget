@@ -4,6 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import com.ruoyi.common.config.RuoYiConfig;
@@ -27,6 +31,7 @@ import com.ruoyi.common.utils.file.FileUtils;
  * 
  * @author ruoyi
  */
+@Api("通用controller")
 @Controller
 public class CommonController
 {
@@ -41,6 +46,7 @@ public class CommonController
      * @param fileName 文件名称
      * @param delete 是否删除
      */
+    @ApiOperation("下载")
     @GetMapping("common/download")
     public void fileDownload(String fileName, Boolean delete, HttpServletResponse response, HttpServletRequest request)
     {
@@ -51,7 +57,7 @@ public class CommonController
                 throw new Exception(StringUtils.format("文件名称({})非法，不允许下载。 ", fileName));
             }
             String realFileName = System.currentTimeMillis() + fileName.substring(fileName.indexOf("_") + 1);
-            String filePath = RuoYiConfig.getDownloadPath() + fileName;
+            String filePath = RuoYiConfig.getUploadPath() + fileName.substring(15);
 
             response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
             FileUtils.setAttachmentResponseHeader(response, realFileName);
@@ -70,6 +76,7 @@ public class CommonController
     /**
      * 通用上传请求（单个）
      */
+    @ApiOperation("上传")
     @PostMapping("/common/upload")
     @ResponseBody
     public AjaxResult uploadFile(MultipartFile file) throws Exception
@@ -82,8 +89,10 @@ public class CommonController
             String fileName = FileUploadUtils.upload(filePath, file);
             String url = serverConfig.getUrl() + fileName;
             AjaxResult ajax = AjaxResult.success();
-            ajax.put("fileName", fileName);
-            ajax.put("url", url);
+            ajax.put("filePath", url);
+            ajax.put("fileNameReal", fileName);
+            ajax.put("fileNameShow", file.getOriginalFilename());
+            ajax.put("fileSize", file.getSize());
             return ajax;
         }
         catch (Exception e)

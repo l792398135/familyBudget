@@ -31,6 +31,229 @@ var table = {
     $.extend({
         _tree: {},
         bttTable: {},
+        //文件的操作
+        file :{
+
+            //初始化新增附件
+            initAddFiles : function (ctrlName,fileType){
+
+                var control = $('#' + ctrlName);
+
+                // 具体参数自行查询
+                control.fileinput({
+                    theme: "explorer", //主题
+                    language: 'zh', //设置语言
+                    uploadUrl: '/common/upload',  //上传的地址
+                    enctype: 'multipart/form-data',
+                    uploadAsync: true,
+                    showUpload: false, //是否显示上传按钮
+                    showPreview: true,//是否展前预览
+                    dropZoneEnabled: false,//是否显示拖拽区域
+                    allowedFileExtensions : fileType == 'file' ? ['doc','docx','xls','xlsx','pdf','txt','ppt','zip'] : ['jpg','gif','png'],//接收的文件后缀
+                    maxFileCount: 10,
+                    msgFilesTooMany: "选择上传的文件数量 超过允许的最大数值！",
+                    previewFileIcon: '<i class="fa fa-file"></i>',
+                    layoutTemplates :{
+                        actionUpload:'',//去除上传预览缩略图中的上传图片；
+                        actionZoom:'',   //去除上传预览缩略图中的查看详情预览的缩略图标。
+                    },
+                    allowedPreviewTypes: ['image'],
+
+                    previewFileIconSettings: {
+                        'doc': '<i class="fa fa-file-word-o text-primary"></i>',
+                        'xls': '<i class="fa fa-file-excel-o text-success"></i>',
+                        'ppt': '<i class="fa fa-file-powerpoint-o text-danger"></i>',
+                        'pdf': '<i class="fa fa-file-pdf-o text-danger"></i>',
+                        'zip': '<i class="fa fa-file-archive-o text-muted"></i>',
+                        'txt': '<i class="fa fa-file-text-o text-info"></i>',
+                    },
+                    previewFileExtSettings: { // configure the logic for determining icon file extensions
+                        'doc': function(ext) {return ext.match(/(doc|docx)$/i);},
+                        'xls': function(ext) {return ext.match(/(xls|xlsx)$/i);},
+                        'ppt': function(ext) {return ext.match(/(ppt|pptx)$/i);},
+                        'zip': function(ext) {return ext.match(/(zip|rar|tar|gzip|gz|7z)$/i);},
+                        'txt': function(ext) {return ext.match(/(txt|ini|csv|java|php|js|css)$/i);}
+                    }
+                });
+            },
+
+            //初始化编辑附件
+            initEditFiles : function(ctrlName,fileType,businessType,businessId){
+
+                $.ajax({
+                    type : "post",
+                    url : "/system/attachment/load",
+                    dataType : "json",
+                    data:{
+                        "businessType" :businessType,
+                        "businessId" : businessId
+                    },
+                    success : function(data) {
+                        //layer.msg('操作成功！');
+                        $.file.loadEditFiles(ctrlName,fileType,data);
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        layer.msg('操作失败！');
+                    }
+                });
+
+            },
+
+            //获取已上传需要编辑的附件
+            loadEditFiles:  function (ctrlName,fileType,djson){
+
+                var control = $('#' + ctrlName);
+
+                //后台返回json字符串转换为json对象
+                var reData = eval(djson).alist;
+                // 预览图片json数据组
+                var preList = new Array();
+
+                for ( var i = 0; i < reData.length; i++) {
+                    var array_element = reData[i];
+                    // 此处指针对.txt判断，其余自行添加
+                    if(array_element.fileNameReal.indexOf("txt") > 0){
+                        // 非图片类型的展示
+                        preList[i]= "<div class='file-preview-other-frame'><div class='file-preview-other'><span class='file-icon-4x'><i class='fa fa-file-text-o text-info'></i></span></div></div>"
+                    }else if(array_element.fileNameReal.indexOf("doc") > 0){
+                        preList[i]= "<div class='file-preview-other-frame'><div class='file-preview-other'><span class='file-icon-4x'><i class='fa fa-file-word-o text-primary'></i></span></div></div>"
+                    }else if(array_element.fileNameReal.indexOf("xls") > 0){
+                        preList[i]= "<div class='file-preview-other-frame'><div class='file-preview-other'><span class='file-icon-4x'><i class='fa fa-file-excel-o text-success'></i></span></div></div>"
+                    }else if(array_element.fileNameReal.indexOf("ppt") > 0){
+                        preList[i]= "<div class='file-preview-other-frame'><div class='file-preview-other'><span class='file-icon-4x'><i class='fa fa-file-powerpoint-o text-danger'></i></span></div></div>"
+                    }else if(array_element.fileNameReal.indexOf("zip") > 0){
+                        preList[i]= "<div class='file-preview-other-frame'><div class='file-preview-other'><span class='file-icon-4x'><i class='fa fa-file-archive-o text-muted'></i></span></div></div>"
+                    }else if(array_element.fileNameReal.indexOf("pdf") > 0){
+                        preList[i]= "<div class='file-preview-other-frame'><div class='file-preview-other'><span class='file-icon-4x'><i class='fa fa-file-pdf-o text-danger'></i></span></div></div>"
+                    }else{
+                        // 图片类型
+                        preList[i]= "<img src=\" "+array_element.filePath+"\" class=\"file-preview-image\"  height=\"80\" width=\"80\">";
+                    }
+                }
+                var previewJson = preList;
+                // 与上面 预览图片json数据组 对应的config数据
+                var preConfigList = new Array();
+                for ( var i = 0; i < reData.length; i++) {
+
+                    var array_element = reData[i];
+                    var tjson = {
+                        caption: array_element.fileNameShow, // 展示的文件名
+                        size : array_element.fileSize,
+                        width: '120px',
+                        url: '/system/attachment/delete', // 删除url
+                        key: array_element.fileNameReal, // 删除是Ajax向后台传递的参数
+                        extra: {ids: array_element.id}
+                    };
+                    preConfigList[i] = tjson;
+                }
+                // 具体参数自行查询
+                control.fileinput({
+                    theme: "explorer",
+                    language: 'zh', //设置语言
+                    uploadUrl: '/common/upload',  //上传的地址
+                    enctype: 'multipart/form-data',
+                    uploadAsync: true,
+                    showUpload: false, //是否显示上传按钮
+                    showPreview: true,//是否展前预览
+                    dropZoneEnabled: false,//是否显示拖拽区域
+                    showRemove:false, //是否显示移除按钮
+                    allowedFileExtensions : fileType == 'file' ? ['doc','docx','xls','xlsx','pdf','txt','ppt','zip'] : ['jpg','gif','png'],//接收的文件后缀
+                    maxFileCount: 10,
+                    msgFilesTooMany: "选择上传的文件数量 超过允许的最大数值！",
+                    previewFileIcon: '<i class="fa fa-file"></i>',
+                    layoutTemplates :{
+                        actionUpload:'',//去除上传预览缩略图中的上传图片；
+                        actionZoom:'',   //去除上传预览缩略图中的查看详情预览的缩略图标。
+                    },
+                    allowedPreviewTypes: ['image'],
+                    initialPreview: previewJson,
+                    initialPreviewConfig: preConfigList,
+                    otherActionButtons:'<button type="button" class="kv-file-down btn btn-sm btn-default" data-key = {key} onclick="$.file.download(this)" title="下载附件"><i class="fa fa-cloud-download"></i></button>',
+
+                    previewFileIconSettings: {
+                        'doc': '<i class="fa fa-file-word-o text-primary"></i>',
+                        'xls': '<i class="fa fa-file-excel-o text-success"></i>',
+                        'ppt': '<i class="fa fa-file-powerpoint-o text-danger"></i>',
+                        'pdf': '<i class="fa fa-file-pdf-o text-danger"></i>',
+                        'zip': '<i class="fa fa-file-archive-o text-muted"></i>',
+                        'htm': '<i class="fa fa-file-code-o text-info"></i>',
+                        'txt': '<i class="fa fa-file-text-o text-info"></i>',
+                        'mov': '<i class="fa fa-file-video-o text-warning"></i>',
+                        'mp3': '<i class="fa fa-file-audio-o text-warning"></i>',
+                        'jpg': '<i class="fa fa-file-photo-o text-danger"></i>',
+                        'gif': '<i class="fa fa-file-photo-o text-muted"></i>',
+                        'png': '<i class="fa fa-file-photo-o text-primary"></i>'
+                    },
+                    previewFileExtSettings: { // configure the logic for determining icon file extensions
+                        'doc': function(ext) {return ext.match(/(doc|docx)$/i);},
+                        'xls': function(ext) {return ext.match(/(xls|xlsx)$/i);},
+                        'ppt': function(ext) {return ext.match(/(ppt|pptx)$/i);},
+                        'zip': function(ext) {return ext.match(/(zip|rar|tar|gzip|gz|7z)$/i);},
+                        'htm': function(ext) {return ext.match(/(htm|html)$/i);},
+                        'txt': function(ext) {return ext.match(/(txt|ini|csv|java|php|js|css)$/i);},
+                        'mov': function(ext) {return ext.match(/(avi|mpg|mkv|mov|mp4|3gp|webm|wmv)$/i);},
+                        'mp3': function(ext) {return ext.match(/(mp3|wav)$/i);}
+                    }
+                });
+
+            },
+
+            //执行上传附件
+            uploadFile : function(ctrlName,businessType,businessId){
+
+                var control = $('#' + ctrlName);
+
+                var file = control.val();
+
+                if(file != '' ){
+
+                    //执行上传
+                    control.fileinput("upload");
+
+                    //上传成功后的处理
+                    control.on("fileuploaded", function(event, outData) {
+
+                        var result = outData.response;
+                        console.log(result)
+                        var filePath = result.filePath;
+                        var fileNameReal = result.fileNameReal;
+                        var fileNameShow = result.fileNameShow;
+                        var fileSize = result.fileSize;
+
+                        $.ajax({
+
+                            cache : true,
+                            type : "POST",
+                            url : "/system/attachment/save",
+                            data : {
+                                "businessType" : businessType,
+                                "businessId" : businessId,
+                                "filePath" : filePath,
+                                "fileNameReal" : fileNameReal,
+                                "fileNameShow" : fileNameShow,
+                                "fileSize" : fileSize,
+                                "delFlag" : '0'
+                            },
+                            async : false,
+                            error : function(request) {
+                            },
+                            success : function(data) {
+                            }
+                        });
+                    })
+                }
+            },
+
+            //执行下载附件
+            download : function(obj){
+                var $btn = $(obj),dataKey = $btn.data('key');
+                if(dataKey == false){
+                    layer.msg('暂未上传，无法下载！');
+                }else{
+                    window.location.href="/common/download?fileName="+dataKey;
+                }
+            }
+        },
         // 表格封装处理
         table: {
             // 初始化表格参数
