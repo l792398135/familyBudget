@@ -2,6 +2,8 @@ package com.ruoyi.pay.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -35,11 +37,11 @@ public class FamilyFixedAssets extends BaseEntity
 
     /** 使用情况 */
     @Excel(name = "使用情况")
-    private String usage;
+    private String usageStatus;
 
     /** 数量 */
     @Excel(name = "数量")
-    private Long num;
+    private Long number;
 
     /** 购入时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -52,7 +54,7 @@ public class FamilyFixedAssets extends BaseEntity
 
     /** 存放地点 */
     @Excel(name = "存放地点")
-    private String position;
+    private String position1;
 
     /** 责任人 */
     @Excel(name = "责任人")
@@ -62,6 +64,7 @@ public class FamilyFixedAssets extends BaseEntity
     @Excel(name = "图片")
     private String imgUrl;
 
+    private List<String> imgUrls;
     public void setId(Long id) 
     {
         this.id = id;
@@ -71,7 +74,16 @@ public class FamilyFixedAssets extends BaseEntity
     {
         return id;
     }
-    public void setName(String name) 
+
+    public List<String> getImgUrls() {
+        return imgUrls;
+    }
+
+    public void setImgUrls(List<String> imgUrls) {
+        this.imgUrls = imgUrls;
+    }
+
+    public void setName(String name)
     {
         this.name = name;
     }
@@ -98,23 +110,23 @@ public class FamilyFixedAssets extends BaseEntity
     {
         return useMenber;
     }
-    public void setUsage(String usage) 
+    public void setUsageStatus(String usageStatus) 
     {
-        this.usage = usage;
+        this.usageStatus = usageStatus;
     }
 
-    public String getUsage() 
+    public String getUsageStatus() 
     {
-        return usage;
+        return usageStatus;
     }
-    public void setNum(Long num) 
+    public void setNumber(Long number) 
     {
-        this.num = num;
+        this.number = number;
     }
 
-    public Long getNum() 
+    public Long getNumber() 
     {
-        return num;
+        return number;
     }
     public void setBuyDate(Date buyDate) 
     {
@@ -134,14 +146,14 @@ public class FamilyFixedAssets extends BaseEntity
     {
         return buyCost;
     }
-    public void setPosition(String position) 
+    public void setPosition1(String position1) 
     {
-        this.position = position;
+        this.position1 = position1;
     }
 
-    public String getPosition() 
+    public String getPosition1() 
     {
-        return position;
+        return position1;
     }
     public void setResponsibler(String responsibler) 
     {
@@ -169,11 +181,11 @@ public class FamilyFixedAssets extends BaseEntity
             .append("name", getName())
             .append("model", getModel())
             .append("useMenber", getUseMenber())
-            .append("usage", getUsage())
-            .append("num", getNum())
+            .append("usageStatus", getUsageStatus())
+            .append("number", getNumber())
             .append("buyDate", getBuyDate())
             .append("buyCost", getBuyCost())
-            .append("position", getPosition())
+            .append("position1", getPosition1())
             .append("responsibler", getResponsibler())
             .append("remark", getRemark())
             .append("imgUrl", getImgUrl())

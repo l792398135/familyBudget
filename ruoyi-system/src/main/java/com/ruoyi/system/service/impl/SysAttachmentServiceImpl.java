@@ -2,9 +2,12 @@ package com.ruoyi.system.service.impl;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.SysAttachmentMapper;
@@ -87,11 +90,13 @@ public class SysAttachmentServiceImpl implements ISysAttachmentService
             int i = Integer.parseInt(string);
             SysAttachment sysAttachment = sysAttachmentMapper.selectSysAttachmentById(i);
             String fileNameReal = sysAttachment.getFileNameReal();
-            String filePath = RuoYiConfig.getUploadPath();
-            String substring = fileNameReal.substring(15);
-            File file = new File(filePath + substring);
-            if (file.isFile()){
-                file.delete();
+            if (StringUtils.isNotEmpty(fileNameReal)) {
+                String filePath = RuoYiConfig.getUploadPath();
+                String substring = fileNameReal.substring(15);
+                File file = new File(filePath + substring);
+                if (file.isFile()) {
+                    file.delete();
+                }
             }
         }
         return sysAttachmentMapper.deleteSysAttachmentByIds(Convert.toStrArray(ids));
@@ -107,5 +112,15 @@ public class SysAttachmentServiceImpl implements ISysAttachmentService
     public int deleteSysAttachmentById(Integer id)
     {
         return sysAttachmentMapper.deleteSysAttachmentById(id);
+    }
+
+    @Override
+    public int deleteSysAttachmentByBusiness(Map<String, String> map) {
+        SysAttachment sysAttachment = new SysAttachment();
+        sysAttachment.setBusinessType(map.get("businessType"));
+        sysAttachment.setBusinessType(map.get("businessId"));
+        List<SysAttachment> sysAttachments = sysAttachmentMapper.selectSysAttachmentList(sysAttachment);
+        List<String> collect = sysAttachments.stream().map(r -> r.getId()+"").collect(Collectors.toList());
+        return deleteSysAttachmentByIds(String.join(",", collect));
     }
 }

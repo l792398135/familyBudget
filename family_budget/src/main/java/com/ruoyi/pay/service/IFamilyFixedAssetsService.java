@@ -33,7 +33,7 @@ public interface IFamilyFixedAssetsService
      * @param familyFixedAssets 固定资产
      * @return 结果
      */
-    public int insertFamilyFixedAssets(FamilyFixedAssets familyFixedAssets);
+    public Long insertFamilyFixedAssets(FamilyFixedAssets familyFixedAssets);
 
     /**
      * 修改固定资产

@@ -1,17 +1,15 @@
 package com.ruoyi.web.controller.system;
 
 import java.util.List;
+import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ruoyi.common.utils.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.system.domain.SysAttachment;
@@ -68,6 +66,23 @@ public class SysAttachmentController extends BaseController
         try
         {
             return toAjax(sysAttachmentService.deleteSysAttachmentByIds(ids));
+        }
+        catch (Exception e)
+        {
+            return error(e.getMessage());
+        }
+    }
+
+    @PostMapping("/deletebybusiness")
+    @ResponseBody
+    public AjaxResult deleteBybusinessAndBusinessType(@RequestBody Map<String,String> map)
+    {
+        try
+        {
+            if (StringUtils.isEmpty(map.get("businessId"))||StringUtils.isEmpty(map.get("businessType"))){
+                throw new RuntimeException("参数错误");
+            }
+            return toAjax(sysAttachmentService.deleteSysAttachmentByBusiness(map));
         }
         catch (Exception e)
         {

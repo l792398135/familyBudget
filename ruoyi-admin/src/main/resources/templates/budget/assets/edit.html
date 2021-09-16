@@ -21,48 +21,50 @@
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">使用人员：</label>
+                <label class="col-sm-3 control-label is-required">使用人员：</label>
                 <div class="col-sm-8">
-                    <input name="useMenber" th:field="*{useMenber}" class="form-control" type="text">
+                    <input name="useMenber" th:field="*{useMenber}" class="form-control" type="text" required>
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label is-required">使用情况：</label>
+                <label class="col-sm-3 control-label">使用情况：</label>
                 <div class="col-sm-8">
-                    <input name="usage" th:field="*{usage}" class="form-control" type="text" required>
+                    <select name="usageStatus" class="form-control m-b" th:with="type=${@dict.getType('useStatus')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{usageStatus}"></option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label is-required">数量：</label>
+                <label class="col-sm-3 control-label">数量：</label>
                 <div class="col-sm-8">
-                    <input name="num" th:field="*{num}" class="form-control" type="text" required>
+                    <input name="number" th:field="*{number}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">购入时间：</label>
+                <label class="col-sm-3 control-label ">购入时间：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
-                        <input name="buyDate" th:value="${#dates.format(familyFixedAssets.buyDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input name="buyDate" th:value="${#dates.format(familyFixedAssets.buyDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" >
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label is-required">购入费用：</label>
+                <label class="col-sm-3 control-label">购入费用：</label>
                 <div class="col-sm-8">
-                    <input name="buyCost" th:field="*{buyCost}" class="form-control" type="text" required>
+                    <input name="buyCost" th:field="*{buyCost}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">存放地点：</label>
                 <div class="col-sm-8">
-                    <input name="position" th:field="*{position}" class="form-control" type="text">
+                    <input name="position1" th:field="*{position1}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
-                <label class="col-sm-3 control-label">责任人：</label>
+                <label class="col-sm-3 control-label is-required">责任人：</label>
                 <div class="col-sm-8">
-                    <input name="responsibler" th:field="*{responsibler}" class="form-control" type="text">
+                    <input name="responsibler" th:field="*{responsibler}" class="form-control" type="text" required>
                 </div>
             </div>
             <div class="form-group">
@@ -71,10 +73,10 @@
                     <textarea name="remark" class="form-control">[[*{remark}]]</textarea>
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">图片：</label>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">附件上传：</label>
                 <div class="col-sm-8">
-                    <input name="imgUrl" th:field="*{imgUrl}" class="form-control" type="text">
+                    <input id="file-Portrait" type="file" multiple="multiple" name="file">
                 </div>
             </div>
         </form>
@@ -87,9 +89,15 @@
             focusCleanup: true
         });
 
+        function saveImg(data){
+            $.file.uploadFile("file-Portrait","budgetassets",$("input[name=id]").val());
+        }
+
         function submitHandler() {
             if ($.validate.form()) {
-                $.operate.save(prefix + "/edit", $('#form-assets-edit').serialize());
+                var data ={"businessId":$("input[name=id]").val(),"businessType":"budgetassets"}
+                $.operate.post1(ctx+"system/attachment/deletebybusiness",data)
+                $.operate.save(prefix + "/edit", $('#form-assets-edit').serialize(),saveImg);
             }
         }
 
@@ -98,6 +106,11 @@
             minView: "month",
             autoclose: true
         });
+        $(function() {
+            var businessId = $("input[name='id']").val()
+            $.file.initEditFiles("file-Portrait","jpg","budgetassets",businessId);
+        });
+
     </script>
 </body>
 </html>

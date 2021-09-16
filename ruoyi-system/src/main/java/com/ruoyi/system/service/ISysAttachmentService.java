@@ -1,6 +1,8 @@
 package com.ruoyi.system.service;
 
 import java.util.List;
+import java.util.Map;
+
 import com.ruoyi.system.domain.SysAttachment;
 
 /**
@@ -58,4 +60,6 @@ public interface ISysAttachmentService
      * @return 结果
      */
     public int deleteSysAttachmentById(Integer id);
+
+    int deleteSysAttachmentByBusiness(Map<String, String> map);
 }

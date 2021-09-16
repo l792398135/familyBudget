@@ -1,6 +1,11 @@
 package com.ruoyi.pay.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import com.ruoyi.system.domain.SysAttachment;
+import com.ruoyi.system.mapper.SysAttachmentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.pay.mapper.FamilyFixedAssetsMapper;
@@ -20,6 +25,8 @@ public class FamilyFixedAssetsServiceImpl implements IFamilyFixedAssetsService
     @Autowired
     private FamilyFixedAssetsMapper familyFixedAssetsMapper;
 
+    @Autowired
+    private SysAttachmentMapper sysAttachmentMapper;
     /**
      * 查询固定资产
      * 
@@ -41,7 +48,20 @@ public class FamilyFixedAssetsServiceImpl implements IFamilyFixedAssetsService
     @Override
     public List<FamilyFixedAssets> selectFamilyFixedAssetsList(FamilyFixedAssets familyFixedAssets)
     {
-        return familyFixedAssetsMapper.selectFamilyFixedAssetsList(familyFixedAssets);
+        List<FamilyFixedAssets> familyFixedAssets1 = familyFixedAssetsMapper.selectFamilyFixedAssetsList(familyFixedAssets);
+        List<FamilyFixedAssets> result = new ArrayList<>();
+        for (FamilyFixedAssets fixedAssets : familyFixedAssets1) {
+            Long id = fixedAssets.getId();
+            SysAttachment sysAttachment = new SysAttachment();
+            sysAttachment.setBusinessId(String.valueOf(id));
+            sysAttachment.setBusinessType("budgetassets");
+            List<SysAttachment> sysAttachments = sysAttachmentMapper.selectSysAttachmentList(sysAttachment);
+            List<String> collect = sysAttachments.stream().map(r -> r.getFilePath()).collect(Collectors.toList());
+            fixedAssets.setImgUrls(collect);
+            result.add(fixedAssets);
+        }
+
+        return result;
     }
 
     /**
@@ -51,9 +71,11 @@ public class FamilyFixedAssetsServiceImpl implements IFamilyFixedAssetsService
      * @return 结果
      */
     @Override
-    public int insertFamilyFixedAssets(FamilyFixedAssets familyFixedAssets)
+    public Long insertFamilyFixedAssets(FamilyFixedAssets familyFixedAssets)
     {
-        return familyFixedAssetsMapper.insertFamilyFixedAssets(familyFixedAssets);
+        int i = familyFixedAssetsMapper.insertFamilyFixedAssets(familyFixedAssets);
+        Long id = familyFixedAssets.getId();
+        return id;
     }
 
     /**

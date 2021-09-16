@@ -9,18 +9,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="name"    column="name"    />
         <result property="model"    column="model"    />
         <result property="useMenber"    column="use_menber"    />
-        <result property="usage"    column="usage"    />
-        <result property="num"    column="num"    />
+        <result property="usageStatus"    column="usage_status"    />
+        <result property="number"    column="number"    />
         <result property="buyDate"    column="buy_date"    />
         <result property="buyCost"    column="buy_cost"    />
-        <result property="position"    column="position"    />
+        <result property="position1"    column="position1"    />
         <result property="responsibler"    column="responsibler"    />
         <result property="remark"    column="remark"    />
         <result property="imgUrl"    column="imgUrl"    />
     </resultMap>
 
     <sql id="selectFamilyFixedAssetsVo">
-        select id, name, model, use_menber, usage, num, buy_date, buy_cost, position, responsibler, remark, imgUrl from family_fixed_assets
+        select id, name, model, use_menber, usage_status, number, buy_date, buy_cost, position1, responsibler, remark, imgUrl from family_fixed_assets
     </sql>
 
     <select id="selectFamilyFixedAssetsList" parameterType="FamilyFixedAssets" resultMap="FamilyFixedAssetsResult">
@@ -28,7 +28,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="useMenber != null  and useMenber != ''"> and use_menber = #{useMenber}</if>
-            <if test="usage != null  and usage != ''"> and usage = #{usage}</if>
             <if test="params.beginBuyDate != null and params.beginBuyDate != '' and params.endBuyDate != null and params.endBuyDate != ''"> and buy_date between #{params.beginBuyDate} and #{params.endBuyDate}</if>
             <if test="responsibler != null  and responsibler != ''"> and responsibler = #{responsibler}</if>
         </where>
@@ -44,26 +43,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="name != null and name != ''">name,</if>
             <if test="model != null">model,</if>
-            <if test="useMenber != null">use_menber,</if>
-            <if test="usage != null and usage != ''">usage,</if>
-            <if test="num != null">num,</if>
+            <if test="useMenber != null and useMenber != ''">use_menber,</if>
+            <if test="usageStatus != null">usage_status,</if>
+            <if test="number != null">number,</if>
             <if test="buyDate != null">buy_date,</if>
             <if test="buyCost != null">buy_cost,</if>
-            <if test="position != null">position,</if>
-            <if test="responsibler != null">responsibler,</if>
+            <if test="position1 != null">position1,</if>
+            <if test="responsibler != null and responsibler != ''">responsibler,</if>
             <if test="remark != null">remark,</if>
             <if test="imgUrl != null">imgUrl,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="name != null and name != ''">#{name},</if>
             <if test="model != null">#{model},</if>
-            <if test="useMenber != null">#{useMenber},</if>
-            <if test="usage != null and usage != ''">#{usage},</if>
-            <if test="num != null">#{num},</if>
+            <if test="useMenber != null and useMenber != ''">#{useMenber},</if>
+            <if test="usageStatus != null">#{usageStatus},</if>
+            <if test="number != null">#{number},</if>
             <if test="buyDate != null">#{buyDate},</if>
             <if test="buyCost != null">#{buyCost},</if>
-            <if test="position != null">#{position},</if>
-            <if test="responsibler != null">#{responsibler},</if>
+            <if test="position1 != null">#{position1},</if>
+            <if test="responsibler != null and responsibler != ''">#{responsibler},</if>
             <if test="remark != null">#{remark},</if>
             <if test="imgUrl != null">#{imgUrl},</if>
          </trim>
@@ -74,13 +73,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null and name != ''">name = #{name},</if>
             <if test="model != null">model = #{model},</if>
-            <if test="useMenber != null">use_menber = #{useMenber},</if>
-            <if test="usage != null and usage != ''">usage = #{usage},</if>
-            <if test="num != null">num = #{num},</if>
+            <if test="useMenber != null and useMenber != ''">use_menber = #{useMenber},</if>
+            <if test="usageStatus != null">usage_status = #{usageStatus},</if>
+            <if test="number != null">number = #{number},</if>
             <if test="buyDate != null">buy_date = #{buyDate},</if>
             <if test="buyCost != null">buy_cost = #{buyCost},</if>
-            <if test="position != null">position = #{position},</if>
-            <if test="responsibler != null">responsibler = #{responsibler},</if>
+            <if test="position1 != null">position1 = #{position1},</if>
+            <if test="responsibler != null and responsibler != ''">responsibler = #{responsibler},</if>
             <if test="remark != null">remark = #{remark},</if>
             <if test="imgUrl != null">imgUrl = #{imgUrl},</if>
         </trim>

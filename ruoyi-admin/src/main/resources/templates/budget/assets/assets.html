@@ -20,13 +20,10 @@
                             </li>
                             <li>
                                 <label>使用情况：</label>
-                                <input type="text" name="usage"/>
-                            </li>
-                            <li class="select-time">
-                                <label>购入时间：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginBuyDate]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endBuyDate]"/>
+                                <select name="usageStatus" th:with="type=${@dict.getType('useStatus')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
                             </li>
                             <li>
                                 <label>责任人：</label>
@@ -64,6 +61,7 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('budget:assets:edit')}]];
         var removeFlag = [[${@permission.hasPermi('budget:assets:remove')}]];
+        var usageStatusDatas = [[${@dict.getType('useStatus')}]];
         var prefix = ctx + "budget/assets";
 
         $(function() {
@@ -95,11 +93,14 @@
                     title: '使用人员'
                 },
                 {
-                    field: 'usage',
-                    title: '使用情况'
+                    field: 'usageStatus',
+                    title: '使用情况',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(usageStatusDatas, value);
+                    }
                 },
                 {
-                    field: 'num',
+                    field: 'number',
                     title: '数量'
                 },
                 {
@@ -111,7 +112,7 @@
                     title: '购入费用'
                 },
                 {
-                    field: 'position',
+                    field: 'position1',
                     title: '存放地点'
                 },
                 {
@@ -121,10 +122,16 @@
                 {
                     field: 'remark',
                     title: '备注'
-                },
-                {
-                    field: 'imgUrl',
-                    title: '图片'
+                },{
+                    field: 'imgUrls',
+                    title: '附件',
+                    formatter: function (arr, row, index) {
+                        var html=''
+                        for (var i=0 ;i<arr.length;i++){
+                            html+= '<img src="' + arr[i]+ '" width="150" height="100">'
+                        }
+                        return html
+                    }
                 },
                 {
                     title: '操作',

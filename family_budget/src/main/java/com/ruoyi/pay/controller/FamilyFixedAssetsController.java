@@ -86,7 +86,7 @@ public class FamilyFixedAssetsController extends BaseController
     @ResponseBody
     public AjaxResult addSave(FamilyFixedAssets familyFixedAssets)
     {
-        return toAjax(familyFixedAssetsService.insertFamilyFixedAssets(familyFixedAssets));
+        return AjaxResult.success("success",familyFixedAssetsService.insertFamilyFixedAssets(familyFixedAssets));
     }
 
     /**
