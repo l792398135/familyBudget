@@ -141,12 +141,9 @@
                     title: '附件',
                     formatter: function (arr, row, index) {
                         var html=''
-                        for (var i=0 ;i<arr.length;i++){
-                            html+= '<img src="' + arr[i]+ '" width="150" height="100">'
+                        if (arr!=null&&arr.length>0){
+                            html+= '<img src="' + arr[0]+ '" width="150" height="100">'
                         }
-                        // if (arr!=null&&arr.length>0){
-                        //     html+= '<img src="' + arr[0]+ '" width="150" height="100">'
-                        // }
                         return html
                     }
                 },

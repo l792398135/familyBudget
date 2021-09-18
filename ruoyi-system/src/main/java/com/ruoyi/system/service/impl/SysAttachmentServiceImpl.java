@@ -102,6 +102,12 @@ public class SysAttachmentServiceImpl implements ISysAttachmentService
         return sysAttachmentMapper.deleteSysAttachmentByIds(Convert.toStrArray(ids));
     }
 
+    @Override
+    public int deleteLogicSysAttachment(String ids) {
+        String[] idsArr = Convert.toStrArray(ids);
+        return sysAttachmentMapper.deleteLogicSysAttachmentByIds(idsArr);
+    }
+
     /**
      * 删除附件信息
      * 
@@ -114,13 +120,4 @@ public class SysAttachmentServiceImpl implements ISysAttachmentService
         return sysAttachmentMapper.deleteSysAttachmentById(id);
     }
 
-    @Override
-    public int deleteSysAttachmentByBusiness(Map<String, String> map) {
-        SysAttachment sysAttachment = new SysAttachment();
-        sysAttachment.setBusinessType(map.get("businessType"));
-        sysAttachment.setBusinessType(map.get("businessId"));
-        List<SysAttachment> sysAttachments = sysAttachmentMapper.selectSysAttachmentList(sysAttachment);
-        List<String> collect = sysAttachments.stream().map(r -> r.getId()+"").collect(Collectors.toList());
-        return deleteSysAttachmentByIds(String.join(",", collect));
-    }
 }

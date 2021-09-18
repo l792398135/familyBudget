@@ -55,9 +55,12 @@ public class FamilyFixedAssetsServiceImpl implements IFamilyFixedAssetsService
             SysAttachment sysAttachment = new SysAttachment();
             sysAttachment.setBusinessId(String.valueOf(id));
             sysAttachment.setBusinessType("budgetassets");
+            sysAttachment.setDelFlag(0);
             List<SysAttachment> sysAttachments = sysAttachmentMapper.selectSysAttachmentList(sysAttachment);
-            List<String> collect = sysAttachments.stream().map(r -> r.getFilePath()).collect(Collectors.toList());
-            fixedAssets.setImgUrls(collect);
+            if (sysAttachments!=null) {
+                List<String> collect = sysAttachments.stream().map(r -> r.getFilePath()).collect(Collectors.toList());
+                fixedAssets.setImgUrls(collect);
+            }
             result.add(fixedAssets);
         }
 

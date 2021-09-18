@@ -61,5 +61,5 @@ public interface ISysAttachmentService
      */
     public int deleteSysAttachmentById(Integer id);
 
-    int deleteSysAttachmentByBusiness(Map<String, String> map);
+    int deleteLogicSysAttachment(String ids);
 }

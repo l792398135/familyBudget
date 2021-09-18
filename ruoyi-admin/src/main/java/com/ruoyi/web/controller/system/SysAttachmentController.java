@@ -59,30 +59,14 @@ public class SysAttachmentController extends BaseController
         jsonObject.put("alist", alist);
         return jsonObject.toString();
     }
+
     @PostMapping("/delete")
     @ResponseBody
     public AjaxResult delete(String ids)
     {
         try
         {
-            return toAjax(sysAttachmentService.deleteSysAttachmentByIds(ids));
-        }
-        catch (Exception e)
-        {
-            return error(e.getMessage());
-        }
-    }
-
-    @PostMapping("/deletebybusiness")
-    @ResponseBody
-    public AjaxResult deleteBybusinessAndBusinessType(@RequestBody Map<String,String> map)
-    {
-        try
-        {
-            if (StringUtils.isEmpty(map.get("businessId"))||StringUtils.isEmpty(map.get("businessType"))){
-                throw new RuntimeException("参数错误");
-            }
-            return toAjax(sysAttachmentService.deleteSysAttachmentByBusiness(map));
+            return toAjax(sysAttachmentService.deleteLogicSysAttachment(ids));
         }
         catch (Exception e)
         {

@@ -58,4 +58,7 @@ public interface SysAttachmentMapper
      * @return 结果
      */
     public int deleteSysAttachmentByIds(String[] ids);
+
+    int deleteLogicSysAttachmentByIds(String[] idsArr);
+
 }
