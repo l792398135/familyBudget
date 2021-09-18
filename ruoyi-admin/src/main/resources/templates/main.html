@@ -46,6 +46,14 @@
                 </div>
             </div>
         </div>
+        <div class="col-sm-3">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5 class="m-b-md">固定资产(万)</h5>
+                    <h1 class="no-margins" id="fixedAssets">0.00</h1>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col-sm-4">
@@ -115,6 +123,7 @@
         if (data.data.preMonthIncome!=null){$("#preMonthIncome").text(data.data.preMonthIncome)}
         if (data.data.localMonthBudget!=null){$("#localMonthBudeget").text(data.data.localMonthBudget)}
         if (data.data.localMonthIncome!=null){$("#localMonthIncome").text(data.data.localMonthIncome)}
+        if (data.data.fixedAssets!=null){$("#fixedAssets").text(data.data.fixedAssets)}
     }
 
 

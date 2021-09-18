@@ -59,7 +59,6 @@
                     <select name="bookkeeperCode" class="form-control m-b" th:with="type=${@dict.getType('family_menber')}" required disabled="disabled">
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{bookkeeperCode}"></option>
                     </select>
-
                 </div>
             </div>
         </form>
@@ -84,11 +83,6 @@
             autoclose: true
         });
 
-        $("input[name='createDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
     </script>
 </body>
 </html>

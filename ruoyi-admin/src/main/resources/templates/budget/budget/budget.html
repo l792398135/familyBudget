@@ -64,6 +64,7 @@
         var editFlag = [[${@permission.hasPermi('budget:budget:edit')}]];
         var removeFlag = [[${@permission.hasPermi('budget:budget:remove')}]];
         var budgetTypeDatas = [[${@dict.getType('month_budget_type')}]];
+        var createMenberDatas = [[${@dict.getType('family_menber')}]];
         var prefix = ctx + "budget/budget";
 
         $(function() {
@@ -107,7 +108,10 @@
                 },
                 {
                     field: 'createUser',
-                    title: '创建人员'
+                    title: '创建人员',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(createMenberDatas, value);
+                    }
                 },
                 {
                     title: '操作',

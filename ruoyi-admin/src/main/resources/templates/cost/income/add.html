@@ -52,23 +52,6 @@
                     </select>
                 </div>
             </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">记账人：</label>
-                <div class="col-sm-8">
-                    <select name="bookkeeperCode" class="form-control m-b" th:with="type=${@dict.getType('family_menber')}">
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">创建日期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <input name="createDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    </div>
-                </div>
-            </div>
         </form>
     </div>
     <th:block th:include="include :: footer" />
@@ -91,11 +74,6 @@
             autoclose: true
         });
 
-        $("input[name='createDate']").datetimepicker({
-            format: "yyyy-mm-dd",
-            minView: "month",
-            autoclose: true
-        });
     </script>
 </body>
 </html>

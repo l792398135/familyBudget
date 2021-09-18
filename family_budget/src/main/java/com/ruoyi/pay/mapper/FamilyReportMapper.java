@@ -22,6 +22,9 @@ public interface FamilyReportMapper {
     @Select("select sum(budget_cost) from family_month_budget where date_format(budget_date ,'%Y-%m') = date_format(curdate(),'%Y-%m')")
     BigDecimal getLoaclMonthBudget();
 
+    @Select("select sum(buy_cost) from family_fixed_assets ")
+    BigDecimal getFixedAssets();
+
     List<TopNVO> topN1();
 
     List<TopNVO> topN2();
