@@ -93,15 +93,24 @@
             focusCleanup: true
         });
 
-        function saveImg(data){
-            $.file.uploadFile("file-Portrait","budgetassets",$("input[name=id]").val());
-        }
-
         function submitHandler() {
             if ($.validate.form()) {
                 var data ={"businessId":$("input[name=id]").val(),"businessType":"budgetassets"}
-                $.operate.post1(ctx+"system/attachment/deletebybusiness",data)
-                $.operate.save(prefix + "/edit", $('#form-assets-edit').serialize(),saveImg);
+                $.ajax({
+                    cache : true,
+                    type : "POST",
+                    url : prefix + "/edit",
+                    data : $('#form-assets-edit').serialize(),
+                    async : false,
+                    error : function(request) {
+                        $.modal.alertError("系统错误");
+                    },
+                    success : function(data) {
+                        var businessId = $("input[name=id]").val()
+                        $.file.uploadFile("file-Portrait","budgetassets",businessId);
+                        $.operate.saveSuccess(data);
+                    }
+                });
             }
         }
 
@@ -112,7 +121,7 @@
         });
         $(function() {
             var businessId = $("input[name='id']").val()
-            $.file.initEditFiles("file-Portrait","jpg","budgetassets",businessId);
+            $.file.initEditFiles("file-Portrait","budgetassets",businessId);
         });
 
     </script>

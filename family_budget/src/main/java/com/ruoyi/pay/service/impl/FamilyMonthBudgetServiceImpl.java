@@ -1,6 +1,9 @@
 package com.ruoyi.pay.service.impl;
 
+import java.util.Date;
 import java.util.List;
+
+import com.ruoyi.common.utils.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.pay.mapper.FamilyMonthBudgetMapper;
@@ -53,6 +56,8 @@ public class FamilyMonthBudgetServiceImpl implements IFamilyMonthBudgetService
     @Override
     public int insertFamilyMonthBudget(FamilyMonthBudget familyMonthBudget)
     {
+        familyMonthBudget.setCreateDate(new Date());
+        familyMonthBudget.setCreateUser(ShiroUtils.getLoginName());
         return familyMonthBudgetMapper.insertFamilyMonthBudget(familyMonthBudget);
     }
 

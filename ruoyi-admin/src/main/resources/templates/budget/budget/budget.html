@@ -108,18 +108,6 @@
                 {
                     field: 'createUser',
                     title: '创建人员'
-                },{
-                    field: 'imgUrl',
-                    title: 'banner图地址',
-                    formatter: function (value, row, index) {
-                        // return '<img src="' + 'http://localhost/profile/upload/2021/09/15/6ea47323-68a0-42e9-9d59-7d77b5d470c1.jpg' + '" width="150" height="100">'+'<img src="' + 'http://localhost/profile/upload/2021/09/15/6ea47323-68a0-42e9-9d59-7d77b5d470c1.jpg' + '" width="150" height="100">';
-                        var arr=new Array('http://localhost/profile/upload/2021/09/15/6ea47323-68a0-42e9-9d59-7d77b5d470c1.jpg','http://localhost/profile/upload/2021/09/15/6ea47323-68a0-42e9-9d59-7d77b5d470c1.jpg')
-                        var html=''
-                        for (var i=0 ;i<arr.length;i++){
-                            html+= '<img src="' + arr[i]+ '" width="150" height="100">'
-                        }
-                        return html
-                    }
                 },
                 {
                     title: '操作',

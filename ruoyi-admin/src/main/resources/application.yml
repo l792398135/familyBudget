@@ -134,3 +134,12 @@ xss:
 swagger:
   # 是否开启swagger
   enabled: true
+  #配置阿里云 oss
+
+aliyun:
+  oss:
+    file:
+      endpoint: "你的节点"
+      keyid: "开启oss服务生成秘钥的keyid"
+      keysecret: "生成秘钥的密码"
+      bucketname: "自己创建bucket的名称"

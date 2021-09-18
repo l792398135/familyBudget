@@ -37,12 +37,6 @@
                     <textarea name="budgetRemarks" class="form-control">[[*{budgetRemarks}]]</textarea>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">附件上传：</label>
-                <div class="col-sm-8">
-                    <input id="file-Portrait" type="file" multiple="multiple" name="file">
-                </div>
-            </div>
         </form>
     </div>
     <th:block th:include="include :: footer" />
@@ -65,12 +59,6 @@
             autoclose: true
         });
 
-        $(function() {
-
-            var businessId = "*{id}"
-            $.file.initEditFiles("file-Portrait","jpg","notice","22");
-
-        });
     </script>
 </body>
 </html>

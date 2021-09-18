@@ -2,9 +2,13 @@ package com.ruoyi.web.controller.common;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSONObject;
+import com.ruoyi.system.domain.SysAttachment;
+import com.ruoyi.system.service.ISysAttachmentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -12,10 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.config.ServerConfig;
@@ -39,7 +40,6 @@ public class CommonController
 
     @Autowired
     private ServerConfig serverConfig;
-
     /**
      * 通用下载请求
      * 
@@ -79,8 +79,9 @@ public class CommonController
     @ApiOperation("上传")
     @PostMapping("/common/upload")
     @ResponseBody
-    public AjaxResult uploadFile(MultipartFile file) throws Exception
+    public String uploadFile(MultipartFile file) throws Exception
     {
+        JSONObject ajax = new JSONObject();
         try
         {
             // 上传文件路径
@@ -88,16 +89,15 @@ public class CommonController
             // 上传并返回新文件名称
             String fileName = FileUploadUtils.upload(filePath, file);
             String url = serverConfig.getUrl() + fileName;
-            AjaxResult ajax = AjaxResult.success();
             ajax.put("filePath", url);
             ajax.put("fileNameReal", fileName);
             ajax.put("fileNameShow", file.getOriginalFilename());
             ajax.put("fileSize", file.getSize());
-            return ajax;
+            return ajax.toString();
         }
         catch (Exception e)
         {
-            return AjaxResult.error(e.getMessage());
+            return "";
         }
     }
 
