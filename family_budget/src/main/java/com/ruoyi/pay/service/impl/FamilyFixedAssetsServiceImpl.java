@@ -49,22 +49,21 @@ public class FamilyFixedAssetsServiceImpl implements IFamilyFixedAssetsService
     public List<FamilyFixedAssets> selectFamilyFixedAssetsList(FamilyFixedAssets familyFixedAssets)
     {
         List<FamilyFixedAssets> familyFixedAssets1 = familyFixedAssetsMapper.selectFamilyFixedAssetsList(familyFixedAssets);
-        List<FamilyFixedAssets> result = new ArrayList<>();
-        for (FamilyFixedAssets fixedAssets : familyFixedAssets1) {
-            Long id = fixedAssets.getId();
-            SysAttachment sysAttachment = new SysAttachment();
-            sysAttachment.setBusinessId(String.valueOf(id));
-            sysAttachment.setBusinessType("budgetassets");
-            sysAttachment.setDelFlag(0);
-            List<SysAttachment> sysAttachments = sysAttachmentMapper.selectSysAttachmentList(sysAttachment);
-            if (sysAttachments!=null) {
-                List<String> collect = sysAttachments.stream().map(r -> r.getFilePath()).collect(Collectors.toList());
-                fixedAssets.setImgUrls(collect);
+            for (int i = 0; i <familyFixedAssets1.size() ; i++) {
+                FamilyFixedAssets fixedAssets =familyFixedAssets1.get(i);
+                Long id = fixedAssets.getId();
+                SysAttachment sysAttachment = new SysAttachment();
+                sysAttachment.setBusinessId(String.valueOf(id));
+                sysAttachment.setBusinessType("budgetassets");
+                sysAttachment.setDelFlag(0);
+                List<SysAttachment> sysAttachments = sysAttachmentMapper.selectSysAttachmentList(sysAttachment);
+                if (sysAttachments!=null) {
+                    List<String> collect = sysAttachments.stream().map(r -> r.getFilePath()).collect(Collectors.toList());
+                    fixedAssets.setImgUrls(collect);
+                }
+                familyFixedAssets1.set(i,fixedAssets);
             }
-            result.add(fixedAssets);
-        }
-
-        return result;
+        return familyFixedAssets1;
     }
 
     /**
