@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pay.mapper.FamilyTransferAccountMapper">
+    
+    <resultMap type="FamilyTransferAccount" id="FamilyTransferAccountResult">
+        <result property="id"    column="id"    />
+        <result property="transferAccount"    column="transfer_account"    />
+        <result property="transfer"    column="transfer"    />
+        <result property="accepter"    column="accepter"    />
+        <result property="remark"    column="remark"    />
+        <result property="transferTime"    column="transfer_time"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectFamilyTransferAccountVo">
+        select id, transfer_account, transfer, accepter, remark, transfer_time, create_user, create_time from family_transfer_account
+    </sql>
+
+    <select id="selectFamilyTransferAccountList" parameterType="FamilyTransferAccount" resultMap="FamilyTransferAccountResult">
+        <include refid="selectFamilyTransferAccountVo"/>
+        <where>  
+            <if test="transfer != null  and transfer != ''"> and transfer = #{transfer}</if>
+            <if test="accepter != null  and accepter != ''"> and accepter = #{accepter}</if>
+            <if test="params.beginTransferTime != null and params.beginTransferTime != '' and params.endTransferTime != null and params.endTransferTime != ''"> and transfer_time between #{params.beginTransferTime} and #{params.endTransferTime}</if>
+            <if test="createUser != null  and createUser != ''"> and create_user = #{createUser}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectFamilyTransferAccountById" parameterType="Long" resultMap="FamilyTransferAccountResult">
+        <include refid="selectFamilyTransferAccountVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFamilyTransferAccount" parameterType="FamilyTransferAccount">
+        insert into family_transfer_account
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="transferAccount != null">transfer_account,</if>
+            <if test="transfer != null and transfer != ''">transfer,</if>
+            <if test="accepter != null and accepter != ''">accepter,</if>
+            <if test="remark != null">remark,</if>
+            <if test="transferTime != null">transfer_time,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="transferAccount != null">#{transferAccount},</if>
+            <if test="transfer != null and transfer != ''">#{transfer},</if>
+            <if test="accepter != null and accepter != ''">#{accepter},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="transferTime != null">#{transferTime},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFamilyTransferAccount" parameterType="FamilyTransferAccount">
+        update family_transfer_account
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="transferAccount != null">transfer_account = #{transferAccount},</if>
+            <if test="transfer != null and transfer != ''">transfer = #{transfer},</if>
+            <if test="accepter != null and accepter != ''">accepter = #{accepter},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="transferTime != null">transfer_time = #{transferTime},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFamilyTransferAccountById" parameterType="Long">
+        delete from family_transfer_account where id = #{id}
+    </delete>
+
+    <delete id="deleteFamilyTransferAccountByIds" parameterType="String">
+        delete from family_transfer_account where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
