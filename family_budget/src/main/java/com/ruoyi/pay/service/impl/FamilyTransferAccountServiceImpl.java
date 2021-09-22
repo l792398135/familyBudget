@@ -1,7 +1,9 @@
 package com.ruoyi.pay.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.pay.mapper.FamilyTransferAccountMapper;
@@ -55,6 +57,7 @@ public class FamilyTransferAccountServiceImpl implements IFamilyTransferAccountS
     public int insertFamilyTransferAccount(FamilyTransferAccount familyTransferAccount)
     {
         familyTransferAccount.setCreateTime(DateUtils.getNowDate());
+        familyTransferAccount.setCreateUser(ShiroUtils.getLoginName());
         return familyTransferAccountMapper.insertFamilyTransferAccount(familyTransferAccount);
     }
 
