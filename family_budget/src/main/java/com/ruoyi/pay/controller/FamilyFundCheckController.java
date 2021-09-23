@@ -123,4 +123,13 @@ public class FamilyFundCheckController extends BaseController
     {
         return toAjax(familyFundCheckService.deleteFamilyFundCheckByIds(ids));
     }
+
+    @RequiresPermissions("cost:check:remove")
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable("id") Long id, ModelMap mmap)
+    {
+//        mmap.put("dict", dictTypeService.selectDictTypeById(dictId));
+//        mmap.put("dictList", dictTypeService.selectDictTypeAll());
+        return "cost/checkdetails/checkdetails";
+    }
 }
