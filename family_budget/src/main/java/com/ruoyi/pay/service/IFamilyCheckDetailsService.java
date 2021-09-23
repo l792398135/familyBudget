@@ -33,7 +33,7 @@ public interface IFamilyCheckDetailsService
      * @param familyCheckDetails 盘点详情
      * @return 结果
      */
-    public int insertFamilyCheckDetails(FamilyCheckDetails familyCheckDetails);
+    public Long insertFamilyCheckDetails(FamilyCheckDetails familyCheckDetails);
 
     /**
      * 修改盘点详情

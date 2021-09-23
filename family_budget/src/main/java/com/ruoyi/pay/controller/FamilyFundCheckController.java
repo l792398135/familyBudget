@@ -74,6 +74,7 @@ public class FamilyFundCheckController extends BaseController
     @GetMapping("/add")
     public String add()
     {
+
         return prefix + "/add";
     }
 
@@ -128,7 +129,7 @@ public class FamilyFundCheckController extends BaseController
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable("id") Long id, ModelMap mmap)
     {
-//        mmap.put("dict", dictTypeService.selectDictTypeById(dictId));
+        mmap.put("check", familyFundCheckService.selectCheckById(id));
 //        mmap.put("dictList", dictTypeService.selectDictTypeAll());
         return "cost/checkdetails/checkdetails";
     }

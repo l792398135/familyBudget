@@ -12,7 +12,7 @@
                         <ul>
                             <li>
                                 <label>盘点编码：</label>
-                                <input type="text" name="checkCode"/>
+                                <input type="text" style="background-color:#ddddde" id="checkCode" name="checkCode" th:value="${check['checkCode']}" readonly/>
                             </li>
                             <li>
                                 <label>责任人：</label>
@@ -52,7 +52,7 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="cost:checkdetails:add">
+                <a class="btn btn-success" onclick="add()" shiro:hasPermission="cost:checkdetails:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
                 <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="cost:checkdetails:edit">
@@ -81,10 +81,11 @@
         $(function() {
             var options = {
                 url: prefix + "/list",
-                createUrl: prefix + "/add",
+                createUrl: prefix + "/add/{id}",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
+                queryParams: queryParams,
                 modalName: "盘点详情",
                 columns: [{
                     checkbox: true
@@ -149,6 +150,18 @@
             };
             $.table.init(options);
         });
+
+        function queryParams(params) {
+            var search = $.table.queryParams(params);
+            search.checkCode = $("#checkCode").val();
+            return search;
+        }
+
+        function add() {
+            var checkCode = $("#checkCode").val();
+            console.log("chechcode"+checkCode)
+            $.operate.add(checkCode);
+        }
     </script>
 </body>
 </html>

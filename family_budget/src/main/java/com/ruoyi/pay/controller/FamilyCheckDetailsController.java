@@ -71,9 +71,10 @@ public class FamilyCheckDetailsController extends BaseController
     /**
      * 新增盘点详情
      */
-    @GetMapping("/add")
-    public String add()
+    @GetMapping("/add/{checkCode}")
+    public String add(@PathVariable("checkCode") String checkCode, ModelMap mmap)
     {
+        mmap.put("checkCode", checkCode);
         return prefix + "/add";
     }
 
@@ -86,7 +87,7 @@ public class FamilyCheckDetailsController extends BaseController
     @ResponseBody
     public AjaxResult addSave(FamilyCheckDetails familyCheckDetails)
     {
-        return toAjax(familyCheckDetailsService.insertFamilyCheckDetails(familyCheckDetails));
+        return AjaxResult.success("success",familyCheckDetailsService.insertFamilyCheckDetails(familyCheckDetails));
     }
 
     /**

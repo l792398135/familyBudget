@@ -52,10 +52,11 @@ public class FamilyCheckDetailsServiceImpl implements IFamilyCheckDetailsService
      * @return 结果
      */
     @Override
-    public int insertFamilyCheckDetails(FamilyCheckDetails familyCheckDetails)
+    public Long insertFamilyCheckDetails(FamilyCheckDetails familyCheckDetails)
     {
         familyCheckDetails.setCreateTime(DateUtils.getNowDate());
-        return familyCheckDetailsMapper.insertFamilyCheckDetails(familyCheckDetails);
+        int i = familyCheckDetailsMapper.insertFamilyCheckDetails(familyCheckDetails);
+        return familyCheckDetails.getId();
     }
 
     /**

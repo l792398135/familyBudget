@@ -58,4 +58,6 @@ public interface IFamilyFundCheckService
      * @return 结果
      */
     public int deleteFamilyFundCheckById(Long id);
+
+    FamilyFundCheck selectCheckById(Long id);
 }

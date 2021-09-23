@@ -98,4 +98,9 @@ public class FamilyFundCheckServiceImpl implements IFamilyFundCheckService
     {
         return familyFundCheckMapper.deleteFamilyFundCheckById(id);
     }
+
+    @Override
+    public FamilyFundCheck selectCheckById(Long id) {
+        return familyFundCheckMapper.selectFamilyFundCheckById(id);
+    }
 }
