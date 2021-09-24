@@ -1,7 +1,12 @@
 package com.ruoyi.pay.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.pay.domain.FamilyFixedAssets;
+import com.ruoyi.system.domain.SysAttachment;
+import com.ruoyi.system.mapper.SysAttachmentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.pay.mapper.FamilyCheckDetailsMapper;
@@ -21,6 +26,8 @@ public class FamilyCheckDetailsServiceImpl implements IFamilyCheckDetailsService
     @Autowired
     private FamilyCheckDetailsMapper familyCheckDetailsMapper;
 
+    @Autowired
+    private SysAttachmentMapper sysAttachmentMapper;
     /**
      * 查询盘点详情
      * 
@@ -42,7 +49,22 @@ public class FamilyCheckDetailsServiceImpl implements IFamilyCheckDetailsService
     @Override
     public List<FamilyCheckDetails> selectFamilyCheckDetailsList(FamilyCheckDetails familyCheckDetails)
     {
-        return familyCheckDetailsMapper.selectFamilyCheckDetailsList(familyCheckDetails);
+        List<FamilyCheckDetails> familyCheckDetails1 = familyCheckDetailsMapper.selectFamilyCheckDetailsList(familyCheckDetails);
+        for (int i = 0; i <familyCheckDetails1.size() ; i++) {
+            FamilyCheckDetails familyCheckDetails2 = familyCheckDetails1.get(i);
+            Long id = familyCheckDetails2.getId();
+            SysAttachment sysAttachment = new SysAttachment();
+            sysAttachment.setBusinessId(String.valueOf(id));
+            sysAttachment.setBusinessType("checkdetails");
+            sysAttachment.setDelFlag(0);
+            List<SysAttachment> sysAttachments = sysAttachmentMapper.selectSysAttachmentList(sysAttachment);
+            if (sysAttachments!=null) {
+                List<String> collect = sysAttachments.stream().map(r -> r.getFilePath()).collect(Collectors.toList());
+                familyCheckDetails2.setImgUrls(collect);
+            }
+            familyCheckDetails1.set(i,familyCheckDetails2);
+        }
+        return familyCheckDetails1;
     }
 
     /**

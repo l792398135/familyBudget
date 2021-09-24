@@ -48,7 +48,17 @@ public class FamilyCheckDetails extends BaseEntity
     @Excel(name = "创建人")
     private String createUser;
 
-    public void setId(Long id) 
+    private List<String> imgUrls;
+
+    public List<String> getImgUrls() {
+        return imgUrls;
+    }
+
+    public void setImgUrls(List<String> imgUrls) {
+        this.imgUrls = imgUrls;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }
