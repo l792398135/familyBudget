@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.pay.domain.FamilyFixedAssets;
 import com.ruoyi.system.domain.SysAttachment;
 import com.ruoyi.system.mapper.SysAttachmentMapper;
@@ -77,6 +78,7 @@ public class FamilyCheckDetailsServiceImpl implements IFamilyCheckDetailsService
     public Long insertFamilyCheckDetails(FamilyCheckDetails familyCheckDetails)
     {
         familyCheckDetails.setCreateTime(DateUtils.getNowDate());
+        familyCheckDetails.setCreateUser(ShiroUtils.getLoginName());
         int i = familyCheckDetailsMapper.insertFamilyCheckDetails(familyCheckDetails);
         return familyCheckDetails.getId();
     }
