@@ -76,6 +76,7 @@
         var removeFlag = [[${@permission.hasPermi('cost:checkdetails:remove')}]];
         var responsiberDatas = [[${@dict.getType('family_menber')}]];
         var resouceAccountDatas = [[${@dict.getType('zhanghuleixing')}]];
+        var createUser = [[${@dict.getType('family_menber')}]];
         var prefix = ctx + "cost/checkdetails";
 
         $(function() {
@@ -138,7 +139,10 @@
                     },
                 {
                     field: 'createUser',
-                    title: '创建人'
+                    title: '创建人',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(createUser, value);
+                    }
                 },
                 {
                     field: 'createTime',

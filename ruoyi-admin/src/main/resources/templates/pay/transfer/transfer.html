@@ -74,6 +74,7 @@
         var removeFlag = [[${@permission.hasPermi('pay:transfer:remove')}]];
         var transferDatas = [[${@dict.getType('family_menber')}]];
         var accepterDatas = [[${@dict.getType('family_menber')}]];
+        var createUser = [[${@dict.getType('family_menber')}]];
         var prefix = ctx + "pay/transfer";
 
         $(function() {
@@ -120,7 +121,10 @@
                 },
                 {
                     field: 'createUser',
-                    title: '创建人'
+                    title: '创建人',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(createUser, value);
+                    }
                 },
                 {
                     field: 'createTime',
