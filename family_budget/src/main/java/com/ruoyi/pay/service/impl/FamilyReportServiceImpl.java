@@ -27,11 +27,13 @@ public class FamilyReportServiceImpl implements IFamilyReportService {
         BigDecimal localMonthBudget = familyReportMapper.getLoaclMonthBudget();
         BigDecimal localMonthIncome = familyReportMapper.getLocalMonthIncome();
         BigDecimal fixedAssets = familyReportMapper.getFixedAssets();
+        BigDecimal checkFund = familyReportMapper.getCheckFund();
         Map<String, Object> result = new HashMap<>();
         result.put("localMonthPay",localMonthPay);
         result.put("preMonthIncome",preMonthIncome);
         result.put("localMonthBudget",localMonthBudget);
         result.put("localMonthIncome",localMonthIncome);
+        result.put("checkFund",checkFund);
         BigDecimal divide = fixedAssets.divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP);
         result.put("fixedAssets",divide);
         return result;

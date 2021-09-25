@@ -25,6 +25,12 @@ public interface FamilyReportMapper {
     @Select("select sum(buy_cost) from family_fixed_assets ")
     BigDecimal getFixedAssets();
 
+    @Select("select sum(fund_amount ) from family_check_details fcd where check_code = " +
+            "( " +
+            "select max(check_code ) from family_fund_check ffc  where ffc.status =0  and start_time is not null " +
+            ")")
+    BigDecimal getCheckFund();
+
     List<TopNVO> topN1();
 
     List<TopNVO> topN2();
