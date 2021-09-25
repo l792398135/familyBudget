@@ -56,8 +56,17 @@ public class FamilyFundCheckServiceImpl implements IFamilyFundCheckService
     @Override
     public int insertFamilyFundCheck(FamilyFundCheck familyFundCheck)
     {
-        String s = DateUtils.dateTimeNow(DateUtils.YYYYMMDDHHMMSS);
-        familyFundCheck.setCheckCode("check"+s);
+        List<FamilyFundCheck> familyFundChecks = familyFundCheckMapper.selectFamilyFundCheckList(new FamilyFundCheck());
+        FamilyFundCheck familyFundCheck1 = familyFundChecks.stream().max((s1, s2) -> Long.compare(s1.getId(), s2.getId())).orElse(null);
+        if (familyFundCheck1!=null) {
+            String checkCode = familyFundCheck1.getCheckCode().substring(1);
+            int i = Integer.parseInt(checkCode);
+            int code = i+1;
+            familyFundCheck.setCheckCode("c" + String.format("%02d",code));
+        }else{
+            familyFundCheck.setCheckCode("c01");
+        }
+
         familyFundCheck.setCreateUser(ShiroUtils.getLoginName());
         familyFundCheck.setCreateTime(DateUtils.getNowDate());
         return familyFundCheckMapper.insertFamilyFundCheck(familyFundCheck);

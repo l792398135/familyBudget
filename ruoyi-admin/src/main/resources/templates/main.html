@@ -17,7 +17,7 @@
         <div class="col-sm-3">
             <div class="ibox">
                 <div class="ibox-content">
-                    <h5 class="m-b-md">本月支出</h5>
+                    <h5 class="m-b-md">本月支出(元)</h5>
                     <h1 class="no-margins" id="localMonthPay">0.00</h1>
                 </div>
             </div>
@@ -25,7 +25,7 @@
         <div class="col-sm-3">
             <div class="ibox">
                 <div class="ibox-content">
-                    <h5 class="m-b-md">本月预算</h5>
+                    <h5 class="m-b-md">本月预算(元)</h5>
                     <h1 class="no-margins" id="localMonthBudeget">0.00</h1>
                 </div>
             </div>
@@ -33,7 +33,7 @@
         <div class="col-sm-3">
             <div class="ibox">
                 <div class="ibox-content">
-                    <h5 class="m-b-md">本月收入</h5>
+                    <h5 class="m-b-md">本月收入(元)</h5>
                     <h1 class="no-margins" id="localMonthIncome">0.00</h1>
                 </div>
             </div>
@@ -41,7 +41,7 @@
         <div class="col-sm-3">
             <div class="ibox">
                 <div class="ibox-content">
-                    <h5 class="m-b-md">上月收入</h5>
+                    <h5 class="m-b-md">上月收入(元)</h5>
                     <h1 class="no-margins" id="preMonthIncome">0.00</h1>
                 </div>
             </div>
@@ -51,6 +51,22 @@
                 <div class="ibox-content">
                     <h5 class="m-b-md">固定资产(万)</h5>
                     <h1 class="no-margins" id="fixedAssets">0.00</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5 class="m-b-md">盘点金额(元)</h5>
+                    <h1 class="no-margins" id="checkFund">0.00</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5 class="m-b-md">资金净额(元)</h5>
+                    <h1 class="no-margins" id="fundNet">0.00</h1>
                 </div>
             </div>
         </div>
@@ -124,6 +140,8 @@
         if (data.data.localMonthBudget!=null){$("#localMonthBudeget").text(data.data.localMonthBudget)}
         if (data.data.localMonthIncome!=null){$("#localMonthIncome").text(data.data.localMonthIncome)}
         if (data.data.fixedAssets!=null){$("#fixedAssets").text(data.data.fixedAssets)}
+        if (data.data.checkFund!=null){$("#checkFund").text(data.data.checkFund)}
+        if (data.data.fundNet!=null){$("#fundNet").text(data.data.fundNet)}
     }
 
 
@@ -133,10 +151,8 @@
         $.each(data.data, function (i, items) {
             var name = items.name
             var num =items.num
-            console.log(name +"-" +num)
             fileList+="<tr><td>"+name+"</td><td>"+num+"</td></tr>"
         })
-        console.log(fileList)
         $("#topN1").html(fileList)
     }
     function localMonthIncome(data){
@@ -145,63 +161,48 @@
         $.each(data.data, function (i, items) {
             var name = items.name
             var num =items.num
-            console.log(name +"-" +num)
             fileList+="<tr><td>"+name+"</td><td>"+num+"</td></tr>"
         })
-        console.log(fileList)
         $("#topN2").html(fileList)
     }
     function preMonthIncome(data){
-        console.log(data)
         var fileList= ''
         $.each(data.data, function (i, items) {
             var name = items.name
             var num =items.num
-            console.log(name +"-" +num)
             fileList+="<tr><td>"+name+"</td><td>"+num+"</td></tr>"
         })
-        console.log(fileList)
         $("#topN3").html(fileList)
     }
     function localMonthPayCode(data){
-        console.log(data)
         var fileList= ''
         $.each(data.data, function (i, items) {
             var name = items.name
             var num =items.num
-            console.log(name +"-" +num)
             fileList+="<tr><td>"+name+"</td><td>"+num+"</td></tr>"
         })
-        console.log(fileList)
         $("#topN4").html(fileList)
     }
     function localMonthOperatorCount(data){
-        console.log(data)
         var fileList= ''
         $.each(data.data, function (i, items) {
             var name = items.name
             var num =items.num
-            console.log(name +"-" +num)
             fileList+="<tr><td>"+name+"</td><td>"+num+"</td></tr>"
         })
-        console.log(fileList)
         $("#topN5").html(fileList)
     }
     function localMonthBookkeeperCount(data){
-        console.log(data)
         var fileList= ''
         $.each(data.data, function (i, items) {
             var name = items.name
             var num =items.num
-            console.log(name +"-" +num)
             fileList+="<tr><td>"+name+"</td><td>"+num+"</td></tr>"
         })
-        console.log(fileList)
         $("#topN6").html(fileList)
     }
 
     $(function() {
-        console.log("进入首页")
         $.operate.get1(prefix + "/getMonthData",getMonthData);
         $.operate.get1(prefix + "/getTopN/localMonthPay",localMonthPay);
         $.operate.get1(prefix + "/getTopN/preMonthIncome",preMonthIncome);

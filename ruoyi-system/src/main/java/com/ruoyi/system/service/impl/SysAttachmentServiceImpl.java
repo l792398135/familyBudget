@@ -48,6 +48,7 @@ public class SysAttachmentServiceImpl implements ISysAttachmentService
     @Override
     public List<SysAttachment> selectSysAttachmentList(SysAttachment sysAttachment)
     {
+        sysAttachment.setDelFlag(0);
         return sysAttachmentMapper.selectSysAttachmentList(sysAttachment);
     }
 
