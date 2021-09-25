@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改费用支出')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-pay-edit" th:object="${familyPay}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">支出成员：</label>
+                <div class="col-sm-8">
+                    <select name="payMenber" class="form-control m-b" th:with="type=${@dict.getType('family_menber')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{payMenber}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">支出日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="payDate" th:value="${#dates.format(familyPay.payDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" required>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">支出金额：</label>
+                <div class="col-sm-8">
+                    <input name="payCost" th:field="*{payCost}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">支出类型：</label>
+                <div class="col-sm-8">
+                    <select name="payTypeCode" class="form-control m-b" th:with="type=${@dict.getType('budget_type')}" required>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{payTypeCode}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">支出明细：</label>
+                <div class="col-sm-8">
+                    <textarea name="payDetail" class="form-control">[[*{payDetail}]]</textarea>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">经办人：</label>
+                <div class="col-sm-8">
+                    <select name="operatorCode" class="form-control m-b" th:with="type=${@dict.getType('family_menber')}" required>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{operatorCode}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">记账人：</label>
+                <div class="col-sm-8">
+                    <select name="bookkeeperCode" class="form-control m-b" th:with="type=${@dict.getType('family_menber')}" required disabled="disabled">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{bookkeeperCode}"></option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "pay/pay";
+        $("#form-pay-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-pay-edit').serialize());
+            }
+        }
+
+        $("input[name='payDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+    </script>
+</body>
+</html>
