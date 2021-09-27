@@ -33,7 +33,7 @@ public interface IFamilyBillService
      * @param familyBill 单据管理
      * @return 结果
      */
-    public int insertFamilyBill(FamilyBill familyBill);
+    public Long insertFamilyBill(FamilyBill familyBill);
 
     /**
      * 修改单据管理

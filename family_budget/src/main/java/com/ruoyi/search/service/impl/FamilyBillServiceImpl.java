@@ -1,7 +1,13 @@
 package com.ruoyi.search.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.ShiroUtils;
+import com.ruoyi.pay.domain.FamilyFixedAssets;
+import com.ruoyi.system.domain.SysAttachment;
+import com.ruoyi.system.mapper.SysAttachmentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.search.mapper.FamilyBillMapper;
@@ -21,6 +27,8 @@ public class FamilyBillServiceImpl implements IFamilyBillService
     @Autowired
     private FamilyBillMapper familyBillMapper;
 
+    @Autowired
+    private SysAttachmentMapper sysAttachmentMapper;
     /**
      * 查询单据管理
      * 
@@ -33,6 +41,7 @@ public class FamilyBillServiceImpl implements IFamilyBillService
         return familyBillMapper.selectFamilyBillById(id);
     }
 
+
     /**
      * 查询单据管理列表
      * 
@@ -42,7 +51,22 @@ public class FamilyBillServiceImpl implements IFamilyBillService
     @Override
     public List<FamilyBill> selectFamilyBillList(FamilyBill familyBill)
     {
-        return familyBillMapper.selectFamilyBillList(familyBill);
+        List<FamilyBill> familyBills = familyBillMapper.selectFamilyBillList(familyBill);
+        for (int i = 0; i <familyBills.size() ; i++) {
+            FamilyBill fixedAssets =familyBills.get(i);
+            Long id = fixedAssets.getId();
+            SysAttachment sysAttachment = new SysAttachment();
+            sysAttachment.setBusinessId(String.valueOf(id));
+            sysAttachment.setBusinessType("bill");
+            sysAttachment.setDelFlag(0);
+            List<SysAttachment> sysAttachments = sysAttachmentMapper.selectSysAttachmentList(sysAttachment);
+            if (sysAttachments!=null) {
+                List<String> collect = sysAttachments.stream().map(r -> r.getFilePath()).collect(Collectors.toList());
+                fixedAssets.setImgUrls(collect);
+            }
+            familyBills.set(i,fixedAssets);
+        }
+        return familyBills;
     }
 
     /**
@@ -52,10 +76,13 @@ public class FamilyBillServiceImpl implements IFamilyBillService
      * @return 结果
      */
     @Override
-    public int insertFamilyBill(FamilyBill familyBill)
+    public Long insertFamilyBill(FamilyBill familyBill)
     {
+        familyBill.setCreateUser(ShiroUtils.getLoginName());
         familyBill.setCreateTime(DateUtils.getNowDate());
-        return familyBillMapper.insertFamilyBill(familyBill);
+        familyBillMapper.insertFamilyBill(familyBill);
+        Long id = familyBill.getId();
+        return id;
     }
 
     /**

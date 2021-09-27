@@ -86,7 +86,7 @@ public class FamilyBillController extends BaseController
     @ResponseBody
     public AjaxResult addSave(FamilyBill familyBill)
     {
-        return toAjax(familyBillService.insertFamilyBill(familyBill));
+        return AjaxResult.success("success",familyBillService.insertFamilyBill(familyBill));
     }
 
     /**

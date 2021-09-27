@@ -16,9 +16,9 @@
                             </li>
                             <li>
                                 <label>状态：</label>
-                                <select name="status" th:with="type=${@dict.getType('sys_normal_disable')}">
+                                <select name="status" th:with="type=${@dict.getType('sys_normal_disable')}" th:value="0" >
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" ></option>
                                     <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
@@ -94,7 +94,17 @@
                     formatter: function(value, row, index) {
                        return $.table.selectDictLabel(statusDatas, value);
                     }
-                },
+                },{
+                        field: 'imgUrls',
+                        title: '附件',
+                        formatter: function (arr, row, index) {
+                            var html=''
+                            if (arr!=null&&arr.length>0){
+                                html+= '<img src="' + arr[0]+ '" width="150" height="100">'
+                            }
+                            return html
+                        }
+                    },
                 {
                     field: 'createUser',
                     title: '创建人'

@@ -95,7 +95,6 @@
 
         function submitHandler() {
             if ($.validate.form()) {
-                var data ={"businessId":$("input[name=id]").val(),"businessType":"budgetassets"}
                 $.ajax({
                     cache : true,
                     type : "POST",

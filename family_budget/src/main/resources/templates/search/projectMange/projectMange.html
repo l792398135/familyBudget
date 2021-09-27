@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('盘点详情列表')" />
+    <th:block th:include="include :: header('项目管理列表')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -11,26 +11,30 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <label>盘点编码：</label>
-                                <input type="text" style="background-color:#ddddde" id="checkCode" name="checkCode" th:value="${check['checkCode']}" readonly/>
+                                <label>项目名称：</label>
+                                <input type="text" name="projectName"/>
                             </li>
                             <li>
-                                <label>责任人：</label>
-                                <select name="responsiber" th:with="type=${@dict.getType('family_menber')}">
+                                <label>负责人：</label>
+                                <select name="projectMenber" th:with="type=${@dict.getType('family_menber')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
-                                <label>账户：</label>
-                                <select name="resouceAccount" th:with="type=${@dict.getType('zhanghuleixing')}">
+                                <label>开始时间：</label>
+                                <input type="text" class="time-input" placeholder="请选择开始时间" name="startTime"/>
+                            </li>
+                            <li>
+                                <label>结束时间：</label>
+                                <input type="text" class="time-input" placeholder="请选择结束时间" name="endDate"/>
+                            </li>
+                            <li>
+                                <label>状态：</label>
+                                <select name="status" th:with="type=${@dict.getType('sys_normal_disable')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
-                            </li>
-                            <li>
-                                <label>图片：</label>
-                                <input type="text" name="img"/>
                             </li>
                             <li>
                                 <label>创建人：</label>
@@ -52,20 +56,17 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="add()" shiro:hasPermission="cost:checkdetails:add">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="search:projectMange:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="cost:checkdetails:edit">
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="search:projectMange:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="cost:checkdetails:remove">
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="search:projectMange:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="cost:checkdetails:export">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="search:projectMange:export">
                     <i class="fa fa-download"></i> 导出
-                </a>
-                <a class="btn btn-danger" onclick="closeItem()">
-                    <i class="fa fa-reply-all"></i> 关闭
                 </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
@@ -75,22 +76,20 @@
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('cost:checkdetails:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('cost:checkdetails:remove')}]];
-        var responsiberDatas = [[${@dict.getType('family_menber')}]];
-        var resouceAccountDatas = [[${@dict.getType('zhanghuleixing')}]];
-        var createUser = [[${@dict.getType('family_menber')}]];
-        var prefix = ctx + "cost/checkdetails";
+        var editFlag = [[${@permission.hasPermi('search:projectMange:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('search:projectMange:remove')}]];
+        var projectMenberDatas = [[${@dict.getType('family_menber')}]];
+        var statusDatas = [[${@dict.getType('sys_normal_disable')}]];
+        var prefix = ctx + "search/projectMange";
 
         $(function() {
             var options = {
                 url: prefix + "/list",
-                createUrl: prefix + "/add/{id}",
+                createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
-                queryParams: queryParams,
-                modalName: "盘点详情",
+                modalName: "项目管理",
                 columns: [{
                     checkbox: true
                 },
@@ -100,52 +99,46 @@
                     visible: false
                 },
                 {
-                    field: 'checkCode',
-                    title: '盘点编码'
+                    field: 'projectName',
+                    title: '项目名称'
                 },
                 {
-                    field: 'responsiber',
-                    title: '责任人',
+                    field: 'projectMenber',
+                    title: '负责人',
                     formatter: function(value, row, index) {
-                       return $.table.selectDictLabel(responsiberDatas, value);
+                       return $.table.selectDictLabel(projectMenberDatas, value);
                     }
                 },
                 {
-                    field: 'resouceAccount',
-                    title: '账户',
+                    field: 'startTime',
+                    title: '开始时间'
+                },
+                {
+                    field: 'endDate',
+                    title: '结束时间'
+                },
+                {
+                    field: 'investAmount',
+                    title: '投资金额'
+                },
+                {
+                    field: 'investedAmount',
+                    title: '以投资金额'
+                },
+                {
+                    field: 'status',
+                    title: '状态',
                     formatter: function(value, row, index) {
-                       return $.table.selectDictLabel(resouceAccountDatas, value);
+                       return $.table.selectDictLabel(statusDatas, value);
                     }
-                },
-                {
-                    field: 'resourceAccountRemark',
-                    title: '账户备注'
-                },
-                {
-                    field: 'fundAmount',
-                    title: '金额'
                 },
                 {
                     field: 'remark',
                     title: '备注'
                 },
-                    {
-                        field: 'imgUrls',
-                        title: '附件',
-                        formatter: function (arr, row, index) {
-                            var html=''
-                            if (arr!=null&&arr.length>0){
-                                html+= '<img src="' + arr[0]+ '" width="150" height="100">'
-                            }
-                            return html
-                        }
-                    },
                 {
                     field: 'createUser',
-                    title: '创建人',
-                    formatter: function(value, row, index) {
-                        return $.table.selectDictLabel(createUser, value);
-                    }
+                    title: '创建人'
                 },
                 {
                     field: 'createTime',
@@ -164,17 +157,6 @@
             };
             $.table.init(options);
         });
-
-        function queryParams(params) {
-            var search = $.table.queryParams(params);
-            search.checkCode = $("#checkCode").val();
-            return search;
-        }
-
-        function add() {
-            var checkCode = $("#checkCode").val();
-            $.operate.add(checkCode);
-        }
     </script>
 </body>
 </html>

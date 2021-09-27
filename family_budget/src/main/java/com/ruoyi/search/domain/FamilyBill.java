@@ -1,6 +1,8 @@
 package com.ruoyi.search.domain;
 
 import java.math.BigDecimal;
+import java.util.List;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -16,6 +18,7 @@ public class FamilyBill extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
+    private List<String> imgUrls;
     /**  */
     private Long id;
 
@@ -38,7 +41,15 @@ public class FamilyBill extends BaseEntity
     @Excel(name = "创建人")
     private String createUser;
 
-    public void setId(Long id) 
+    public List<String> getImgUrls() {
+        return imgUrls;
+    }
+
+    public void setImgUrls(List<String> imgUrls) {
+        this.imgUrls = imgUrls;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }
