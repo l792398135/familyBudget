@@ -2,6 +2,8 @@ package com.ruoyi.search.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -17,7 +19,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 public class FamilyProjectManage extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
-
+    private List<String> imgUrls;
     /**  */
     private Long id;
 
@@ -55,7 +57,15 @@ public class FamilyProjectManage extends BaseEntity
     @Excel(name = "创建人")
     private String createUser;
 
-    public void setId(Long id) 
+    public List<String> getImgUrls() {
+        return imgUrls;
+    }
+
+    public void setImgUrls(List<String> imgUrls) {
+        this.imgUrls = imgUrls;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }

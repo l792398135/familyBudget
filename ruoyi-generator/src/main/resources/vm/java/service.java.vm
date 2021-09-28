@@ -36,7 +36,7 @@ public interface I${ClassName}Service
      * @param ${className} ${functionName}
      * @return 结果
      */
-    public int insert${ClassName}(${ClassName} ${className});
+    public Long insert${ClassName}(${ClassName} ${className});
 
     /**
      * 修改${functionName}

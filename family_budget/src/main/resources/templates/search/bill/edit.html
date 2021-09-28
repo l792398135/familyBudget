@@ -55,11 +55,7 @@
             focusCleanup: true
         });
 
-        function submitHandler() {
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/edit", $('#form-bill-edit').serialize());
-            }
-        }
+
         function submitHandler() {
             if ($.validate.form()) {
                 $.ajax({

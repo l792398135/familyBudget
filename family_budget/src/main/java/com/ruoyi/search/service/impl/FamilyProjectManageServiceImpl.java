@@ -1,7 +1,13 @@
 package com.ruoyi.search.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.ShiroUtils;
+import com.ruoyi.search.domain.FamilyBill;
+import com.ruoyi.system.domain.SysAttachment;
+import com.ruoyi.system.mapper.SysAttachmentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.search.mapper.FamilyProjectManageMapper;
@@ -20,7 +26,8 @@ public class FamilyProjectManageServiceImpl implements IFamilyProjectManageServi
 {
     @Autowired
     private FamilyProjectManageMapper familyProjectManageMapper;
-
+    @Autowired
+    private SysAttachmentMapper sysAttachmentMapper;
     /**
      * 查询项目管理
      * 
@@ -42,7 +49,22 @@ public class FamilyProjectManageServiceImpl implements IFamilyProjectManageServi
     @Override
     public List<FamilyProjectManage> selectFamilyProjectManageList(FamilyProjectManage familyProjectManage)
     {
-        return familyProjectManageMapper.selectFamilyProjectManageList(familyProjectManage);
+        List<FamilyProjectManage> familyProjectManages = familyProjectManageMapper.selectFamilyProjectManageList(familyProjectManage);
+        for (int i = 0; i <familyProjectManages.size() ; i++) {
+            FamilyProjectManage fixedAssets =familyProjectManages.get(i);
+            Long id = fixedAssets.getId();
+            SysAttachment sysAttachment = new SysAttachment();
+            sysAttachment.setBusinessId(String.valueOf(id));
+            sysAttachment.setBusinessType("projectManage");
+            sysAttachment.setDelFlag(0);
+            List<SysAttachment> sysAttachments = sysAttachmentMapper.selectSysAttachmentList(sysAttachment);
+            if (sysAttachments!=null) {
+                List<String> collect = sysAttachments.stream().map(r -> r.getFilePath()).collect(Collectors.toList());
+                fixedAssets.setImgUrls(collect);
+            }
+            familyProjectManages.set(i,fixedAssets);
+        }
+        return familyProjectManages;
     }
 
     /**
@@ -52,10 +74,12 @@ public class FamilyProjectManageServiceImpl implements IFamilyProjectManageServi
      * @return 结果
      */
     @Override
-    public int insertFamilyProjectManage(FamilyProjectManage familyProjectManage)
+    public Long insertFamilyProjectManage(FamilyProjectManage familyProjectManage)
     {
+        familyProjectManage.setCreateUser(ShiroUtils.getLoginName());
         familyProjectManage.setCreateTime(DateUtils.getNowDate());
-        return familyProjectManageMapper.insertFamilyProjectManage(familyProjectManage);
+        int i = familyProjectManageMapper.insertFamilyProjectManage(familyProjectManage);
+        return familyProjectManage.getId();
     }
 
     /**

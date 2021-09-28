@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('项目管理列表')" />
+    <th:block th:include="include :: header('负债列表')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -11,34 +11,25 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <label>项目名称：</label>
-                                <input type="text" name="projectName"/>
-                            </li>
-                            <li>
-                                <label>负责人：</label>
-                                <select name="projectMenber" th:with="type=${@dict.getType('family_menber')}">
+                                <label>贷款人：</label>
+                                <select name="loanMenber" th:with="type=${@dict.getType('family_menber')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
-                                <label>开始时间：</label>
-                                <input type="text" class="time-input" placeholder="请选择开始时间" name="startTime"/>
-                            </li>
-                            <li>
-                                <label>结束时间：</label>
-                                <input type="text" class="time-input" placeholder="请选择结束时间" name="endDate"/>
-                            </li>
-                            <li>
                                 <label>状态：</label>
-                                <select name="status" th:with="type=${@dict.getType('sys_normal_disable')}" th:value="0">
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                <select name="status" th:with="type=${@dict.getType('sys_normal_disable')}">
                                     <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
                                 <label>创建人：</label>
-                                <input type="text" name="createUser"/>
+                                <select name="createUser" th:with="type=${@dict.getType('family_menber')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
                             </li>
                             <li class="select-time">
                                 <label>创建时间：</label>
@@ -56,16 +47,16 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="search:projectMange:add">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="finance:loan:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="search:projectMange:edit">
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="finance:loan:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="search:projectMange:remove">
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="finance:loan:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="search:projectMange:export">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="finance:loan:export">
                     <i class="fa fa-download"></i> 导出
                 </a>
             </div>
@@ -76,11 +67,12 @@
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('search:projectMange:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('search:projectMange:remove')}]];
-        var projectMenberDatas = [[${@dict.getType('family_menber')}]];
+        var editFlag = [[${@permission.hasPermi('finance:loan:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('finance:loan:remove')}]];
+        var loanMenberDatas = [[${@dict.getType('family_menber')}]];
         var statusDatas = [[${@dict.getType('sys_normal_disable')}]];
-        var prefix = ctx + "search/projectMange";
+        var createUserDatas = [[${@dict.getType('family_menber')}]];
+        var prefix = ctx + "finance/loan";
 
         $(function() {
             var options = {
@@ -89,7 +81,7 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
-                modalName: "项目管理",
+                modalName: "负债",
                 columns: [{
                     checkbox: true
                 },
@@ -98,33 +90,45 @@
                     title: '',
                     visible: false
                 },
+
                 {
-                    field: 'projectName',
-                    title: '项目名称'
-                },
-                {
-                    field: 'projectMenber',
-                    title: '负责人',
+                    field: 'loanMenber',
+                    title: '贷款人',
                     formatter: function(value, row, index) {
-                       return $.table.selectDictLabel(projectMenberDatas, value);
+                       return $.table.selectDictLabel(loanMenberDatas, value);
                     }
                 },
+
                 {
-                    field: 'startTime',
+                    field: 'loanAmount',
+                    title: '贷款金额'
+                },
+
+                {
+                    field: 'loanStartDate',
                     title: '开始时间'
                 },
+
                 {
-                    field: 'endDate',
+                    field: 'loanEndDate',
                     title: '结束时间'
                 },
+
                 {
-                    field: 'investAmount',
-                    title: '投资金额'
+                    field: 'loanRate',
+                    title: '利率'
                 },
+
                 {
-                    field: 'investedAmount',
-                    title: '以投资金额'
+                    field: 'loanPlatform',
+                    title: '平台'
                 },
+
+                {
+                    field: 'remark',
+                    title: '备注'
+                },
+
                 {
                     field: 'status',
                     title: '状态',
@@ -132,14 +136,21 @@
                        return $.table.selectDictLabel(statusDatas, value);
                     }
                 },
-                {
-                    field: 'remark',
-                    title: '备注'
-                },
+
                 {
                     field: 'createUser',
-                    title: '创建人'
-                },{
+                    title: '创建人',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(createUserDatas, value);
+                    }
+                },
+
+                {
+                    field: 'createTime',
+                    title: '创建时间'
+                },
+
+                    {
                         field: 'imgUrls',
                         title: '附件',
                         formatter: function (arr, row, index) {
@@ -150,10 +161,6 @@
                             return html
                         }
                     },
-                {
-                    field: 'createTime',
-                    title: '创建时间'
-                },
                 {
                     title: '操作',
                     align: 'center',

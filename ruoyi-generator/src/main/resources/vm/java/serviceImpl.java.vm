@@ -1,6 +1,8 @@
 package ${packageName}.service.impl;
 
+import com.ruoyi.common.utils.ShiroUtils;
 import java.util.List;
+import java.util.stream.Collectors;
 #if($table.tree)
 import java.util.ArrayList;
 import com.ruoyi.common.core.domain.Ztree;
@@ -23,7 +25,8 @@ import ${packageName}.mapper.${ClassName}Mapper;
 import ${packageName}.domain.${ClassName};
 import ${packageName}.service.I${ClassName}Service;
 import com.ruoyi.common.core.text.Convert;
-
+import com.ruoyi.system.domain.SysAttachment;
+import com.ruoyi.system.mapper.SysAttachmentMapper;
 /**
  * ${functionName}Service业务层处理
  * 
@@ -33,6 +36,9 @@ import com.ruoyi.common.core.text.Convert;
 @Service
 public class ${ClassName}ServiceImpl implements I${ClassName}Service 
 {
+    @Autowired
+    private SysAttachmentMapper sysAttachmentMapper;
+
     @Autowired
     private ${ClassName}Mapper ${className}Mapper;
 
@@ -57,7 +63,22 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service
     @Override
     public List<${ClassName}> select${ClassName}List(${ClassName} ${className})
     {
-        return ${className}Mapper.select${ClassName}List(${className});
+        List<${className}> ${className}1= ${className}Mapper.select${ClassName}List(${className});
+        for (int i = 0; i <${className}1.size() ; i++) {
+            ${ClassName} item =${className}1.get(i);
+            Long id = item.getId();
+            SysAttachment sysAttachment = new SysAttachment();
+            sysAttachment.setBusinessId(String.valueOf(id));
+            sysAttachment.setBusinessType("businessType");
+            sysAttachment.setDelFlag(0);
+            List<SysAttachment> sysAttachments = sysAttachmentMapper.selectSysAttachmentList(sysAttachment);
+            if (sysAttachments!=null) {
+                List<String> collect = sysAttachments.stream().map(r -> r.getFilePath()).collect(Collectors.toList());
+                item.setImgUrls(collect);
+            }
+            ${className}1.set(i,item);
+        }
+        return ${className}1;
     }
 
     /**
@@ -70,7 +91,7 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service
     @Transactional
 #end
     @Override
-    public int insert${ClassName}(${ClassName} ${className})
+    public Long insert${ClassName}(${ClassName} ${className})
     {
 #foreach ($column in $columns)
 #if($column.javaField == 'createTime')
@@ -82,7 +103,9 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service
         insert${subClassName}(${className});
         return rows;
 #else
-        return ${className}Mapper.insert${ClassName}(${className});
+        ${className}.setCreateUser(ShiroUtils.getLoginName());
+        ${className}Mapper.insert${ClassName}(${className});
+        return ${className}.getId();
 #end
     }
 

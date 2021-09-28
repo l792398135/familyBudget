@@ -33,7 +33,7 @@ public interface IFamilyProjectManageService
      * @param familyProjectManage 项目管理
      * @return 结果
      */
-    public int insertFamilyProjectManage(FamilyProjectManage familyProjectManage);
+    public Long insertFamilyProjectManage(FamilyProjectManage familyProjectManage);
 
     /**
      * 修改项目管理

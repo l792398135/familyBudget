@@ -64,7 +64,21 @@
 
         function submitHandler() {
             if ($.validate.form()) {
-                $.operate.save(prefix + "/edit", $('#form-checkdetails-edit').serialize());
+                $.ajax({
+                    cache : true,
+                    type : "POST",
+                    url : prefix + "/edit",
+                    data : $('#form-checkdetails-edit').serialize(),
+                    async : false,
+                    error : function(request) {
+                        $.modal.alertError("系统错误");
+                    },
+                    success : function(data) {
+                        var businessId = $("input[name=id]").val()
+                        $.file.uploadFile("file-Portrait","bill",businessId);
+                        $.operate.saveSuccess(data);
+                    }
+                });
             }
         }
 

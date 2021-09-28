@@ -120,7 +120,7 @@ public class ${ClassName}Controller extends BaseController
     @ResponseBody
     public AjaxResult addSave(${ClassName} ${className})
     {
-        return toAjax(${className}Service.insert${ClassName}(${className}));
+        return AjaxResult.success("success",${className}Service.insert${ClassName}(${className}));
     }
 
     /**

@@ -86,7 +86,7 @@ public class FamilyProjectManageController extends BaseController
     @ResponseBody
     public AjaxResult addSave(FamilyProjectManage familyProjectManage)
     {
-        return toAjax(familyProjectManageService.insertFamilyProjectManage(familyProjectManage));
+        return AjaxResult.success(familyProjectManageService.insertFamilyProjectManage(familyProjectManage));
     }
 
     /**

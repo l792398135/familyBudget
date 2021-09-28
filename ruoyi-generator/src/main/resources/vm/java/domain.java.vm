@@ -3,6 +3,7 @@ package ${packageName}.domain;
 #foreach ($import in $importList)
 import ${import};
 #end
+import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -26,7 +27,15 @@ import com.ruoyi.common.core.domain.TreeEntity;
 public class ${ClassName} extends ${Entity}
 {
     private static final long serialVersionUID = 1L;
+    private List<String> imgUrls;
 
+    public List<String> getImgUrls() {
+        return imgUrls;
+    }
+
+    public void setImgUrls(List<String> imgUrls) {
+        this.imgUrls = imgUrls;
+    }
 #foreach ($column in $columns)
 #if(!$table.isSuperColumn($column.javaField))
     /** $column.columnComment */
