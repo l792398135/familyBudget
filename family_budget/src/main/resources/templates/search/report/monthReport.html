@@ -14,64 +14,6 @@
 <body class="gray-bg">
 <div class="wrapper wrapper-content">
     <div class="row">
-        <div class="col-sm-3">
-            <div class="ibox">
-                <div class="ibox-content">
-                    <h5 class="m-b-md">本月支出(元)</h5>
-                    <h1 class="no-margins" id="localMonthPay">0.00</h1>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="ibox">
-                <div class="ibox-content">
-                    <h5 class="m-b-md">本月预算(元)</h5>
-                    <h1 class="no-margins" id="localMonthBudeget">0.00</h1>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="ibox">
-                <div class="ibox-content">
-                    <h5 class="m-b-md">本月收入(元)</h5>
-                    <h1 class="no-margins" id="localMonthIncome">0.00</h1>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="ibox">
-                <div class="ibox-content">
-                    <h5 class="m-b-md">上月收入(元)</h5>
-                    <h1 class="no-margins" id="preMonthIncome">0.00</h1>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="ibox">
-                <div class="ibox-content">
-                    <h5 class="m-b-md">固定资产(万)</h5>
-                    <h1 class="no-margins" id="fixedAssets">0.00</h1>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="ibox">
-                <div class="ibox-content">
-                    <h5 class="m-b-md">盘点金额(元)</h5>
-                    <h1 class="no-margins" id="checkFund">0.00</h1>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="ibox">
-                <div class="ibox-content">
-                    <h5 class="m-b-md">资金净额(元)</h5>
-                    <h1 class="no-margins" id="fundNet">0.00</h1>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
         <div class="col-sm-4">
             <div class="ibox">
                 <div class="ibox-content">
@@ -123,17 +65,38 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>月度支出(元)</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-month-pay"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>月度收入(元)</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-month-income"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
 <script th:src="@{/ajax/libs/flot/jquery.flot.js}"></script>
-
-<th:block th:include="include :: sparkline-js" />
+<th:block th:include="include :: echarts-js" />
+<!--<th:block th:include="include :: sparkline-js" />-->
 <th:block th:include="include :: footer" />
 <script type="text/javascript">
     var prefix = ctx + "report";
-
     function getMonthData(data) {
         if (data.data.localMonthPay!=null){$("#localMonthPay").text(data.data.localMonthPay)}
         if (data.data.preMonthIncome!=null){$("#preMonthIncome").text(data.data.preMonthIncome)}
@@ -143,7 +106,6 @@
         if (data.data.checkFund!=null){$("#checkFund").text(data.data.checkFund)}
         if (data.data.fundNet!=null){$("#fundNet").text(data.data.fundNet)}
     }
-
 
     function localMonthPay(data){
         console.log(data)
@@ -201,15 +163,77 @@
         })
         $("#topN6").html(fileList)
     }
-
+    function monthPayChart(data){
+        console.log("月bar"+data.data)
+        console.log("月bar"+data.toString())
+        var monthPayChart = echarts.init(document.getElementById("echarts-month-pay"));
+        monthPayOption = {
+            color: ["#5470c6"],
+            xAxis: {
+                type: 'category',
+                data: data.data.map(item=>item['date_field'])
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    data: data.data.map(item=>item['cost_field']),
+                    type: 'bar'
+                }
+            ],
+            label: {
+                show: true, //开启显示
+                position: 'top', //在上方显示
+                textStyle: { //数值样式
+                    color: 'black',
+                    fontSize: 16,
+                    fontWeight: 600
+                }
+            }
+        };
+        monthPayChart.setOption(monthPayOption);
+        window.onresize = monthPayChart.resize;
+    }
+    function monthIncomeChart(data){
+        var monthIncomeChart = echarts.init(document.getElementById("echarts-month-income"));
+        monthIncomeOption = {
+            color: ["#5470c6"],
+            xAxis: {
+                type: 'category',
+                data: data.data.map(item=>item['date_field'])
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    data: data.data.map(item=>item['cost_field']),
+                    type: 'bar'
+                }
+            ],
+            label: {
+                show: true, //开启显示
+                position: 'top', //在上方显示
+                textStyle: { //数值样式
+                    color: 'black',
+                    fontSize: 16,
+                    fontWeight: 600
+                }
+            }
+        };
+        monthIncomeChart.setOption(monthIncomeOption);
+        window.onresize = monthIncomeChart.resize;
+    }
     $(function() {
-        $.operate.get1(prefix + "/getMonthData",getMonthData);
         $.operate.get1(prefix + "/getTopN/localMonthPay",localMonthPay);
         $.operate.get1(prefix + "/getTopN/preMonthIncome",preMonthIncome);
         $.operate.get1(prefix + "/getTopN/localMonthIncome",localMonthIncome);
         $.operate.get1(prefix + "/getTopN/localMonthPayCode",localMonthPayCode);
         $.operate.get1(prefix + "/getTopN/localMonthOperatorCount",localMonthOperatorCount);
         $.operate.get1(prefix + "/getTopN/localMonthBookkeeperCount",localMonthBookkeeperCount);
+        $.operate.get1(prefix + "/getMonthPayChart",monthPayChart);
+        $.operate.get1(prefix + "/getMonthIncomeChart",monthIncomeChart);
     })
 </script>
 </body>

@@ -1,4 +1,4 @@
-package com.ruoyi.pay.vo;
+package com.ruoyi.search.vo;
 
 import java.io.Serializable;
 

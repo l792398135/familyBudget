@@ -1,19 +1,13 @@
-package com.ruoyi.pay.service.impl;
+package com.ruoyi.search.service.impl;
 
-import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.pay.mapper.FamilyMonthBudgetMapper;
-import com.ruoyi.pay.mapper.FamilyPayMapper;
-import com.ruoyi.pay.mapper.FamilyReportMapper;
-import com.ruoyi.pay.service.IFamilyReportService;
-import com.ruoyi.pay.vo.TopNVO;
+import com.ruoyi.search.mapper.FamilyReportMapper;
+import com.ruoyi.search.service.IFamilyReportService;
+import com.ruoyi.search.vo.TopNVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class FamilyReportServiceImpl implements IFamilyReportService {
@@ -28,15 +22,29 @@ public class FamilyReportServiceImpl implements IFamilyReportService {
         BigDecimal localMonthIncome = familyReportMapper.getLocalMonthIncome();
         BigDecimal fixedAssets = familyReportMapper.getFixedAssets();
         BigDecimal checkFund = familyReportMapper.getCheckFund();
+        BigDecimal fundNet = getfundNet();
         Map<String, Object> result = new HashMap<>();
         result.put("localMonthPay",localMonthPay);
         result.put("preMonthIncome",preMonthIncome);
         result.put("localMonthBudget",localMonthBudget);
         result.put("localMonthIncome",localMonthIncome);
         result.put("checkFund",checkFund);
+        result.put("fundNet",fundNet);
         BigDecimal divide = fixedAssets.divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP);
         result.put("fixedAssets",divide);
         return result;
+    }
+
+    private BigDecimal getfundNet() {
+        Date startTime = familyReportMapper.getFundCheckStartTime();
+        BigDecimal checkFund = familyReportMapper.getCheckFund();
+        if (startTime!=null) {
+            BigDecimal income = familyReportMapper.getFundCheckIncome(startTime);
+            BigDecimal pay = familyReportMapper.getFundCheckPay(startTime);
+            return checkFund.add(income).subtract(pay);
+        }else{
+            return null;
+        }
     }
 
     @Override
@@ -58,5 +66,15 @@ public class FamilyReportServiceImpl implements IFamilyReportService {
             throw new RuntimeException("没有这个类型");
         }
         return result;
+    }
+
+    @Override
+    public List<Map<String, Object>> getMonthPayChart() {
+        return familyReportMapper.getMonthPayChart();
+    }
+
+    @Override
+    public List<Map<String, Object>> getMonthIncomeChart() {
+        return familyReportMapper.getMonthIncomeChart();
     }
 }
