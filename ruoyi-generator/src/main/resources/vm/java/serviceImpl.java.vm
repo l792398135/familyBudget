@@ -63,7 +63,7 @@ public class ${ClassName}ServiceImpl implements I${ClassName}Service
     @Override
     public List<${ClassName}> select${ClassName}List(${ClassName} ${className})
     {
-        List<${className}> ${className}1= ${className}Mapper.select${ClassName}List(${className});
+        List<${ClassName}> ${className}1= ${className}Mapper.select${ClassName}List(${className});
         for (int i = 0; i <${className}1.size() ; i++) {
             ${ClassName} item =${className}1.get(i);
             Long id = item.getId();

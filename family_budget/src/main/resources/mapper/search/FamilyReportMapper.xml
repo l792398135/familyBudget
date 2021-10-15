@@ -11,6 +11,7 @@
     where date_format(income_date ,'%Y-%m') = date_format(curdate(),'%Y-%m')
     group by income_menber order by sum(income_cost) desc
     ) tmp left join sys_dict_data dict on tmp.men =dict.dict_value  and dict.dict_type = "family_menber"
+    order by num
     </select>
 
     <select id="topN2" resultType="com.ruoyi.search.vo.TopNVO">
@@ -20,7 +21,7 @@ select income_menber men,sum(income_cost ) sum from family_income fi
 where date_format(income_date ,'%Y-%m') = date_format(DATE_SUB(curdate(), INTERVAL 1 MONTH),'%Y-%m')
 group by income_menber
 ) tmp left join sys_dict_data dict on tmp.men =dict.dict_value  and dict.dict_type = "family_menber"
-order by sum desc
+order by num
     </select>
 
     <select id="topN3" resultType="com.ruoyi.search.vo.TopNVO">
@@ -30,7 +31,7 @@ select pay_menber men,sum(pay_cost ) sum from family_pay fp
 where date_format(pay_date ,'%Y-%m') = date_format(curdate() ,'%Y-%m')
 group by pay_menber
 ) tmp left join sys_dict_data dict on tmp.men =dict.dict_value  and dict.dict_type = "family_menber"
-order by sum desc
+order by num
     </select>
 
     <select id="topN4" resultType="com.ruoyi.search.vo.TopNVO">
@@ -40,7 +41,7 @@ select dict.dict_label name ,tmp.men code ,tmp.sum num from (
 	where date_format(pay_date ,'%Y-%m') = date_format(curdate() ,'%Y-%m')
 	group by pay_type_code
 	) tmp left join sys_dict_data dict on tmp.men =dict.dict_value  and dict.dict_type = "budget_type"
-order by sum desc
+order by num
     </select>
 
     <select id="topN5" resultType="com.ruoyi.search.vo.TopNVO">
@@ -54,7 +55,7 @@ select dict.dict_label name ,tmp1.op code ,tmp1.count num from (
 		where date_format(pay_date ,'%Y-%m') = date_format(curdate() ,'%Y-%m')
 	) tmp group by tmp.operator_code
 ) tmp1 left join sys_dict_data dict on tmp1.op =dict.dict_value  and dict.dict_type = "family_menber"
-order by num desc
+order by num
     </select>
 
     <select id="topN6" resultType="com.ruoyi.search.vo.TopNVO">
@@ -68,7 +69,7 @@ select dict.dict_label name ,tmp1.op code ,tmp1.count num from (
 		where date_format(create_date ,'%Y-%m') = date_format(curdate() ,'%Y-%m')
 	) tmp group by tmp.bookkeeper_code order by count(1) desc
 ) tmp1 left join sys_dict_data dict on tmp1.op =dict.dict_value  and dict.dict_type = "family_menber"
-order by num desc
+order by num
     </select>
 
 

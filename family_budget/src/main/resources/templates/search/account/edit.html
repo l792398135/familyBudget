@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改账号管理')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-account-edit" th:object="${familyAccount}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">系统：</label>
+                <div class="col-sm-8">
+                    <input name="system1" th:field="*{system1}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">账号：</label>
+                <div class="col-sm-8">
+                    <input name="account" th:field="*{account}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">密码：</label>
+                <div class="col-sm-8">
+                    <input name="password" th:field="*{password}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <textarea name="remark" class="form-control">[[*{remark}]]</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">附件上传：</label>
+                <div class="col-sm-8">
+                    <input id="file-Portrait" type="file" multiple="multiple" name="file">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "search/account";
+        $("#form-account-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.ajax({
+                    cache : true,
+                    type : "POST",
+                    url : prefix + "/edit",
+                    data : $('#form-account-edit').serialize(),
+                    async : false,
+                    error : function(request) {
+                        $.modal.alertError("系统错误");
+                    },
+                    success : function(data) {
+                        var businessId = $("input[name=id]").val()
+                        $.file.uploadFile("file-Portrait","bill",businessId);
+                        $.operate.saveSuccess(data);
+                    }
+                });
+            }
+        }
+        $(function() {
+            var businessId = $("input[name='id']").val()
+            $.file.initEditFiles("file-Portrait","account",businessId);
+        });
+    </script>
+</body>
+</html>
