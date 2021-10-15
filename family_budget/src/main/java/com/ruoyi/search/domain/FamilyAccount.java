@@ -39,6 +39,10 @@ public class FamilyAccount extends BaseEntity
     @Excel(name = "密码")
     private String password;
 
+    /** 密码 */
+    @Excel(name = "加密密码")
+    private String saltPassword;
+
     /** 创建人 */
     @Excel(name = "创建人")
     private String createUser;
@@ -46,7 +50,15 @@ public class FamilyAccount extends BaseEntity
     /** 用户id */
     private Long userId;
 
-    public void setId(Long id) 
+    public String getSaltPassword() {
+        return saltPassword;
+    }
+
+    public void setSaltPassword(String saltPassword) {
+        this.saltPassword = saltPassword;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }

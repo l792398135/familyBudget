@@ -5,6 +5,7 @@ import com.ruoyi.common.utils.ShiroUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.search.utils.DesUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.search.mapper.FamilyAccountMapper;
@@ -80,6 +81,7 @@ public class FamilyAccountServiceImpl implements IFamilyAccountService
         familyAccount.setUserId(ShiroUtils.getUserId());
         familyAccount.setCreateTime(DateUtils.getNowDate());
         familyAccount.setCreateUser(ShiroUtils.getLoginName());
+        familyAccount.setPassword(DesUtil.encrypt(familyAccount.getSaltPassword(),familyAccount.getPassword()));
         familyAccountMapper.insertFamilyAccount(familyAccount);
         return familyAccount.getId();
     }
