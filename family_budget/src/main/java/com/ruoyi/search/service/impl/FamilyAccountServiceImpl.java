@@ -5,6 +5,7 @@ import com.ruoyi.common.utils.ShiroUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.search.utils.DesUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -81,7 +82,9 @@ public class FamilyAccountServiceImpl implements IFamilyAccountService
         familyAccount.setUserId(ShiroUtils.getUserId());
         familyAccount.setCreateTime(DateUtils.getNowDate());
         familyAccount.setCreateUser(ShiroUtils.getLoginName());
-        familyAccount.setPassword(DesUtil.encrypt(familyAccount.getSaltPassword(),familyAccount.getPassword()));
+        if (StringUtils.isNotEmpty(familyAccount.getPassword())) {
+            familyAccount.setPassword(DesUtil.encrypt(familyAccount.getSaltPassword(), familyAccount.getPassword()));
+        }
         familyAccountMapper.insertFamilyAccount(familyAccount);
         return familyAccount.getId();
     }
@@ -95,6 +98,9 @@ public class FamilyAccountServiceImpl implements IFamilyAccountService
     @Override
     public int updateFamilyAccount(FamilyAccount familyAccount)
     {
+        if (StringUtils.isNotEmpty(familyAccount.getPassword())) {
+            familyAccount.setPassword(DesUtil.encrypt(familyAccount.getSaltPassword(), familyAccount.getPassword()));
+        }
         return familyAccountMapper.updateFamilyAccount(familyAccount);
     }
 
@@ -120,5 +126,11 @@ public class FamilyAccountServiceImpl implements IFamilyAccountService
     public int deleteFamilyAccountById(Long id)
     {
         return familyAccountMapper.deleteFamilyAccountById(id);
+    }
+
+    @Override
+    public String encryptSaltPassword(FamilyAccount familyAccount) {
+        String decrypt = DesUtil.decrypt(familyAccount.getSaltPassword(), familyAccount.getPassword());
+        return decrypt;
     }
 }

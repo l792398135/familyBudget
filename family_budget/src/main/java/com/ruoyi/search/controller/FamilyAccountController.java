@@ -100,6 +100,14 @@ public class FamilyAccountController extends BaseController
         return prefix + "/edit";
     }
 
+    @GetMapping("/encrypt/{id}")
+    public String encrypt(@PathVariable("id") Long id, ModelMap mmap)
+    {
+        FamilyAccount familyAccount = familyAccountService.selectFamilyAccountById(id);
+        mmap.put("familyAccount", familyAccount);
+        return prefix + "/encrypt";
+    }
+
     /**
      * 修改保存账号管理
      */
@@ -110,6 +118,13 @@ public class FamilyAccountController extends BaseController
     public AjaxResult editSave(FamilyAccount familyAccount)
     {
         return toAjax(familyAccountService.updateFamilyAccount(familyAccount));
+    }
+
+    @PostMapping("/encryptSaltPassword")
+    @ResponseBody
+    public AjaxResult encryptSaltPassword(FamilyAccount familyAccount)
+    {
+        return AjaxResult.success(familyAccountService.encryptSaltPassword(familyAccount));
     }
 
     /**

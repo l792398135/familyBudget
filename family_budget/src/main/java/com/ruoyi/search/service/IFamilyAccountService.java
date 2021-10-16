@@ -58,4 +58,6 @@ public interface IFamilyAccountService
      * @return 结果
      */
     public int deleteFamilyAccountById(Long id);
+
+    String encryptSaltPassword(FamilyAccount familyAccount);
 }
