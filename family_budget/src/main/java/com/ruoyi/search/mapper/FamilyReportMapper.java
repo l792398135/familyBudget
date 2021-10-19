@@ -4,6 +4,7 @@ package com.ruoyi.search.mapper;
 import com.ruoyi.search.vo.TopNVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -63,4 +64,10 @@ public interface FamilyReportMapper {
 
     @Select("select  date_format(income_date ,'%Y-%m' ) date_field,sum(income_cost ) cost_field  from family_income fi group by date_format(income_date ,'%Y-%m' ) order by date_field")
     List<Map<String, Object>> getMonthIncomeChart();
+
+    @Select("select date_format(pay_date ,'%Y-%m') date_field,pay_menber ,sum(pay_cost ) cost_field from family_pay  where pay_type_code =#{code} group by date_format(pay_date ,'%Y-%m'),pay_menber ")
+    List<Map<String, Object>> getPay(@Value("code") String code);
+
+    @Select("select date_format(income_date ,'%Y-%m') date_field,income_menber pay_menber ,sum(income_cost ) cost_field from family_income  where income_type_code =#{code} group by date_format(income_date ,'%Y-%m'),income_menber ")
+    List<Map<String, Object>> getIncome(@Value("code") String code);
 }

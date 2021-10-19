@@ -1,5 +1,6 @@
 package com.ruoyi.search.service;
 
+import com.ruoyi.search.vo.ChartVO;
 import com.ruoyi.search.vo.TopNVO;
 
 import java.util.List;
@@ -14,4 +15,8 @@ public interface IFamilyReportService {
     List<Map<String, Object>> getMonthPayChart();
 
     List<Map<String, Object>> getMonthIncomeChart();
+
+    List<ChartVO> getPay(String code);
+
+    List<ChartVO> getIncome(String code);
 }

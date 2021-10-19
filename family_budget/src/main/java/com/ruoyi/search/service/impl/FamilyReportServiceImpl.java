@@ -2,12 +2,16 @@ package com.ruoyi.search.service.impl;
 
 import com.ruoyi.search.mapper.FamilyReportMapper;
 import com.ruoyi.search.service.IFamilyReportService;
+import com.ruoyi.search.vo.ChartVO;
 import com.ruoyi.search.vo.TopNVO;
+import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class FamilyReportServiceImpl implements IFamilyReportService {
@@ -76,5 +80,75 @@ public class FamilyReportServiceImpl implements IFamilyReportService {
     @Override
     public List<Map<String, Object>> getMonthIncomeChart() {
         return familyReportMapper.getMonthIncomeChart();
+    }
+
+    @Override
+    public List<ChartVO> getPay(String code) {
+        List<Map<String, Object>> res = familyReportMapper.getPay(code);
+        List<ChartVO> result = new ArrayList<>();
+        List<String> date_fields = res.stream().map(r -> r.get("date_field").toString()).distinct().sorted().collect(Collectors.toList());
+        Map<String, List<Map<String, Object>>> pay_menber = res.stream().collect(Collectors.groupingBy(map -> map.get("pay_menber").toString()));
+        for (Map.Entry<String, List<Map<String, Object>>> stringListEntry : pay_menber.entrySet()) {
+            String key = stringListEntry.getKey();
+            List<Map<String, Object>> value = stringListEntry.getValue();
+            List<Map<String, Object>> objects = new ArrayList<>();
+            for (String date_field : date_fields) {
+                for (Map<String, Object> stringObjectMap : value) {
+                    Object date_field1 = stringObjectMap.get("date_field");
+                    if (ObjectUtils.isEmpty(date_field1)){
+                        continue;
+                    }else {
+                        String s = date_field1.toString();
+                        if (s.equals(date_field)){
+                            Map<String, Object> tmp = new HashMap<>();
+                            tmp.put("dataName",date_field);
+                            tmp.put("dataNum",stringObjectMap.get("cost_field").toString());
+                            objects.add(tmp);
+                        }
+                    }
+                }
+            }
+            ChartVO chartVO = new ChartVO();
+            chartVO.setChartId("echarts-pay");
+            chartVO.setName(key);
+            chartVO.setData(objects);
+            result.add(chartVO);
+        }
+        return result;
+    }
+
+    @Override
+    public List<ChartVO> getIncome(String code) {
+        List<Map<String, Object>> res = familyReportMapper.getIncome(code);
+        List<ChartVO> result = new ArrayList<>();
+        List<String> date_fields = res.stream().map(r -> r.get("date_field").toString()).distinct().sorted().collect(Collectors.toList());
+        Map<String, List<Map<String, Object>>> pay_menber = res.stream().collect(Collectors.groupingBy(map -> map.get("pay_menber").toString()));
+        for (Map.Entry<String, List<Map<String, Object>>> stringListEntry : pay_menber.entrySet()) {
+            String key = stringListEntry.getKey();
+            List<Map<String, Object>> value = stringListEntry.getValue();
+            List<Map<String, Object>> objects = new ArrayList<>();
+            for (String date_field : date_fields) {
+                for (Map<String, Object> stringObjectMap : value) {
+                    Object date_field1 = stringObjectMap.get("date_field");
+                    if (ObjectUtils.isEmpty(date_field1)){
+                        continue;
+                    }else {
+                        String s = date_field1.toString();
+                        if (s.equals(date_field)){
+                            Map<String, Object> tmp = new HashMap<>();
+                            tmp.put("dataName",date_field);
+                            tmp.put("dataNum",stringObjectMap.get("cost_field").toString());
+                            objects.add(tmp);
+                        }
+                    }
+                }
+            }
+            ChartVO chartVO = new ChartVO();
+            chartVO.setChartId("echarts-income");
+            chartVO.setName(key);
+            chartVO.setData(objects);
+            result.add(chartVO);
+        }
+        return result;
     }
 }

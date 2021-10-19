@@ -3,6 +3,7 @@ package com.ruoyi.search.controller;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.search.service.IFamilyReportService;
+import com.ruoyi.search.vo.ChartVO;
 import com.ruoyi.search.vo.TopNVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,9 +30,33 @@ public class FamilyReportController extends BaseController {
 
     @RequiresPermissions("report:report:view")
     @GetMapping("/report")
-    public String bill()
+    public String report()
     {
         return prefix + "/monthReport";
+    }
+
+    @RequiresPermissions("report:search:view")
+    @GetMapping("/search")
+    public String searchReport()
+    {
+        return prefix + "/searchReport";
+    }
+
+    @ApiOperation("获取月费用")
+    @GetMapping("/getPay/{code}")
+    @ResponseBody
+    public AjaxResult getPay(@PathVariable("code") String code)
+    {
+        List<ChartVO> monthData = familyReportService.getPay(code);
+        return AjaxResult.success(monthData);
+    }
+    @ApiOperation("获取月费用")
+    @GetMapping("/getIncome/{code}")
+    @ResponseBody
+    public AjaxResult getIncome(@PathVariable("code") String code)
+    {
+        List<ChartVO> monthData = familyReportService.getIncome(code);
+        return AjaxResult.success(monthData);
     }
 
     @ApiOperation("获取月费用")
