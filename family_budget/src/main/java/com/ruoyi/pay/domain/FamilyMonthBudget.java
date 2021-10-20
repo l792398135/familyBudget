@@ -34,6 +34,8 @@ public class FamilyMonthBudget extends BaseEntity
     @Excel(name = "预算费用")
     private BigDecimal budgetCost;
 
+    private BigDecimal budgetIncome;
+
     /** 预算备注 */
     @Excel(name = "预算备注")
     private String budgetRemarks;
@@ -47,7 +49,15 @@ public class FamilyMonthBudget extends BaseEntity
     @Excel(name = "创建人员")
     private String createUser;
 
-    public void setId(Long id) 
+    public BigDecimal getBudgetIncome() {
+        return budgetIncome;
+    }
+
+    public void setBudgetIncome(BigDecimal budgetIncome) {
+        this.budgetIncome = budgetIncome;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }

@@ -84,14 +84,14 @@ public class FamilyMonthBudgetDetailsServiceImpl implements IFamilyMonthBudgetDe
     public int updateFamilyMonthBudgetDetails(FamilyMonthBudgetDetails familyMonthBudgetDetails)
     {
         familyMonthBudgetDetailsMapper.updateFamilyMonthBudgetDetails(familyMonthBudgetDetails);
-
         Long id = familyMonthBudgetDetails.getId();
-        familyMonthBudgetDetails =familyMonthBudgetDetailsMapper.selectFamilyMonthBudgetDetailsById(id);
-        //计算预算总额
-        String budgetDate = familyMonthBudgetDetails.getBudgetDate();
-        String budgetType = familyMonthBudgetDetails.getBudgetType();
-        BigDecimal sum = familyMonthBudgetDetailsMapper.sumBudgetBy(budgetDate,budgetType);
+        FamilyMonthBudgetDetails familyMonthBudgetDetails1 =familyMonthBudgetDetailsMapper.selectFamilyMonthBudgetDetailsById(id);
 
+        //计算预算总额
+        String budgetDate = familyMonthBudgetDetails1.getBudgetDate();
+        String budgetType = familyMonthBudgetDetails1.getBudgetType();
+        String dictType = familyMonthBudgetDetails1.getDictType();
+        BigDecimal sum = familyMonthBudgetDetailsMapper.sumBudgetBy(budgetDate,budgetType,dictType);
         FamilyMonthBudget familyMonthBudget = new FamilyMonthBudget();
         try {
             familyMonthBudget.setBudgetDate(DateUtils.parseDate(budgetDate,"yyyy-MM"));
@@ -99,9 +99,15 @@ public class FamilyMonthBudgetDetailsServiceImpl implements IFamilyMonthBudgetDe
             e.printStackTrace();
         }
         familyMonthBudget.setBudgetType(budgetType);
+
         List<FamilyMonthBudget> familyMonthBudgets = monthBudgetMapper.selectFamilyMonthBudgetList(familyMonthBudget);
         FamilyMonthBudget familyMonthBudget1 = familyMonthBudgets.get(0);
-        familyMonthBudget1.setBudgetCost(sum);
+        if (dictType.equals("budget_type")){
+            familyMonthBudget1.setBudgetCost(sum);
+        }
+        if (dictType.equals("income_type")){
+            familyMonthBudget1.setBudgetIncome(sum);
+        }
         monthBudgetMapper.updateFamilyMonthBudget(familyMonthBudget1);
         return 1;
     }

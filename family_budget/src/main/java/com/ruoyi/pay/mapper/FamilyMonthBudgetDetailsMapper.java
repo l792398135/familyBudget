@@ -62,6 +62,6 @@ public interface FamilyMonthBudgetDetailsMapper
      */
     public int deleteFamilyMonthBudgetDetailsByIds(String[] ids);
 
-    @Select("select sum(budget_amount) from family_month_budget_details where budget_type =#{budgetType} and budget_date =#{budgetDate}")
-    BigDecimal sumBudgetBy(@Param("budgetDate") String budgetDate, @Param("budgetType") String budgetType);
+    @Select("select sum(budget_amount) from family_month_budget_details where budget_type =#{budgetType} and budget_date =#{budgetDate} and dict_type =#{dictType}")
+    BigDecimal sumBudgetBy(@Param("budgetDate") String budgetDate, @Param("budgetType") String budgetType,@Param("dictType")String dictType);
 }

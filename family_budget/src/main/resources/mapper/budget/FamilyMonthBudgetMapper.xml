@@ -12,10 +12,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="budgetRemarks"    column="budget_remarks"    />
         <result property="createDate"    column="create_date"    />
         <result property="createUser"    column="create_user"    />
+        <result property="budgetIncome"    column="budget_income"    />
     </resultMap>
 
     <sql id="selectFamilyMonthBudgetVo">
-        select id, budget_type, budget_date, budget_cost, budget_remarks, create_date, create_user from family_month_budget
+        select id, budget_type, budget_date, budget_cost, budget_remarks, create_date, create_user,budget_income from family_month_budget
     </sql>
 
     <select id="selectFamilyMonthBudgetList" parameterType="FamilyMonthBudget" resultMap="FamilyMonthBudgetResult">
@@ -43,6 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="budgetRemarks != null">budget_remarks,</if>
             <if test="createDate != null">create_date,</if>
             <if test="createUser != null">create_user,</if>
+            <if test="budgetIncome != null">budget_cost,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -52,6 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="budgetRemarks != null">#{budgetRemarks},</if>
             <if test="createDate != null">#{createDate},</if>
             <if test="createUser != null">#{createUser},</if>
+            <if test="budgetIncome != null">budget_cost,</if>
          </trim>
     </insert>
 
@@ -64,6 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="budgetRemarks != null">budget_remarks = #{budgetRemarks},</if>
             <if test="createDate != null">create_date = #{createDate},</if>
             <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="budgetIncome != null">budget_income =#{budgetIncome},</if>
         </trim>
         where id = #{id}
     </update>

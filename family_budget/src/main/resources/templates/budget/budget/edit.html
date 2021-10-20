@@ -8,23 +8,6 @@
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-budget-edit" th:object="${familyMonthBudget}">
             <input name="id" th:field="*{id}" type="hidden">
-            <div class="form-group">    
-                <label class="col-sm-3 control-label is-required">预算类型：</label>
-                <div class="col-sm-8">
-                    <select name="budgetType" class="form-control m-b" th:with="type=${@dict.getType('month_budget_type')}" required>
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{budgetType}"></option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label is-required">预算周期：</label>
-                <div class="col-sm-8">
-                    <div class="input-group date">
-                        <input name="budgetDate" th:value="${#dates.format(familyMonthBudget.budgetDate, 'yyyy-MM-dd')}" class="form-control" readonly placeholder="yyyy-MM-dd" type="text" required>
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    </div>
-                </div>
-            </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">预算备注：</label>
                 <div class="col-sm-8">
