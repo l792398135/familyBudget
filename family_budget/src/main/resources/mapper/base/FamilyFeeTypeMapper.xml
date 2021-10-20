@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.base.mapper.FamilyFeeTypeMapper">
+    
+    <resultMap type="FamilyFeeType" id="FamilyFeeTypeResult">
+        <result property="id"    column="id"    />
+        <result property="dictType"    column="dict_type"    />
+        <result property="dictTypeName"    column="dict_type_name"    />
+        <result property="dictValue"    column="dict_value"    />
+        <result property="dictSort"    column="dict_sort"    />
+        <result property="dictLabel"    column="dict_label"    />
+        <result property="controlFlag"    column="control_flag"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createDate"    column="create_date"    />
+    </resultMap>
+
+    <sql id="selectFamilyFeeTypeVo">
+        select id, dict_type, dict_type_name, dict_value, dict_sort, dict_label, control_flag, create_user, create_date from family_fee_type
+    </sql>
+
+    <select id="selectFamilyFeeTypeList" parameterType="FamilyFeeType" resultMap="FamilyFeeTypeResult">
+        <include refid="selectFamilyFeeTypeVo"/>
+        <where>  
+            <if test="dictType != null  and dictType != ''"> and dict_type = #{dictType}</if>
+            <if test="dictTypeName != null  and dictTypeName != ''"> and dict_type_name like concat('%', #{dictTypeName}, '%')</if>
+            <if test="dictValue != null  and dictValue != ''"> and dict_value = #{dictValue}</if>
+            <if test="dictSort != null "> and dict_sort = #{dictSort}</if>
+            <if test="dictLabel != null  and dictLabel != ''"> and dict_label = #{dictLabel}</if>
+            <if test="controlFlag != null  and controlFlag != ''"> and control_flag = #{controlFlag}</if>
+        </where>
+    </select>
+    
+    <select id="selectFamilyFeeTypeById" parameterType="Long" resultMap="FamilyFeeTypeResult">
+        <include refid="selectFamilyFeeTypeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFamilyFeeType" parameterType="FamilyFeeType" useGeneratedKeys="true" keyProperty="id">
+        insert into family_fee_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dictType != null">dict_type,</if>
+            <if test="dictTypeName != null">dict_type_name,</if>
+            <if test="dictValue != null">dict_value,</if>
+            <if test="dictSort != null">dict_sort,</if>
+            <if test="dictLabel != null">dict_label,</if>
+            <if test="controlFlag != null">control_flag,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="createDate != null">create_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dictType != null">#{dictType},</if>
+            <if test="dictTypeName != null">#{dictTypeName},</if>
+            <if test="dictValue != null">#{dictValue},</if>
+            <if test="dictSort != null">#{dictSort},</if>
+            <if test="dictLabel != null">#{dictLabel},</if>
+            <if test="controlFlag != null">#{controlFlag},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createDate != null">#{createDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFamilyFeeType" parameterType="FamilyFeeType">
+        update family_fee_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dictType != null">dict_type = #{dictType},</if>
+            <if test="dictTypeName != null">dict_type_name = #{dictTypeName},</if>
+            <if test="dictValue != null">dict_value = #{dictValue},</if>
+            <if test="dictSort != null">dict_sort = #{dictSort},</if>
+            <if test="dictLabel != null">dict_label = #{dictLabel},</if>
+            <if test="controlFlag != null">control_flag = #{controlFlag},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFamilyFeeTypeById" parameterType="Long">
+        delete from family_fee_type where id = #{id}
+    </delete>
+
+    <delete id="deleteFamilyFeeTypeByIds" parameterType="String">
+        delete from family_fee_type where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

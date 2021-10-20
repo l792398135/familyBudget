@@ -34,8 +34,16 @@
         <div class="col-sm-2">
             <div class="ibox">
                 <div class="ibox-content">
-                    <h5 class="m-b-md">本月预算(元)</h5>
+                    <h5 class="m-b-md">本月支出预算(元)</h5>
                     <h4 class="no-margins" id="localMonthBudeget">0.00</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5 class="m-b-md">本月收入预算(元)</h5>
+                    <h4 class="no-margins" id="localMonthBudgetIncome">0.00</h4>
                 </div>
             </div>
         </div>
@@ -47,6 +55,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-2">
             <div class="ibox">
                 <div class="ibox-content">
@@ -86,6 +96,7 @@
         if (data.data.localMonthPay!=null){$("#localMonthPay").text(data.data.localMonthPay)}
         if (data.data.preMonthIncome!=null){$("#preMonthIncome").text(data.data.preMonthIncome)}
         if (data.data.localMonthBudget!=null){$("#localMonthBudeget").text(data.data.localMonthBudget)}
+        if (data.data.localMonthBudgetIncome!=null){$("#localMonthBudgetIncome").text(data.data.localMonthBudgetIncome)}
         if (data.data.localMonthIncome!=null){$("#localMonthIncome").text(data.data.localMonthIncome)}
         if (data.data.fixedAssets!=null){$("#fixedAssets").text(data.data.fixedAssets)}
         if (data.data.checkFund!=null){$("#checkFund").text(data.data.checkFund)}

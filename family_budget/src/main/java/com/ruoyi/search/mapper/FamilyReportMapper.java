@@ -25,6 +25,9 @@ public interface FamilyReportMapper {
     @Select("select sum(budget_cost) from family_month_budget where date_format(budget_date ,'%Y-%m') = date_format(curdate(),'%Y-%m')")
     BigDecimal getLoaclMonthBudget();
 
+    @Select("select sum(budget_income) from family_month_budget where date_format(budget_date ,'%Y-%m') = date_format(curdate(),'%Y-%m')")
+    BigDecimal getLoaclMonthBudgetIncome();
+
     @Select("select sum(buy_cost) from family_fixed_assets ")
     BigDecimal getFixedAssets();
 
@@ -65,9 +68,9 @@ public interface FamilyReportMapper {
     @Select("select  date_format(income_date ,'%Y-%m' ) date_field,sum(income_cost ) cost_field  from family_income fi group by date_format(income_date ,'%Y-%m' ) order by date_field")
     List<Map<String, Object>> getMonthIncomeChart();
 
-    @Select("select date_format(pay_date ,'%Y-%m') date_field,pay_menber ,sum(pay_cost ) cost_field from family_pay  where pay_type_code =#{code} group by date_format(pay_date ,'%Y-%m'),pay_menber ")
+    @Select("select date_format(pay_date ,'%Y-%m') date_field,pay_menber menber,sum(pay_cost ) cost_field from family_pay  where pay_type_code =#{code} group by date_format(pay_date ,'%Y-%m'),pay_menber ")
     List<Map<String, Object>> getPay(@Value("code") String code);
 
-    @Select("select date_format(income_date ,'%Y-%m') date_field,income_menber pay_menber ,sum(income_cost ) cost_field from family_income  where income_type_code =#{code} group by date_format(income_date ,'%Y-%m'),income_menber ")
+    @Select("select date_format(income_date ,'%Y-%m') date_field,income_menber menber ,sum(income_cost ) cost_field from family_income  where income_type_code =#{code} group by date_format(income_date ,'%Y-%m'),income_menber ")
     List<Map<String, Object>> getIncome(@Value("code") String code);
 }

@@ -3,7 +3,14 @@ package com.ruoyi.pay.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.ruoyi.base.domain.FamilyFeeType;
+import com.ruoyi.base.service.impl.FamilyFeeTypeServiceImpl;
+import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.ShiroUtils;
+import com.ruoyi.pay.domain.FamilyMonthBudgetDetails;
+import com.ruoyi.pay.mapper.FamilyMonthBudgetDetailsMapper;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.pay.mapper.FamilyMonthBudgetMapper;
@@ -22,6 +29,10 @@ public class FamilyMonthBudgetServiceImpl implements IFamilyMonthBudgetService
 {
     @Autowired
     private FamilyMonthBudgetMapper familyMonthBudgetMapper;
+    @Autowired
+    private FamilyFeeTypeServiceImpl feeTypeService;
+    @Autowired
+    private FamilyMonthBudgetDetailsMapper budgetDetailsMapper;
 
     /**
      * 查询月预算
@@ -54,13 +65,35 @@ public class FamilyMonthBudgetServiceImpl implements IFamilyMonthBudgetService
      * @return 结果
      */
     @Override
-    public int insertFamilyMonthBudget(FamilyMonthBudget familyMonthBudget)
-    {
+    public int insertFamilyMonthBudget(FamilyMonthBudget familyMonthBudget) {
+        Date budgetDate = familyMonthBudget.getBudgetDate();
+        String budgetType = familyMonthBudget.getBudgetType();
+        //查询预算周期是否已经创建
+        if (budgetType.equals("plan")) {
+            List<FamilyMonthBudget> familyMonthBudgets = familyMonthBudgetMapper.selectFamilyMonthBudgetList(familyMonthBudget);
+            if (CollectionUtils.isNotEmpty(familyMonthBudgets)){
+                throw new BusinessException("这个周期的计划预算已经创建");
+            }
+        }
+
+        FamilyFeeType familyFeeType = new FamilyFeeType();
+        familyFeeType.setControlFlag("0");
+        List<FamilyFeeType> familyFeeTypes = feeTypeService.selectFamilyFeeTypeList(familyFeeType);
+        for (FamilyFeeType feeType : familyFeeTypes) {
+            FamilyMonthBudgetDetails budgetDetails = new FamilyMonthBudgetDetails();
+            budgetDetails.setDictValue(feeType.getDictValue());
+            budgetDetails.setDictLabel(feeType.getDictLabel());
+            budgetDetails.setDictSort(feeType.getDictSort());
+            budgetDetails.setDictType(feeType.getDictType());
+            budgetDetails.setDictTypeName(feeType.getDictTypeName());
+            budgetDetails.setBudgetDate(DateUtils.parseDateToStr("yyyy-MM", budgetDate));
+            budgetDetails.setBudgetType(budgetType);
+            budgetDetailsMapper.insertFamilyMonthBudgetDetails(budgetDetails);
+        }
         familyMonthBudget.setCreateDate(new Date());
         familyMonthBudget.setCreateUser(ShiroUtils.getLoginName());
         return familyMonthBudgetMapper.insertFamilyMonthBudget(familyMonthBudget);
     }
-
     /**
      * 修改月预算
      * 
@@ -82,7 +115,20 @@ public class FamilyMonthBudgetServiceImpl implements IFamilyMonthBudgetService
     @Override
     public int deleteFamilyMonthBudgetByIds(String ids)
     {
-        return familyMonthBudgetMapper.deleteFamilyMonthBudgetByIds(Convert.toStrArray(ids));
+        String[] strings = Convert.toStrArray(ids);
+        for (String string : strings) {
+            FamilyMonthBudget familyMonthBudget = familyMonthBudgetMapper.selectFamilyMonthBudgetById(Long.parseLong(string));
+            if (familyMonthBudget.getBudgetType().equals("plan")) {
+                FamilyMonthBudgetDetails budgetDetails = new FamilyMonthBudgetDetails();
+                budgetDetails.setBudgetDate(DateUtils.parseDateToStr("yyyy-MM", familyMonthBudget.getBudgetDate()));
+                budgetDetails.setBudgetType(familyMonthBudget.getBudgetType());
+                List<FamilyMonthBudgetDetails> familyMonthBudgetDetails = budgetDetailsMapper.selectFamilyMonthBudgetDetailsList(budgetDetails);
+                if (CollectionUtils.isNotEmpty(familyMonthBudgetDetails)){
+                    throw new BusinessException(DateUtils.parseDateToStr("yyyy-MM", familyMonthBudget.getBudgetDate())+"预算周期存在下级科目");
+                }
+            }
+        }
+        return familyMonthBudgetMapper.deleteFamilyMonthBudgetByIds(strings);
     }
 
     /**
@@ -96,4 +142,5 @@ public class FamilyMonthBudgetServiceImpl implements IFamilyMonthBudgetService
     {
         return familyMonthBudgetMapper.deleteFamilyMonthBudgetById(id);
     }
+
 }

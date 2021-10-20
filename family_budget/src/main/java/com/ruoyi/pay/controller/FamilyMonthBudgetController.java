@@ -123,4 +123,11 @@ public class FamilyMonthBudgetController extends BaseController
     {
         return toAjax(familyMonthBudgetService.deleteFamilyMonthBudgetByIds(ids));
     }
+
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable("id") Long id, ModelMap mmap)
+    {
+        mmap.put("budget", familyMonthBudgetService.selectFamilyMonthBudgetById(id));
+        return "budget/budgetDetails/budgetDetails";
+    }
 }

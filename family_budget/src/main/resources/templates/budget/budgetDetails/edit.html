@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('编辑预算金额')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content">
+        <div class="col-sm-6">
+            <div class="ibox-title" style="height:50px">
+                <h5 class="chartTitle"></h5>
+            </div>
+            <div class="ibox float-e-margins" >
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-fee"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-budgetDetails-edit" th:object="${familyMonthBudgetDetails}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">预算金额：</label>
+                <div class="col-sm-8">
+                    <input name="budgetAmount" th:field="*{budgetAmount}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: echarts-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "budget/budgetDetails";
+        $("#form-budgetDetails-edit").validate({
+            focusCleanup: true
+        });
+        $(function() {
+            var details =[[${familyMonthBudgetDetails}]];
+            let dictType = details.dictType;
+            let dictValue = details.dictValue;
+            $(".chartTitle").text([[${chartTitle}]])
+            if (dictType=="budget_type") {
+                $.operate.get1(ctx + "report" + "/getPay/" +dictValue, lineChart);
+            }
+            if (dictType=="income_type"){
+                $.operate.get1(ctx + "report" + "/getIncome/" + dictValue, lineChart);
+            }
+        })
+
+        function lineChart(data){
+            if (data.data.length==0) return
+            var monthIncomeChart = echarts.init(document.getElementById("echarts-fee"));
+            monthIncomeChart.clear()
+            var tmp=[]
+            for (var i = 0; i < data.data.length; i++) {
+                temp = {
+                    name: data.data[i].name,
+                    type: "line",
+                    // stack :'Total',
+                    data: data.data[i].data.map(item=>item["dataNum"])
+                };
+                tmp.push(temp)
+            }
+            var legend =data.data.map(item=>item['name'])
+            var xAxisData = data.data[0].data.map(item=>item['dataName'])
+            option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: legend
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: xAxisData
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series:tmp
+            };
+            monthIncomeChart.setOption(option);
+            window.onresize = monthIncomeChart.resize;
+        }
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.ajax({
+                    cache : true,
+                    type : "POST",
+                    url : prefix + "/edit",
+                    data : $('#form-budgetDetails-edit').serialize(),
+                    async : false,
+                    error : function(request) {
+                        $.modal.alertError("系统错误");
+                    },
+                    success : function(data) {
+                        $.operate.saveSuccess(data);
+                    }
+                });
+            }
+        }
+
+    </script>
+</body>
+</html>

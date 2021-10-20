@@ -42,7 +42,7 @@ public class FamilyReportController extends BaseController {
         return prefix + "/searchReport";
     }
 
-    @ApiOperation("获取月费用")
+    @ApiOperation("查询支出明细")
     @GetMapping("/getPay/{code}")
     @ResponseBody
     public AjaxResult getPay(@PathVariable("code") String code)
@@ -50,7 +50,7 @@ public class FamilyReportController extends BaseController {
         List<ChartVO> monthData = familyReportService.getPay(code);
         return AjaxResult.success(monthData);
     }
-    @ApiOperation("获取月费用")
+    @ApiOperation("查询收入明细")
     @GetMapping("/getIncome/{code}")
     @ResponseBody
     public AjaxResult getIncome(@PathVariable("code") String code)

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增费用类型')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-feeType-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">类型编码：</label>
+                <div class="col-sm-8">
+                    <input name="dictType" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">类型名称：</label>
+                <div class="col-sm-8">
+                    <input name="dictTypeName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">费用编码：</label>
+                <div class="col-sm-8">
+                    <input name="dictValue" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">费用排序：</label>
+                <div class="col-sm-8">
+                    <input name="dictSort" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">费用名称：</label>
+                <div class="col-sm-8">
+                    <input name="dictLabel" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否控制：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box" th:each="dict : ${@dict.getType('sys_job_status')}">
+                        <input type="radio" th:id="${'controlFlag_' + dict.dictCode}" name="controlFlag" th:value="${dict.dictValue}" th:checked="${dict.default}">
+                        <label th:for="${'controlFlag_' + dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "base/feeType"
+        $("#form-feeType-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler(e) {
+            if ($.validate.form()) {
+                $.ajax({
+                    cache : true,
+                    type : "POST",
+                    url : prefix + "/add",
+                    data : $('#form-feeType-add').serialize(),
+                    async : false,
+                    error : function(request) {
+                        $.modal.alertError("系统错误");
+                    },
+                    success : function(data) {
+                        $.operate.saveSuccess(data);
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

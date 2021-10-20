@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pay.mapper.FamilyMonthBudgetDetailsMapper">
+    
+    <resultMap type="FamilyMonthBudgetDetails" id="FamilyMonthBudgetDetailsResult">
+        <result property="id"    column="id"    />
+        <result property="dictTypeName"    column="dict_type_name"    />
+        <result property="dictType"    column="dict_type"    />
+        <result property="dictValue"    column="dict_value"    />
+        <result property="dictSort"    column="dict_sort"    />
+        <result property="budgetType"    column="budget_type"    />
+        <result property="budgetAmount"    column="budget_amount"    />
+        <result property="budgetDate"    column="budget_date"    />
+        <result property="dictLabel"    column="dict_label"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createDate"    column="create_date"    />
+    </resultMap>
+
+    <sql id="selectFamilyMonthBudgetDetailsVo">
+        select id, dict_type_name, dict_type, dict_value, dict_sort, budget_type, budget_amount, budget_date, dict_label, create_user, create_date from family_month_budget_details
+    </sql>
+
+    <select id="selectFamilyMonthBudgetDetailsList" parameterType="FamilyMonthBudgetDetails" resultMap="FamilyMonthBudgetDetailsResult">
+        <include refid="selectFamilyMonthBudgetDetailsVo"/>
+        <where>  
+            <if test="dictTypeName != null  and dictTypeName != ''"> and dict_type_name like concat('%', #{dictTypeName}, '%')</if>
+            <if test="dictType != null  and dictType != ''"> and dict_type = #{dictType}</if>
+            <if test="dictValue != null  and dictValue != ''"> and dict_value = #{dictValue}</if>
+            <if test="budgetType != null  and budgetType != ''"> and budget_type = #{budgetType}</if>
+            <if test="budgetAmount != null "> and budget_amount = #{budgetAmount}</if>
+            <if test="budgetDate != null  and budgetDate != ''"> and budget_date = #{budgetDate}</if>
+            <if test="dictLabel != null  and dictLabel != ''"> and dict_label = #{dictLabel}</if>
+        </where>
+    </select>
+    
+    <select id="selectFamilyMonthBudgetDetailsById" parameterType="Long" resultMap="FamilyMonthBudgetDetailsResult">
+        <include refid="selectFamilyMonthBudgetDetailsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFamilyMonthBudgetDetails" parameterType="FamilyMonthBudgetDetails" useGeneratedKeys="true" keyProperty="id">
+        insert into family_month_budget_details
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dictTypeName != null">dict_type_name,</if>
+            <if test="dictType != null">dict_type,</if>
+            <if test="dictValue != null">dict_value,</if>
+            <if test="dictSort != null">dict_sort,</if>
+            <if test="budgetType != null">budget_type,</if>
+            <if test="budgetAmount != null">budget_amount,</if>
+            <if test="budgetDate != null">budget_date,</if>
+            <if test="dictLabel != null">dict_label,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="createDate != null">create_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dictTypeName != null">#{dictTypeName},</if>
+            <if test="dictType != null">#{dictType},</if>
+            <if test="dictValue != null">#{dictValue},</if>
+            <if test="dictSort != null">#{dictSort},</if>
+            <if test="budgetType != null">#{budgetType},</if>
+            <if test="budgetAmount != null">#{budgetAmount},</if>
+            <if test="budgetDate != null">#{budgetDate},</if>
+            <if test="dictLabel != null">#{dictLabel},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createDate != null">#{createDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFamilyMonthBudgetDetails" parameterType="FamilyMonthBudgetDetails">
+        update family_month_budget_details
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dictTypeName != null">dict_type_name = #{dictTypeName},</if>
+            <if test="dictType != null">dict_type = #{dictType},</if>
+            <if test="dictValue != null">dict_value = #{dictValue},</if>
+            <if test="dictSort != null">dict_sort = #{dictSort},</if>
+            <if test="budgetType != null">budget_type = #{budgetType},</if>
+            <if test="budgetAmount != null">budget_amount = #{budgetAmount},</if>
+            <if test="budgetDate != null">budget_date = #{budgetDate},</if>
+            <if test="dictLabel != null">dict_label = #{dictLabel},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFamilyMonthBudgetDetailsById" parameterType="Long">
+        delete from family_month_budget_details where id = #{id}
+    </delete>
+
+    <delete id="deleteFamilyMonthBudgetDetailsByIds" parameterType="String">
+        delete from family_month_budget_details where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

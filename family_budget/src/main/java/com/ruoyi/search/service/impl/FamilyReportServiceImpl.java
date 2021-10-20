@@ -23,6 +23,7 @@ public class FamilyReportServiceImpl implements IFamilyReportService {
         BigDecimal localMonthPay = familyReportMapper.getLocalMonthPay();
         BigDecimal preMonthIncome = familyReportMapper.getPreMonthIncome();
         BigDecimal localMonthBudget = familyReportMapper.getLoaclMonthBudget();
+        BigDecimal localMonthBudgetIncome = familyReportMapper.getLoaclMonthBudgetIncome();
         BigDecimal localMonthIncome = familyReportMapper.getLocalMonthIncome();
         BigDecimal fixedAssets = familyReportMapper.getFixedAssets();
         BigDecimal checkFund = familyReportMapper.getCheckFund();
@@ -31,6 +32,7 @@ public class FamilyReportServiceImpl implements IFamilyReportService {
         result.put("localMonthPay",localMonthPay);
         result.put("preMonthIncome",preMonthIncome);
         result.put("localMonthBudget",localMonthBudget);
+        result.put("localMonthBudgetIncome",localMonthBudgetIncome);
         result.put("localMonthIncome",localMonthIncome);
         result.put("checkFund",checkFund);
         result.put("fundNet",fundNet);
@@ -85,9 +87,14 @@ public class FamilyReportServiceImpl implements IFamilyReportService {
     @Override
     public List<ChartVO> getPay(String code) {
         List<Map<String, Object>> res = familyReportMapper.getPay(code);
+        List<ChartVO> result = getChartVOS(res, "echarts-pay");
+        return result;
+    }
+
+    private List<ChartVO> getChartVOS(List<Map<String, Object>> res, String s2) {
         List<ChartVO> result = new ArrayList<>();
         List<String> date_fields = res.stream().map(r -> r.get("date_field").toString()).distinct().sorted().collect(Collectors.toList());
-        Map<String, List<Map<String, Object>>> pay_menber = res.stream().collect(Collectors.groupingBy(map -> map.get("pay_menber").toString()));
+        Map<String, List<Map<String, Object>>> pay_menber = res.stream().collect(Collectors.groupingBy(map -> map.get("menber").toString()));
         for (Map.Entry<String, List<Map<String, Object>>> stringListEntry : pay_menber.entrySet()) {
             String key = stringListEntry.getKey();
             List<Map<String, Object>> value = stringListEntry.getValue();
@@ -95,21 +102,24 @@ public class FamilyReportServiceImpl implements IFamilyReportService {
             for (String date_field : date_fields) {
                 for (Map<String, Object> stringObjectMap : value) {
                     Object date_field1 = stringObjectMap.get("date_field");
-                    if (ObjectUtils.isEmpty(date_field1)){
-                        continue;
-                    }else {
+                    if (ObjectUtils.isEmpty(date_field1)) {
+                        Map<String, Object> tmp = new HashMap<>();
+                        tmp.put("dataName", date_field);
+                        tmp.put("dataNum", "0");
+                        objects.add(tmp);
+                    } else {
                         String s = date_field1.toString();
-                        if (s.equals(date_field)){
+                        if (s.equals(date_field)) {
                             Map<String, Object> tmp = new HashMap<>();
-                            tmp.put("dataName",date_field);
-                            tmp.put("dataNum",stringObjectMap.get("cost_field").toString());
+                            tmp.put("dataName", date_field);
+                            tmp.put("dataNum", stringObjectMap.get("cost_field").toString());
                             objects.add(tmp);
                         }
                     }
                 }
             }
             ChartVO chartVO = new ChartVO();
-            chartVO.setChartId("echarts-pay");
+            chartVO.setChartId(s2);
             chartVO.setName(key);
             chartVO.setData(objects);
             result.add(chartVO);
@@ -120,35 +130,7 @@ public class FamilyReportServiceImpl implements IFamilyReportService {
     @Override
     public List<ChartVO> getIncome(String code) {
         List<Map<String, Object>> res = familyReportMapper.getIncome(code);
-        List<ChartVO> result = new ArrayList<>();
-        List<String> date_fields = res.stream().map(r -> r.get("date_field").toString()).distinct().sorted().collect(Collectors.toList());
-        Map<String, List<Map<String, Object>>> pay_menber = res.stream().collect(Collectors.groupingBy(map -> map.get("pay_menber").toString()));
-        for (Map.Entry<String, List<Map<String, Object>>> stringListEntry : pay_menber.entrySet()) {
-            String key = stringListEntry.getKey();
-            List<Map<String, Object>> value = stringListEntry.getValue();
-            List<Map<String, Object>> objects = new ArrayList<>();
-            for (String date_field : date_fields) {
-                for (Map<String, Object> stringObjectMap : value) {
-                    Object date_field1 = stringObjectMap.get("date_field");
-                    if (ObjectUtils.isEmpty(date_field1)){
-                        continue;
-                    }else {
-                        String s = date_field1.toString();
-                        if (s.equals(date_field)){
-                            Map<String, Object> tmp = new HashMap<>();
-                            tmp.put("dataName",date_field);
-                            tmp.put("dataNum",stringObjectMap.get("cost_field").toString());
-                            objects.add(tmp);
-                        }
-                    }
-                }
-            }
-            ChartVO chartVO = new ChartVO();
-            chartVO.setChartId("echarts-income");
-            chartVO.setName(key);
-            chartVO.setData(objects);
-            result.add(chartVO);
-        }
+        List<ChartVO> result = getChartVOS(res, "echarts-income");
         return result;
     }
 }
