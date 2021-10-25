@@ -102,7 +102,18 @@
             </div>
         </div>
     </div>
-
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>现金排行(元)</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-month-people"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
@@ -124,6 +135,45 @@
 
     function localMonthPay(data){
         var chart = echarts.init(document.getElementById("echarts-topN1"));
+        option = {
+            color: ["#5470c6"],
+            xAxis: [{
+                type: 'value',
+                axisLabel: {
+                    margin: 10,
+                    interval: 1,
+                    rotate:45,  //字体倾斜度数
+                }
+            }],
+            yAxis: {
+                type: 'category',
+                data: data.data.map(item=>item['name'])
+            },
+            label: {
+                show: true,
+                position: 'right',
+                textStyle: { //数值样式
+                    color: 'black',
+                    fontSize: 16,
+                    fontWeight: 600
+                }
+            },
+            series: [
+                {
+                    data: data.data.map(item=>item['num']),
+                    type: 'bar'
+                }
+            ],grid:{
+                left:'20',
+                containLabel:true
+            }
+        };
+        chart.setOption(option);
+        window.onresize = chart.resize;
+
+    }
+    function peopleMoney(data){
+        var chart = echarts.init(document.getElementById("echarts-month-people"));
         option = {
             color: ["#5470c6"],
             xAxis: [{
@@ -452,6 +502,7 @@
         window.onresize = monthIncomeChart.resize;
     }
     $(function() {
+        $.operate.get1(prefix + "/getPeopleMoney",peopleMoney);
         $.operate.get1(prefix + "/getTopN/localMonthPay",localMonthPay);
         $.operate.get1(prefix + "/getTopN/preMonthIncome",preMonthIncome);
         $.operate.get1(prefix + "/getTopN/localMonthIncome",localMonthIncome);

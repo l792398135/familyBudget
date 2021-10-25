@@ -29,7 +29,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
         </where>
     </select>
-    
+
+    <select id="getTramsferListByCheckDate"  resultMap="FamilyTransferAccountResult">
+        <include refid="selectFamilyTransferAccountVo"/>
+        <where>
+            <if test="startTime != null  "> and transfer_time >= #{startTime}</if>
+        </where>
+    </select>
     <select id="selectFamilyTransferAccountById" parameterType="Long" resultMap="FamilyTransferAccountResult">
         <include refid="selectFamilyTransferAccountVo"/>
         where id = #{id}

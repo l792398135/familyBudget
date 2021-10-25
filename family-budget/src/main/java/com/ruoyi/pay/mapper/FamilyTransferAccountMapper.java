@@ -1,5 +1,6 @@
 package com.ruoyi.pay.mapper;
 
+import java.util.Date;
 import java.util.List;
 import com.ruoyi.pay.domain.FamilyTransferAccount;
 
@@ -26,6 +27,7 @@ public interface FamilyTransferAccountMapper
      * @return 转账集合
      */
     public List<FamilyTransferAccount> selectFamilyTransferAccountList(FamilyTransferAccount familyTransferAccount);
+
 
     /**
      * 新增转账
@@ -58,4 +60,7 @@ public interface FamilyTransferAccountMapper
      * @return 结果
      */
     public int deleteFamilyTransferAccountByIds(String[] ids);
+
+    List<FamilyTransferAccount> getTramsferListByCheckDate(Date startTime);
+
 }

@@ -13,6 +13,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="number"    column="number"    />
         <result property="buyDate"    column="buy_date"    />
         <result property="buyCost"    column="buy_cost"    />
+        <result property="nowCost"    column="now_cost"    />
+        <result property="nowEditDate"    column="now_edit_date"    />
         <result property="position1"    column="position1"    />
         <result property="responsibler"    column="responsibler"    />
         <result property="remark"    column="remark"    />
@@ -20,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectFamilyFixedAssetsVo">
-        select id, name, model, use_menber, usage_status, number, buy_date, buy_cost, position1, responsibler, remark, imgUrl from family_fixed_assets
+        select id, name, model, use_menber, usage_status, number, buy_date, buy_cost,now_cost, now_edit_date,position1, responsibler, remark, imgUrl from family_fixed_assets
     </sql>
 
     <select id="selectFamilyFixedAssetsList" parameterType="FamilyFixedAssets" resultMap="FamilyFixedAssetsResult">
@@ -48,6 +50,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="number != null">number,</if>
             <if test="buyDate != null">buy_date,</if>
             <if test="buyCost != null">buy_cost,</if>
+            <if test="nowCost != null">now_cost,</if>
+            <if test="nowEditDate != null">now_edit_date,</if>
             <if test="position1 != null">position1,</if>
             <if test="responsibler != null and responsibler != ''">responsibler,</if>
             <if test="remark != null">remark,</if>
@@ -61,6 +65,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="number != null">#{number},</if>
             <if test="buyDate != null">#{buyDate},</if>
             <if test="buyCost != null">#{buyCost},</if>
+            <if test="nowCost != null">#{nowCost},</if>
+            <if test="nowEditDate != null">#{nowEditDate},</if>
             <if test="position1 != null">#{position1},</if>
             <if test="responsibler != null and responsibler != ''">#{responsibler},</if>
             <if test="remark != null">#{remark},</if>
@@ -78,6 +84,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="number != null">number = #{number},</if>
             <if test="buyDate != null">buy_date = #{buyDate},</if>
             <if test="buyCost != null">buy_cost = #{buyCost},</if>
+            <if test="nowCost != null">now_cost = #{nowCost},</if>
+            <if test="nowEditDate != null">now_edit_date = #{nowEditDate},</if>
             <if test="position1 != null">position1 = #{position1},</if>
             <if test="responsibler != null and responsibler != ''">responsibler = #{responsibler},</if>
             <if test="remark != null">remark = #{remark},</if>

@@ -70,7 +70,7 @@
         <!-- 家庭预算-->
         <dependency>
             <groupId>com.ruoyi</groupId>
-            <artifactId>family_budget</artifactId>
+            <artifactId>family-budget</artifactId>
             <version>${ruoyi.version}</version>
         </dependency>
 

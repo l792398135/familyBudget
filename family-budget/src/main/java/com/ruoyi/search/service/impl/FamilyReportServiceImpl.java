@@ -1,9 +1,13 @@
 package com.ruoyi.search.service.impl;
 
+import com.ruoyi.pay.domain.FamilyFundCheck;
+import com.ruoyi.pay.domain.FamilyTransferAccount;
+import com.ruoyi.pay.mapper.*;
 import com.ruoyi.search.mapper.FamilyReportMapper;
 import com.ruoyi.search.service.IFamilyReportService;
 import com.ruoyi.search.vo.ChartVO;
 import com.ruoyi.search.vo.TopNVO;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,58 @@ import java.util.stream.Collectors;
 public class FamilyReportServiceImpl implements IFamilyReportService {
     @Autowired
     private FamilyReportMapper familyReportMapper;
+    @Autowired
+    private FamilyFundCheckMapper fundCheckMapper;
+    @Autowired
+    private FamilyTransferAccountMapper transferAccountMapper;
+    @Override
+    public List<TopNVO> getPeopleMoney() {
+        //查询有效的盘点
+        FamilyFundCheck familyFundCheckParam = new FamilyFundCheck();
+        familyFundCheckParam.setStatus("0");
+        List<FamilyFundCheck> familyFundChecks = fundCheckMapper.selectFamilyFundCheckList(familyFundCheckParam);
+        if(CollectionUtils.isEmpty(familyFundChecks)){
+            return null;
+        }
+        FamilyFundCheck familyFundCheck = familyFundChecks.get(0);
+        String checkCode = familyFundCheck.getCheckCode();
+        Date startTime = familyFundCheck.getStartTime();
+        //根据盘点编码，查询盘点人员金额list
+        List<TopNVO> checkList = familyReportMapper.getCheckListByCheckCode(checkCode);
+        //根据盘点时间，查询收入支出的金额 人员金额list
+        List<TopNVO> payList = familyReportMapper.getPayListByCheckDate(startTime);
+        List<TopNVO> incomeList = familyReportMapper.getIncomeListByCheckDate(startTime);
+        //根据盘点时间，查出内部转账的金额list
+        List<FamilyTransferAccount> transferAccounts = transferAccountMapper.getTramsferListByCheckDate(startTime);
+        //组装
+        List<TopNVO> collect = checkList.stream().map(r -> {
+            String code = r.getCode();
+            BigDecimal num = new BigDecimal(r.getNum());
+            for (TopNVO topNVO : payList) {
+                if (topNVO.getCode().equals(code)) {
+                    num = num.subtract(new BigDecimal(topNVO.getNum()));
+                }
+            }
+            for (TopNVO topNVO : incomeList) {
+                if (topNVO.getCode().equals(code)) {
+                    num = num.add(new BigDecimal(topNVO.getNum()));
+                }
+            }
+            for (FamilyTransferAccount transferAccount : transferAccounts) {
+                if (transferAccount.getTransfer().equals(r.getCode())){
+                    num = num.subtract(transferAccount.getTransferAccount());
+                }
+            }
+            for (FamilyTransferAccount transferAccount : transferAccounts) {
+                if (transferAccount.getAccepter().equals(r.getCode())){
+                    num = num.add(transferAccount.getTransferAccount());
+                }
+            }
+            r.setNum(num.toString());
+            return r;
+        }).collect(Collectors.toList());
+        return collect;
+    }
 
     @Override
     public Map<String, Object> getMonthData() {

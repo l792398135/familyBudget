@@ -4,6 +4,33 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.search.mapper.FamilyReportMapper">
 
+    <select id="getCheckListByCheckCode" resultType="com.ruoyi.search.vo.TopNVO">
+    select dict.dict_label name ,tmp.men code ,tmp.sum num from (
+    select fcd.responsiber men ,sum(fcd .fund_amount ) sum from
+    family_check_details fcd where fcd.check_code =#{checkCode} group by
+    responsiber order by sum(fcd.fund_amount ) desc
+    ) tmp left join sys_dict_data dict on tmp.men =dict.dict_value
+    and dict.dict_type = "family_menber" order by num
+    </select>
+
+    <select id="getPayListByCheckDate" resultType="com.ruoyi.search.vo.TopNVO">
+    select dict.dict_label name ,tmp.men code ,tmp.sum num from (
+    select fp.pay_menber men, sum(pay_cost ) sum from family_pay fp
+    where  fp.pay_date>#{startTime} group by fp.pay_menber
+     order by sum(fp.pay_cost) desc
+     ) tmp left join sys_dict_data dict on tmp.men =dict.dict_value
+     and dict.dict_type = "family_menber" order by num
+    </select>
+
+    <select id="getIncomeListByCheckDate" resultType="com.ruoyi.search.vo.TopNVO">
+    select dict.dict_label name ,tmp.men code ,tmp.sum num from (
+    select fi.income_menber men, sum(fi.income_cost)  sum from family_income fi
+      where   fi.income_date>#{startTime} group by fi.income_menber
+       order by sum(fi.income_cost ) desc
+    ) tmp left join sys_dict_data dict on tmp.men =dict.dict_value  and
+    dict.dict_type = "family_menber" order by num
+    </select>
+
     <select id="topN1" resultType="com.ruoyi.search.vo.TopNVO">
 --     # 本月收入排行
     select dict.dict_label name ,tmp.men code ,tmp.sum num from (

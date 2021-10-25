@@ -50,8 +50,6 @@ public interface FamilyReportMapper {
     List<TopNVO> topN6();
 
 
-    @Select("")
-    BigDecimal getfundNet();
 
     @Select("select start_time from family_fund_check where status = '0' limit 1")
     Date getFundCheckStartTime();
@@ -73,4 +71,11 @@ public interface FamilyReportMapper {
 
     @Select("select date_format(income_date ,'%Y-%m') date_field,income_menber menber ,sum(income_cost ) cost_field from family_income  where income_type_code =#{code} group by date_format(income_date ,'%Y-%m'),income_menber ")
     List<Map<String, Object>> getIncome(@Value("code") String code);
+
+    List<TopNVO> getCheckListByCheckCode(String checkCode);
+
+    List<TopNVO> getPayListByCheckDate(Date startTime);
+
+    List<TopNVO> getIncomeListByCheckDate(Date startTime);
+
 }

@@ -52,6 +52,11 @@ public class FamilyFixedAssets extends BaseEntity
     @Excel(name = "购入费用")
     private BigDecimal buyCost;
 
+    private BigDecimal nowCost;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date nowEditDate;
+
     /** 存放地点 */
     @Excel(name = "存放地点")
     private String position1;
@@ -65,7 +70,24 @@ public class FamilyFixedAssets extends BaseEntity
     private String imgUrl;
 
     private List<String> imgUrls;
-    public void setId(Long id) 
+
+    public BigDecimal getNowCost() {
+        return nowCost;
+    }
+
+    public void setNowCost(BigDecimal nowCost) {
+        this.nowCost = nowCost;
+    }
+
+    public Date getNowEditDate() {
+        return nowEditDate;
+    }
+
+    public void setNowEditDate(Date nowEditDate) {
+        this.nowEditDate = nowEditDate;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }

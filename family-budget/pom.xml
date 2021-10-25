@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>family_budget</artifactId>
+    <artifactId>family-budget</artifactId>
     <dependencies>
         <dependency>
             <groupId>io.swagger</groupId>

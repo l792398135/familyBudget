@@ -57,6 +57,20 @@
                     <input name="buyCost" th:field="*{buyCost}" class="form-control" type="text">
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">现在估值：</label>
+                <div class="col-sm-8">
+                    <input name="nowCost" th:field="*{nowCost}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">估值时间：</label>
+                <div class="col-sm-8">
+<!--                    <input name="nowEditDate" th:field="*{nowEditDate}" class="form-control" type="text">-->
+                    <input name="nowEditDate" th:value="${#dates.format(familyFixedAssets.nowEditDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" >
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+            </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">存放地点：</label>
                 <div class="col-sm-8">
@@ -118,6 +132,12 @@
             minView: "month",
             autoclose: true
         });
+        $("input[name='nowEditDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
         $(function() {
             var businessId = $("input[name='id']").val()
             $.file.initEditFiles("file-Portrait","budgetassets",businessId);

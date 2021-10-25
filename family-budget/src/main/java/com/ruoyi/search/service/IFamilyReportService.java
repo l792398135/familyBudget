@@ -19,4 +19,6 @@ public interface IFamilyReportService {
     List<ChartVO> getPay(String code);
 
     List<ChartVO> getIncome(String code);
+
+    List<TopNVO> getPeopleMoney();
 }

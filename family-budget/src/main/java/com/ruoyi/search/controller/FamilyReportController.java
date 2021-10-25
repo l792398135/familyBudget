@@ -42,13 +42,22 @@ public class FamilyReportController extends BaseController {
         return prefix + "/searchReport";
     }
 
-    @ApiOperation("查询支出明细")
+    @ApiOperation("")
     @GetMapping("/getPay/{code}")
     @ResponseBody
     public AjaxResult getPay(@PathVariable("code") String code)
     {
         List<ChartVO> monthData = familyReportService.getPay(code);
         return AjaxResult.success(monthData);
+    }
+
+    @ApiOperation("现金排行")
+    @GetMapping("/getPeopleMoney")
+    @ResponseBody
+    public AjaxResult getPeopleMoney()
+    {
+        List<TopNVO> peopleMoney = familyReportService.getPeopleMoney();
+        return AjaxResult.success(peopleMoney);
     }
     @ApiOperation("查询收入明细")
     @GetMapping("/getIncome/{code}")
