@@ -28,7 +28,7 @@ public interface FamilyReportMapper {
     @Select("select sum(budget_income) from family_month_budget where date_format(budget_date ,'%Y-%m') = date_format(curdate(),'%Y-%m')")
     BigDecimal getLoaclMonthBudgetIncome();
 
-    @Select("select sum(buy_cost) from family_fixed_assets ")
+    @Select("select sum(now_cost) from family_fixed_assets ")
     BigDecimal getFixedAssets();
 
     @Select("select sum(fund_amount ) from family_check_details fcd where check_code = " +

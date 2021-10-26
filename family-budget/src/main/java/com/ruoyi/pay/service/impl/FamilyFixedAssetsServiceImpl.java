@@ -75,6 +75,8 @@ public class FamilyFixedAssetsServiceImpl implements IFamilyFixedAssetsService
     @Override
     public Long insertFamilyFixedAssets(FamilyFixedAssets familyFixedAssets)
     {
+        familyFixedAssets.setNowCost(familyFixedAssets.getBuyCost());
+        familyFixedAssets.setNowEditDate(familyFixedAssets.getBuyDate());
         int i = familyFixedAssetsMapper.insertFamilyFixedAssets(familyFixedAssets);
         Long id = familyFixedAssets.getId();
         return id;
