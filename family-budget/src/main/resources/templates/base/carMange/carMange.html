@@ -128,20 +128,17 @@
                        return $.table.selectDictLabel(effectiveFlagDatas, value);
                     }
                 },
-
-
-
-                    {
-                        field: 'imgUrls',
-                        title: '附件',
-                        formatter: function (arr, row, index) {
-                            var html=''
-                            if (arr!=null&&arr.length>0){
-                                html+= '<img src="' + arr[0]+ '" width="150" height="100">'
-                            }
-                            return html
+                {
+                    field: 'imgUrls',
+                    title: '附件',
+                    formatter: function (arr, row, index) {
+                        var html=''
+                        if (arr!=null&&arr.length>0){
+                            html+= '<img src="' + arr[0]+ '" width="150" height="100">'
                         }
-                    },
+                        return html
+                    }
+                },
                 {
                     title: '操作',
                     align: 'center',

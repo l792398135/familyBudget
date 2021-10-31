@@ -23,7 +23,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * 车辆管理基础数据Controller
  * 
  * @author ruoyi
- * @date 2021-10-30
+ * @date 2021-10-31
  */
 @Controller
 @RequestMapping("/car/carMange")
@@ -122,5 +122,12 @@ public class FamilyCarMangecController extends BaseController
     public AjaxResult remove(String ids)
     {
         return toAjax(familyCarMangecService.deleteFamilyCarMangecByIds(ids));
+    }
+
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable("id") Long id, ModelMap mmap)
+    {
+        mmap.put("repair", familyCarMangecService.selectFamilyCarMangecById(id));
+        return "car/carRepair/carRepair";
     }
 }

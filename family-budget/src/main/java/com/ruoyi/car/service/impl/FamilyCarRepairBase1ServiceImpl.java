@@ -1,9 +1,13 @@
 package com.ruoyi.car.service.impl;
 
+import com.ruoyi.base.controller.FamilyCarMangeController;
+import com.ruoyi.base.domain.FamilyCarMange;
+import com.ruoyi.base.mapper.FamilyCarMangeMapper;
 import com.ruoyi.common.utils.ShiroUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.ruoyi.common.utils.DateUtils;
+import org.apache.shiro.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.car.mapper.FamilyCarRepairBase1Mapper;
@@ -27,6 +31,8 @@ public class FamilyCarRepairBase1ServiceImpl implements IFamilyCarRepairBase1Ser
     @Autowired
     private FamilyCarRepairBase1Mapper familyCarRepairBase1Mapper;
 
+    @Autowired
+    private FamilyCarMangeMapper familyCarMangeMapper;
     /**
      * 查询车辆保养科目
      * 
@@ -54,7 +60,7 @@ public class FamilyCarRepairBase1ServiceImpl implements IFamilyCarRepairBase1Ser
             Long id = item.getId();
             SysAttachment sysAttachment = new SysAttachment();
             sysAttachment.setBusinessId(String.valueOf(id));
-            sysAttachment.setBusinessType("businessType");
+            sysAttachment.setBusinessType("carRepair");
             sysAttachment.setDelFlag(0);
             List<SysAttachment> sysAttachments = sysAttachmentMapper.selectSysAttachmentList(sysAttachment);
             if (sysAttachments!=null) {

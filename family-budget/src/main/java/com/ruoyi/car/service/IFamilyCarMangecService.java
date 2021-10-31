@@ -7,7 +7,7 @@ import com.ruoyi.car.domain.FamilyCarMangec;
  * 车辆管理基础数据Service接口
  * 
  * @author ruoyi
- * @date 2021-10-30
+ * @date 2021-10-31
  */
 public interface IFamilyCarMangecService 
 {

@@ -13,7 +13,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 车辆管理基础数据对象 family_car_mange
  * 
  * @author ruoyi
- * @date 2021-10-30
+ * @date 2021-10-31
  */
 public class FamilyCarMangec extends BaseEntity
 {
@@ -46,6 +46,10 @@ public class FamilyCarMangec extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "购买日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date buyDate;
+
+    /** 行驶里程 */
+    @Excel(name = "行驶里程")
+    private Long carMile;
 
     /** 车牌 */
     @Excel(name = "车牌")
@@ -102,6 +106,15 @@ public class FamilyCarMangec extends BaseEntity
     {
         return buyDate;
     }
+    public void setCarMile(Long carMile) 
+    {
+        this.carMile = carMile;
+    }
+
+    public Long getCarMile() 
+    {
+        return carMile;
+    }
     public void setCarId(String carId) 
     {
         this.carId = carId;
@@ -138,6 +151,7 @@ public class FamilyCarMangec extends BaseEntity
             .append("responsibler", getResponsibler())
             .append("carBuyCost", getCarBuyCost())
             .append("buyDate", getBuyDate())
+            .append("carMile", getCarMile())
             .append("carId", getCarId())
             .append("remark", getRemark())
             .append("effectiveFlag", getEffectiveFlag())

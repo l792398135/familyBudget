@@ -16,7 +16,7 @@ import com.ruoyi.system.mapper.SysAttachmentMapper;
  * 车辆管理基础数据Service业务层处理
  * 
  * @author ruoyi
- * @date 2021-10-30
+ * @date 2021-10-31
  */
 @Service
 public class FamilyCarMangecServiceImpl implements IFamilyCarMangecService 
@@ -54,7 +54,7 @@ public class FamilyCarMangecServiceImpl implements IFamilyCarMangecService
             Long id = item.getId();
             SysAttachment sysAttachment = new SysAttachment();
             sysAttachment.setBusinessId(String.valueOf(id));
-            sysAttachment.setBusinessType("businessType");
+            sysAttachment.setBusinessType("carManage");
             sysAttachment.setDelFlag(0);
             List<SysAttachment> sysAttachments = sysAttachmentMapper.selectSysAttachmentList(sysAttachment);
             if (sysAttachments!=null) {

@@ -1,9 +1,21 @@
 package com.ruoyi.car.service.impl;
 
+import com.ruoyi.car.domain.FamilyCarMangec;
+import com.ruoyi.car.domain.FamilyCarRepairBase1;
+import com.ruoyi.car.mapper.FamilyCarMangecMapper;
+import com.ruoyi.car.mapper.FamilyCarRepairBase1Mapper;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.ShiroUtils;
+
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.pay.domain.FamilyPay;
+import com.ruoyi.pay.mapper.FamilyPayMapper;
+import com.ruoyi.system.mapper.SysDictDataMapper;
+import com.ruoyi.system.mapper.SysDictTypeMapper;
+import org.apache.shiro.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.car.mapper.FamilyCarRepairMapper;
@@ -27,6 +39,17 @@ public class FamilyCarRepairServiceImpl implements IFamilyCarRepairService
     @Autowired
     private FamilyCarRepairMapper familyCarRepairMapper;
 
+    @Autowired
+    private FamilyCarMangecMapper familyCarMangecMapper;
+
+    @Autowired
+    private FamilyCarRepairBase1Mapper familyCarRepairBase1Mapper;
+
+    @Autowired
+    private FamilyPayMapper payMapper;
+
+    @Autowired
+    private SysDictDataMapper dictDataMapper;
     /**
      * 查询车辆维护费用
      * 
@@ -78,6 +101,46 @@ public class FamilyCarRepairServiceImpl implements IFamilyCarRepairService
         familyCarRepair.setCreateTime(DateUtils.getNowDate());
         familyCarRepair.setCreateUser(ShiroUtils.getLoginName());
         familyCarRepairMapper.insertFamilyCarRepair(familyCarRepair);
+
+        String carCode = familyCarRepair.getCarCode();
+        FamilyCarMangec familyCarMangec = new FamilyCarMangec();
+        familyCarMangec.setCarCode(carCode);
+        List<FamilyCarMangec> familyCarMangecs = familyCarMangecMapper.selectFamilyCarMangecList(familyCarMangec);
+        if (!CollectionUtils.isEmpty(familyCarMangecs)){
+            FamilyCarMangec familyCarMangec1 = familyCarMangecs.get(0);
+            Long carMile = familyCarMangec1.getCarMile();
+            Date payDate = familyCarRepair.getPayDate();
+            String carRepairCode = familyCarRepair.getCarRepairCode();
+            FamilyCarRepairBase1 familyCarRepairBase1 = new FamilyCarRepairBase1();
+            familyCarRepairBase1.setCarCode(carCode);
+            familyCarRepairBase1.setCarRepairCode(carRepairCode);
+            List<FamilyCarRepairBase1> familyCarRepairBase1s = familyCarRepairBase1Mapper.selectFamilyCarRepairBase1List(familyCarRepairBase1);
+            if (!CollectionUtils.isEmpty(familyCarRepairBase1s)){
+                FamilyCarRepairBase1 familyCarRepairBase11 = familyCarRepairBase1s.get(0);
+                familyCarRepairBase11.setCarRepairMileLast(carMile);
+                familyCarRepairBase11.setCarRepairCycleLast(payDate);
+                familyCarRepairBase1Mapper.updateFamilyCarRepairBase1(familyCarRepairBase11);
+
+                FamilyPay familyPay = new FamilyPay();
+                familyPay.setPayCost(familyCarRepair.getCarCost());
+                familyPay.setCreateDate(new Date());
+                familyPay.setPayDate(payDate);
+                familyPay.setPayTypeCode("che");
+                familyPay.setPayMenber(familyCarRepair.getPayMenber());
+                familyPay.setOperatorCode(familyCarRepair.getPayMenber());
+                familyPay.setBookkeeperCode(familyCarRepair.getCreateUser());
+                String carMange = dictDataMapper.selectDictLabel("car_manage", carCode);
+                String carRepair = dictDataMapper.selectDictLabel("car_repair", carRepairCode);
+
+                familyPay.setPayDetail(carMange +"车在"+carMile+"公里进行" +carRepair +"维修");
+                payMapper.insertFamilyPay(familyPay);
+            }else{
+                throw new BusinessException("请先刷新保养科目！");
+            }
+        }else{
+            throw new BusinessException("车辆无效！");
+        }
+
         return familyCarRepair.getId();
     }
 

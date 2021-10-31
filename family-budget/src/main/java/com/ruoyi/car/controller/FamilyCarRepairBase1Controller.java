@@ -123,4 +123,11 @@ public class FamilyCarRepairBase1Controller extends BaseController
     {
         return toAjax(familyCarRepairBase1Service.deleteFamilyCarRepairBase1ByIds(ids));
     }
+
+    @GetMapping("/repair/{id}")
+    public String repair(@PathVariable("id") Long id, ModelMap mmap)
+    {
+        mmap.put("repair", familyCarRepairBase1Service.selectFamilyCarRepairBase1ById(id));
+        return "car/carRepair/repair";
+    }
 }

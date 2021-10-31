@@ -34,6 +34,10 @@ public class FamilyCarMange extends BaseEntity
     @Excel(name = "车子编码")
     private String carCode;
 
+    /** 行驶里程 */
+    @Excel(name = "行驶里程")
+    private Long carMile;
+
     /** 负责人 */
     @Excel(name = "负责人")
     private String responsibler;
@@ -58,7 +62,15 @@ public class FamilyCarMange extends BaseEntity
     /** 创建人 */
     private String createUser;
 
-    public void setId(Long id) 
+    public Long getCarMile() {
+        return carMile;
+    }
+
+    public void setCarMile(Long carMile) {
+        this.carMile = carMile;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }
