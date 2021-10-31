@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.car.mapper.FamilyCarRepairMapper">
+    
+    <resultMap type="FamilyCarRepair" id="FamilyCarRepairResult">
+        <result property="id"    column="id"    />
+        <result property="carCode"    column="car_code"    />
+        <result property="carRepairCode"    column="car_repair_code"    />
+        <result property="carCost"    column="car_cost"    />
+        <result property="payMenber"    column="pay_menber"    />
+        <result property="payDate"    column="pay_date"    />
+        <result property="remark"    column="remark"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectFamilyCarRepairVo">
+        select id, car_code, car_repair_code, car_cost, pay_menber, pay_date, remark, create_user, create_time from family_car_repair
+    </sql>
+
+    <select id="selectFamilyCarRepairList" parameterType="FamilyCarRepair" resultMap="FamilyCarRepairResult">
+        <include refid="selectFamilyCarRepairVo"/>
+        <where>  
+            <if test="carCode != null  and carCode != ''"> and car_code = #{carCode}</if>
+            <if test="carRepairCode != null  and carRepairCode != ''"> and car_repair_code = #{carRepairCode}</if>
+            <if test="payMenber != null  and payMenber != ''"> and pay_menber = #{payMenber}</if>
+            <if test="payDate != null "> and pay_date = #{payDate}</if>
+            <if test="createUser != null  and createUser != ''"> and create_user = #{createUser}</if>
+        </where>
+    </select>
+    
+    <select id="selectFamilyCarRepairById" parameterType="Long" resultMap="FamilyCarRepairResult">
+        <include refid="selectFamilyCarRepairVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFamilyCarRepair" parameterType="FamilyCarRepair" useGeneratedKeys="true" keyProperty="id">
+        insert into family_car_repair
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="carCode != null">car_code,</if>
+            <if test="carRepairCode != null">car_repair_code,</if>
+            <if test="carCost != null">car_cost,</if>
+            <if test="payMenber != null">pay_menber,</if>
+            <if test="payDate != null">pay_date,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="carCode != null">#{carCode},</if>
+            <if test="carRepairCode != null">#{carRepairCode},</if>
+            <if test="carCost != null">#{carCost},</if>
+            <if test="payMenber != null">#{payMenber},</if>
+            <if test="payDate != null">#{payDate},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFamilyCarRepair" parameterType="FamilyCarRepair">
+        update family_car_repair
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="carCode != null">car_code = #{carCode},</if>
+            <if test="carRepairCode != null">car_repair_code = #{carRepairCode},</if>
+            <if test="carCost != null">car_cost = #{carCost},</if>
+            <if test="payMenber != null">pay_menber = #{payMenber},</if>
+            <if test="payDate != null">pay_date = #{payDate},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFamilyCarRepairById" parameterType="Long">
+        delete from family_car_repair where id = #{id}
+    </delete>
+
+    <delete id="deleteFamilyCarRepairByIds" parameterType="String">
+        delete from family_car_repair where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

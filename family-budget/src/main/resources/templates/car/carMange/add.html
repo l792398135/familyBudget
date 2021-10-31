@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <th:block th:include="include :: header('修改车辆管理基础数据')" />
+    <th:block th:include="include :: header('新增车辆管理基础数据')" />
     <th:block th:include="include :: datetimepicker-css" />
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-carMange-edit" th:object="${familyCarMange1}">
-            <input name="id" th:field="*{id}" type="hidden">
+        <form class="form-horizontal m" id="form-carMange-add">
             <div class="form-group">    
                 <label class="col-sm-3 control-label">车子编码：</label>
                 <div class="col-sm-8">
                     <select name="carCode" class="form-control m-b" th:with="type=${@dict.getType('car_manage')}">
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{carCode}"></option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
             </div>
@@ -20,21 +19,21 @@
                 <label class="col-sm-3 control-label">负责人：</label>
                 <div class="col-sm-8">
                     <select name="responsibler" class="form-control m-b" th:with="type=${@dict.getType('family_menber')}">
-                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{responsibler}"></option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">购买花费：</label>
                 <div class="col-sm-8">
-                    <input name="carBuyCost" th:field="*{carBuyCost}" class="form-control" type="text">
+                    <input name="carBuyCost" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">    
                 <label class="col-sm-3 control-label">购买日期：</label>
                 <div class="col-sm-8">
                     <div class="input-group date">
-                        <input name="buyDate" th:value="${#dates.format(familyCarMange1.buyDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <input name="buyDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
@@ -42,26 +41,17 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">车牌：</label>
                 <div class="col-sm-8">
-                    <input name="carId" th:field="*{carId}" class="form-control" type="text">
+                    <input name="carId" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">备注：</label>
                 <div class="col-sm-8">
-                    <textarea name="remark" class="form-control">[[*{remark}]]</textarea>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">是否有效：</label>
-                <div class="col-sm-8">
-                    <div class="radio-box" th:each="dict : ${@dict.getType('sys_yes_no')}">
-                        <input type="radio" th:id="${'effectiveFlag_' + dict.dictCode}" name="effectiveFlag" th:value="${dict.dictValue}" th:field="*{effectiveFlag}">
-                        <label th:for="${'effectiveFlag_' + dict.dictCode}" th:text="${dict.dictLabel}"></label>
-                    </div>
+                    <textarea name="remark" class="form-control"></textarea>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">附件上传：</label>
+                <label class="col-sm-3 control-label">图片：</label>
                 <div class="col-sm-8">
                     <input id="file-Portrait" type="file" multiple="multiple" name="file">
                 </div>
@@ -71,25 +61,25 @@
     <th:block th:include="include :: footer" />
     <th:block th:include="include :: datetimepicker-js" />
     <script th:inline="javascript">
-        var prefix = ctx + "base/carMange";
-        $("#form-carMange-edit").validate({
+        var prefix = ctx + "car/carMange"
+        $("#form-carMange-add").validate({
             focusCleanup: true
         });
 
-        function submitHandler() {
+        function submitHandler(e) {
             if ($.validate.form()) {
                 $.ajax({
                     cache : true,
                     type : "POST",
-                    url : prefix + "/edit",
-                    data : $('#form-carMange-edit').serialize(),
+                    url : prefix + "/add",
+                    data : $('#form-carMange-add').serialize(),
                     async : false,
                     error : function(request) {
                         $.modal.alertError("系统错误");
                     },
                     success : function(data) {
-                        var businessId = $("input[name=id]").val()
-                        $.file.uploadFile("file-Portrait","carManage",businessId);
+                        var businessId = data.data;
+                        $.file.uploadFile("file-Portrait","test",businessId);
                         $.operate.saveSuccess(data);
                     }
                 });
@@ -102,8 +92,7 @@
             autoclose: true
         });
         $(function() {
-            var businessId = $("input[name='id']").val()
-            $.file.initEditFiles("file-Portrait","carManage",businessId);
+            $.file.initAddFiles("file-Portrait");
         });
     </script>
 </body>

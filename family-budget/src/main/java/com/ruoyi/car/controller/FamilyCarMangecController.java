@@ -1,4 +1,4 @@
-package com.ruoyi.base.controller;
+package com.ruoyi.car.controller;
 
 import java.util.List;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.base.domain.FamilyCarMange;
-import com.ruoyi.base.service.IFamilyCarMangeService;
+import com.ruoyi.car.domain.FamilyCarMangec;
+import com.ruoyi.car.service.IFamilyCarMangecService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
@@ -23,18 +23,18 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * 车辆管理基础数据Controller
  * 
  * @author ruoyi
- * @date 2021-10-26
+ * @date 2021-10-30
  */
 @Controller
-@RequestMapping("/base/carMange")
-public class FamilyCarMangeController extends BaseController
+@RequestMapping("/car/carMange")
+public class FamilyCarMangecController extends BaseController
 {
-    private String prefix = "base/carMange";
+    private String prefix = "car/carMange";
 
     @Autowired
-    private IFamilyCarMangeService familyCarMangeService;
+    private IFamilyCarMangecService familyCarMangecService;
 
-    @RequiresPermissions("base:carMange:view")
+    @RequiresPermissions("car:carMange:view")
     @GetMapping()
     public String carMange()
     {
@@ -44,27 +44,27 @@ public class FamilyCarMangeController extends BaseController
     /**
      * 查询车辆管理基础数据列表
      */
-    @RequiresPermissions("base:carMange:list")
+    @RequiresPermissions("car:carMange:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(FamilyCarMange familyCarMange)
+    public TableDataInfo list(FamilyCarMangec familyCarMangec)
     {
         startPage();
-        List<FamilyCarMange> list = familyCarMangeService.selectFamilyCarMangeList(familyCarMange);
+        List<FamilyCarMangec> list = familyCarMangecService.selectFamilyCarMangecList(familyCarMangec);
         return getDataTable(list);
     }
 
     /**
      * 导出车辆管理基础数据列表
      */
-    @RequiresPermissions("base:carMange:export")
+    @RequiresPermissions("car:carMange:export")
     @Log(title = "车辆管理基础数据", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(FamilyCarMange familyCarMange)
+    public AjaxResult export(FamilyCarMangec familyCarMangec)
     {
-        List<FamilyCarMange> list = familyCarMangeService.selectFamilyCarMangeList(familyCarMange);
-        ExcelUtil<FamilyCarMange> util = new ExcelUtil<FamilyCarMange>(FamilyCarMange.class);
+        List<FamilyCarMangec> list = familyCarMangecService.selectFamilyCarMangecList(familyCarMangec);
+        ExcelUtil<FamilyCarMangec> util = new ExcelUtil<FamilyCarMangec>(FamilyCarMangec.class);
         return util.exportExcel(list, "车辆管理基础数据数据");
     }
 
@@ -80,13 +80,13 @@ public class FamilyCarMangeController extends BaseController
     /**
      * 新增保存车辆管理基础数据
      */
-    @RequiresPermissions("base:carMange:add")
+    @RequiresPermissions("car:carMange:add")
     @Log(title = "车辆管理基础数据", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(FamilyCarMange familyCarMange)
+    public AjaxResult addSave(FamilyCarMangec familyCarMangec)
     {
-        return AjaxResult.success("success",familyCarMangeService.insertFamilyCarMange(familyCarMange));
+        return AjaxResult.success("success",familyCarMangecService.insertFamilyCarMangec(familyCarMangec));
     }
 
     /**
@@ -95,38 +95,32 @@ public class FamilyCarMangeController extends BaseController
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, ModelMap mmap)
     {
-        FamilyCarMange familyCarMange = familyCarMangeService.selectFamilyCarMangeById(id);
-        mmap.put("familyCarMange", familyCarMange);
+        FamilyCarMangec familyCarMangec = familyCarMangecService.selectFamilyCarMangecById(id);
+        mmap.put("familyCarMangec", familyCarMangec);
         return prefix + "/edit";
     }
 
     /**
      * 修改保存车辆管理基础数据
      */
-    @RequiresPermissions("base:carMange:edit")
+    @RequiresPermissions("car:carMange:edit")
     @Log(title = "车辆管理基础数据", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(FamilyCarMange familyCarMange)
+    public AjaxResult editSave(FamilyCarMangec familyCarMangec)
     {
-        return toAjax(familyCarMangeService.updateFamilyCarMange(familyCarMange));
+        return toAjax(familyCarMangecService.updateFamilyCarMangec(familyCarMangec));
     }
 
     /**
      * 删除车辆管理基础数据
      */
-    @RequiresPermissions("base:carMange:remove")
+    @RequiresPermissions("car:carMange:remove")
     @Log(title = "车辆管理基础数据", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody
     public AjaxResult remove(String ids)
     {
-        return toAjax(familyCarMangeService.deleteFamilyCarMangeByIds(ids));
-    }
-    @GetMapping("/detail/{id}")
-    public String detail(@PathVariable("id") Long id, ModelMap mmap)
-    {
-        mmap.put("repair", familyCarMangeService.selectFamilyCarMangeById(id));
-        return "base/carRepair/carRepair";
+        return toAjax(familyCarMangecService.deleteFamilyCarMangecByIds(ids));
     }
 }
