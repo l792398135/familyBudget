@@ -11,7 +11,7 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <label>车子编码：</label>111
+                                <label>车子编码：</label>
                                 <select name="carCode" th:with="type=${@dict.getType('car_manage')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
@@ -25,11 +25,16 @@
                                 </select>
                             </li>
                             <li>
+                                <label>行驶里程：</label>
+                                <input type="text" name="carMile"/>
+                            </li>
+                            <li>
+                                <label>车牌：</label>
+                                <input type="text" name="carId"/>
+                            </li>
+                            <li>
                                 <label>是否有效：</label>
-                                <select name="effectiveFlag" th:with="type=${@dict.getType('sys_yes_no')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
+                                <input name="effectiveFlag" th:value="Y" readonly/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -40,20 +45,7 @@
                 </form>
             </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="base:carMange:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="base:carMange:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="base:carMange:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="base:carMange:export">
-                    <i class="fa fa-download"></i> 导出
-                </a>
-            </div>
+
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
             </div>
@@ -61,12 +53,12 @@
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('base:carMange:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('base:carMange:remove')}]];
+        var editFlag = [[${@permission.hasPermi('car:carMange:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('car:carMange:remove')}]];
         var carCodeDatas = [[${@dict.getType('car_manage')}]];
         var responsiblerDatas = [[${@dict.getType('family_menber')}]];
         var effectiveFlagDatas = [[${@dict.getType('sys_yes_no')}]];
-        var prefix = ctx + "base/carMange";
+        var prefix = ctx + "car/carMange";
 
         $(function() {
             var options = {
@@ -112,6 +104,11 @@
                 },
 
                 {
+                    field: 'carMile',
+                    title: '行驶里程'
+                },
+
+                {
                     field: 'carId',
                     title: '车牌'
                 },
@@ -120,25 +117,17 @@
                     field: 'remark',
                     title: '备注'
                 },
-
-                {
-                    field: 'effectiveFlag',
-                    title: '是否有效',
-                    formatter: function(value, row, index) {
-                       return $.table.selectDictLabel(effectiveFlagDatas, value);
-                    }
-                },
-                {
-                    field: 'imgUrls',
-                    title: '附件',
-                    formatter: function (arr, row, index) {
-                        var html=''
-                        if (arr!=null&&arr.length>0){
-                            html+= '<img src="' + arr[0]+ '" width="150" height="100">'
+                    {
+                        field: 'imgUrls',
+                        title: '附件',
+                        formatter: function (arr, row, index) {
+                            var html=''
+                            if (arr!=null&&arr.length>0){
+                                html+= '<img src="' + arr[0]+ '" width="150" height="100">'
+                            }
+                            return html
                         }
-                        return html
-                    }
-                },
+                    },
                 {
                     title: '操作',
                     align: 'center',
@@ -146,7 +135,6 @@
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-info btn-xs " href="javascript:void(0)" onclick="detail(\'' + row.id + '\')"><i class="fa fa-list-ul"></i>列表</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
                 }]

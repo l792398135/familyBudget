@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.base.mapper.FamilyCarRepairBaseMapper">
+    
+    <resultMap type="FamilyCarRepairBase" id="FamilyCarRepairBaseResult">
+        <result property="id"    column="id"    />
+        <result property="carCode"    column="car_code"    />
+        <result property="carRepairCode"    column="car_repair_code"    />
+        <result property="carRepairCycle"    column="car_repair_cycle"    />
+        <result property="carRepairMile"    column="car_repair_mile"    />
+        <result property="carRepairCycleLast"    column="car_repair_cycle_last"    />
+        <result property="carRepairMileLast"    column="car_repair_mile_last"    />
+        <result property="carRepairCycleCall"    column="car_repair_cycle_call"    />
+        <result property="carRepairMileCall"    column="car_repair_mile_call"    />
+        <result property="effectiveFlag"    column="effective_flag"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createUser"    column="create_user"    />
+    </resultMap>
+
+    <sql id="selectFamilyCarRepairBaseVo">
+        select id, car_code, car_repair_code, car_repair_cycle, car_repair_mile, car_repair_cycle_last, car_repair_mile_last, car_repair_cycle_call, car_repair_mile_call, effective_flag, status, remark, create_time, create_user from family_car_repair_base
+    </sql>
+
+    <select id="selectFamilyCarRepairBaseList" parameterType="FamilyCarRepairBase" resultMap="FamilyCarRepairBaseResult">
+        <include refid="selectFamilyCarRepairBaseVo"/>
+        <where>  
+            <if test="carCode != null  and carCode != ''"> and car_code = #{carCode}</if>
+            <if test="carRepairCode != null  and carRepairCode != ''"> and car_repair_code = #{carRepairCode}</if>
+            <if test="carRepairMile != null "> and car_repair_mile = #{carRepairMile}</if>
+            <if test="effectiveFlag != null  and effectiveFlag != ''"> and effective_flag = #{effectiveFlag}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectFamilyCarRepairBaseById" parameterType="Long" resultMap="FamilyCarRepairBaseResult">
+        <include refid="selectFamilyCarRepairBaseVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFamilyCarRepairBase" parameterType="FamilyCarRepairBase" useGeneratedKeys="true" keyProperty="id">
+        insert into family_car_repair_base
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="carCode != null">car_code,</if>
+            <if test="carRepairCode != null">car_repair_code,</if>
+            <if test="carRepairCycle != null">car_repair_cycle,</if>
+            <if test="carRepairMile != null">car_repair_mile,</if>
+            <if test="carRepairCycleLast != null">car_repair_cycle_last,</if>
+            <if test="carRepairMileLast != null">car_repair_mile_last,</if>
+            <if test="carRepairCycleCall != null">car_repair_cycle_call,</if>
+            <if test="carRepairMileCall != null">car_repair_mile_call,</if>
+            <if test="effectiveFlag != null">effective_flag,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createUser != null">create_user,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="carCode != null">#{carCode},</if>
+            <if test="carRepairCode != null">#{carRepairCode},</if>
+            <if test="carRepairCycle != null">#{carRepairCycle},</if>
+            <if test="carRepairMile != null">#{carRepairMile},</if>
+            <if test="carRepairCycleLast != null">#{carRepairCycleLast},</if>
+            <if test="carRepairMileLast != null">#{carRepairMileLast},</if>
+            <if test="carRepairCycleCall != null">#{carRepairCycleCall},</if>
+            <if test="carRepairMileCall != null">#{carRepairMileCall},</if>
+            <if test="effectiveFlag != null">#{effectiveFlag},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createUser != null">#{createUser},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFamilyCarRepairBase" parameterType="FamilyCarRepairBase">
+        update family_car_repair_base
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="carCode != null">car_code = #{carCode},</if>
+            <if test="carRepairCode != null">car_repair_code = #{carRepairCode},</if>
+            <if test="carRepairCycle != null">car_repair_cycle = #{carRepairCycle},</if>
+            <if test="carRepairMile != null">car_repair_mile = #{carRepairMile},</if>
+            <if test="carRepairCycleLast != null">car_repair_cycle_last = #{carRepairCycleLast},</if>
+            <if test="carRepairMileLast != null">car_repair_mile_last = #{carRepairMileLast},</if>
+            <if test="carRepairCycleCall != null">car_repair_cycle_call = #{carRepairCycleCall},</if>
+            <if test="carRepairMileCall != null">car_repair_mile_call = #{carRepairMileCall},</if>
+            <if test="effectiveFlag != null">effective_flag = #{effectiveFlag},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFamilyCarRepairBaseById" parameterType="Long">
+        delete from family_car_repair_base where id = #{id}
+    </delete>
+
+    <delete id="deleteFamilyCarRepairBaseByIds" parameterType="String">
+        delete from family_car_repair_base where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

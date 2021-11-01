@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.car.mapper.FamilyCarMangecMapper">
+    
+    <resultMap type="FamilyCarMangec" id="FamilyCarMangecResult">
+        <result property="id"    column="id"    />
+        <result property="carCode"    column="car_code"    />
+        <result property="responsibler"    column="responsibler"    />
+        <result property="carBuyCost"    column="car_buy_cost"    />
+        <result property="buyDate"    column="buy_date"    />
+        <result property="carMile"    column="car_mile"    />
+        <result property="carId"    column="car_id"    />
+        <result property="remark"    column="remark"    />
+        <result property="effectiveFlag"    column="effective_flag"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectFamilyCarMangecVo">
+        select id, car_code, responsibler, car_buy_cost, buy_date, car_mile, car_id, remark, effective_flag, create_user, create_time from family_car_mange
+    </sql>
+
+    <select id="selectFamilyCarMangecList" parameterType="FamilyCarMangec" resultMap="FamilyCarMangecResult">
+        <include refid="selectFamilyCarMangecVo"/>
+        <where>  
+            <if test="carCode != null  and carCode != ''"> and car_code = #{carCode}</if>
+            <if test="responsibler != null  and responsibler != ''"> and responsibler = #{responsibler}</if>
+            <if test="carMile != null "> and car_mile = #{carMile}</if>
+            <if test="carId != null  and carId != ''"> and car_id = #{carId}</if>
+            <if test="effectiveFlag != null  and effectiveFlag != ''"> and effective_flag = #{effectiveFlag}</if>
+        </where>
+    </select>
+    
+    <select id="selectFamilyCarMangecById" parameterType="Long" resultMap="FamilyCarMangecResult">
+        <include refid="selectFamilyCarMangecVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFamilyCarMangec" parameterType="FamilyCarMangec" useGeneratedKeys="true" keyProperty="id">
+        insert into family_car_mange
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="carCode != null">car_code,</if>
+            <if test="responsibler != null">responsibler,</if>
+            <if test="carBuyCost != null">car_buy_cost,</if>
+            <if test="buyDate != null">buy_date,</if>
+            <if test="carMile != null">car_mile,</if>
+            <if test="carId != null">car_id,</if>
+            <if test="remark != null">remark,</if>
+            <if test="effectiveFlag != null">effective_flag,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="carCode != null">#{carCode},</if>
+            <if test="responsibler != null">#{responsibler},</if>
+            <if test="carBuyCost != null">#{carBuyCost},</if>
+            <if test="buyDate != null">#{buyDate},</if>
+            <if test="carMile != null">#{carMile},</if>
+            <if test="carId != null">#{carId},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="effectiveFlag != null">#{effectiveFlag},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFamilyCarMangec" parameterType="FamilyCarMangec">
+        update family_car_mange
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="carCode != null">car_code = #{carCode},</if>
+            <if test="responsibler != null">responsibler = #{responsibler},</if>
+            <if test="carBuyCost != null">car_buy_cost = #{carBuyCost},</if>
+            <if test="buyDate != null">buy_date = #{buyDate},</if>
+            <if test="carMile != null">car_mile = #{carMile},</if>
+            <if test="carId != null">car_id = #{carId},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="effectiveFlag != null">effective_flag = #{effectiveFlag},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFamilyCarMangecById" parameterType="Long">
+        delete from family_car_mange where id = #{id}
+    </delete>
+
+    <delete id="deleteFamilyCarMangecByIds" parameterType="String">
+        delete from family_car_mange where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

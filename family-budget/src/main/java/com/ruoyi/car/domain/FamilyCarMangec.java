@@ -1,4 +1,4 @@
-package com.ruoyi.base.domain;
+package com.ruoyi.car.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -13,9 +13,9 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 车辆管理基础数据对象 family_car_mange
  * 
  * @author ruoyi
- * @date 2021-10-26
+ * @date 2021-10-31
  */
-public class FamilyCarMange extends BaseEntity
+public class FamilyCarMangec extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
     private List<String> imgUrls;
@@ -34,10 +34,6 @@ public class FamilyCarMange extends BaseEntity
     @Excel(name = "车子编码")
     private String carCode;
 
-    /** 行驶里程 */
-    @Excel(name = "行驶里程")
-    private Long carMile;
-
     /** 负责人 */
     @Excel(name = "负责人")
     private String responsibler;
@@ -51,26 +47,21 @@ public class FamilyCarMange extends BaseEntity
     @Excel(name = "购买日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date buyDate;
 
+    /** 行驶里程 */
+    @Excel(name = "行驶里程")
+    private Long carMile;
+
     /** 车牌 */
     @Excel(name = "车牌")
     private String carId;
 
     /** 是否有效 */
-    @Excel(name = "是否有效")
     private String effectiveFlag;
 
     /** 创建人 */
     private String createUser;
 
-    public Long getCarMile() {
-        return carMile;
-    }
-
-    public void setCarMile(Long carMile) {
-        this.carMile = carMile;
-    }
-
-    public void setId(Long id)
+    public void setId(Long id) 
     {
         this.id = id;
     }
@@ -115,6 +106,15 @@ public class FamilyCarMange extends BaseEntity
     {
         return buyDate;
     }
+    public void setCarMile(Long carMile) 
+    {
+        this.carMile = carMile;
+    }
+
+    public Long getCarMile() 
+    {
+        return carMile;
+    }
     public void setCarId(String carId) 
     {
         this.carId = carId;
@@ -151,6 +151,7 @@ public class FamilyCarMange extends BaseEntity
             .append("responsibler", getResponsibler())
             .append("carBuyCost", getCarBuyCost())
             .append("buyDate", getBuyDate())
+            .append("carMile", getCarMile())
             .append("carId", getCarId())
             .append("remark", getRemark())
             .append("effectiveFlag", getEffectiveFlag())
