@@ -36,7 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
     </select>
-    
+
     <select id="selectFamilyCarRepairBase1ById" parameterType="Long" resultMap="FamilyCarRepairBase1Result">
         <include refid="selectFamilyCarRepairBase1Vo"/>
         where id = #{id}

@@ -4,6 +4,8 @@ import com.ruoyi.base.controller.FamilyCarMangeController;
 import com.ruoyi.base.domain.FamilyCarMange;
 import com.ruoyi.base.mapper.FamilyCarMangeMapper;
 import com.ruoyi.common.utils.ShiroUtils;
+
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.ruoyi.common.utils.DateUtils;
@@ -56,7 +58,25 @@ public class FamilyCarRepairBase1ServiceImpl implements IFamilyCarRepairBase1Ser
     {
         List<FamilyCarRepairBase1> familyCarRepairBase11= familyCarRepairBase1Mapper.selectFamilyCarRepairBase1List(familyCarRepairBase1);
         for (int i = 0; i <familyCarRepairBase11.size() ; i++) {
-            FamilyCarRepairBase1 item =familyCarRepairBase11.get(i);
+            //状态
+            FamilyCarRepairBase1 item = familyCarRepairBase11.get(i);
+            Date carRepairCycleLast = item.getCarRepairCycleLast();
+            Long carRepairCycleCall = item.getCarRepairCycleCall();
+            Long carRepairCycle = item.getCarRepairCycle();
+            Date calledDate = DateUtils.addMonths(carRepairCycleLast, carRepairCycle.intValue());
+            int midInt = DateUtils.differentDaysByMillisecond(carRepairCycleLast, calledDate);
+            int startInt =midInt-carRepairCycleCall.intValue();
+            int accInt = DateUtils.differentDaysByMillisecond(carRepairCycleLast, new Date());
+
+            if (accInt<startInt){
+                item.setStatus("jiankang");
+            }else if (accInt>midInt){
+                item.setStatus("weixian");
+            }else{
+                item.setStatus("yajiankang");
+            }
+            //状态
+//            FamilyCarRepairBase1 item =familyCarRepairBase11.get(i);
             Long id = item.getId();
             SysAttachment sysAttachment = new SysAttachment();
             sysAttachment.setBusinessId(String.valueOf(id));
