@@ -163,7 +163,7 @@ var table = {
                 if(dataKey == false){
                     layer.msg('暂未上传，无法下载！');
                 }else{
-                    window.location.href="/common/download?fileName="+dataKey;
+                    window.location.href="/common/downloadImg?fileName="+dataKey;
                 }
             }
         },
