@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="borrowMember != null  and borrowMember != ''"> and borrow_member like concat('%', #{borrowMember}, '%')</if>
             <if test="createUser != null  and createUser != ''"> and create_user = #{createUser}</if>
             <if test="createDate != null "> and create_date = #{createDate}</if>
-        </where>
+        </where> order by id desc
     </select>
     
     <select id="selectFamilyDebtById" parameterType="Long" resultMap="FamilyDebtResult">

@@ -25,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="billName != null  and billName != ''"> and bill_name like concat('%', #{billName}, '%')</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
             <if test="createUser != null  and createUser != ''"> and create_user = #{createUser}</if>
-        </where>
+        </where> order by id desc
     </select>
     
     <select id="selectFamilyBillById" parameterType="Long" resultMap="FamilyBillResult">

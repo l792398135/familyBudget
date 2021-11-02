@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="budgetDate != null "> and budget_date = #{budgetDate}</if>
             <if test="params.beginCreateDate != null and params.beginCreateDate != '' and params.endCreateDate != null and params.endCreateDate != ''"> and create_date between #{params.beginCreateDate} and #{params.endCreateDate}</if>
             <if test="createUser != null  and createUser != ''"> and create_user = #{createUser}</if>
-        </where>
+        </where> order by id desc
     </select>
     
     <select id="selectFamilyMonthBudgetById" parameterType="Long" resultMap="FamilyMonthBudgetResult">

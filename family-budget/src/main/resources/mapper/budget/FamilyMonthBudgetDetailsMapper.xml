@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="budgetAmount != null "> and budget_amount = #{budgetAmount}</if>
             <if test="budgetDate != null  and budgetDate != ''"> and budget_date = #{budgetDate}</if>
             <if test="dictLabel != null  and dictLabel != ''"> and dict_label = #{dictLabel}</if>
-        </where>
+        </where> order by id desc
     </select>
     
     <select id="selectFamilyMonthBudgetDetailsById" parameterType="Long" resultMap="FamilyMonthBudgetDetailsResult">

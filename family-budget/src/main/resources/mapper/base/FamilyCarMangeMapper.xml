@@ -27,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="carCode != null  and carCode != ''"> and car_code = #{carCode}</if>
             <if test="responsibler != null  and responsibler != ''"> and responsibler = #{responsibler}</if>
             <if test="effectiveFlag != null  and effectiveFlag != ''"> and effective_flag = #{effectiveFlag}</if>
-        </where>
+        </where> order by id desc
     </select>
     
     <select id="selectFamilyCarMangeById" parameterType="Long" resultMap="FamilyCarMangeResult">

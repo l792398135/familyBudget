@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payMenber != null  and payMenber != ''"> and pay_menber = #{payMenber}</if>
             <if test="payDate != null "> and pay_date = #{payDate}</if>
             <if test="createUser != null  and createUser != ''"> and create_user = #{createUser}</if>
-        </where>
+        </where> order by id desc
     </select>
     
     <select id="selectFamilyCarRepairById" parameterType="Long" resultMap="FamilyCarRepairResult">

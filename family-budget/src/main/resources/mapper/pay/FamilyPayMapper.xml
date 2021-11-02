@@ -29,7 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="operatorCode != null  and operatorCode != ''"> and operator_code = #{operatorCode}</if>
             <if test="bookkeeperCode != null  and bookkeeperCode != ''"> and bookkeeper_code = #{bookkeeperCode}</if>
             <if test="params.beginCreateDate != null and params.beginCreateDate != '' and params.endCreateDate != null and params.endCreateDate != ''"> and create_date between #{params.beginCreateDate} and #{params.endCreateDate}</if>
-        </where>
+        </where> order by id desc
     </select>
     
     <select id="selectFamilyPayById" parameterType="Long" resultMap="FamilyPayResult">

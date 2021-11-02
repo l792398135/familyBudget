@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="params.beginReimburseDate != null and params.beginReimburseDate != '' and params.endReimburseDate != null and params.endReimburseDate != ''"> and reimburse_date between #{params.beginReimburseDate} and #{params.endReimburseDate}</if>
             <if test="createUser != null  and createUser != ''"> and create_user = #{createUser}</if>
             <if test="createDate != null "> and create_date = #{createDate}</if>
-        </where>
+        </where> order by id desc
     </select>
     
     <select id="selectFamilyInsuranceReimburseById" parameterType="Long" resultMap="FamilyInsuranceReimburseResult">

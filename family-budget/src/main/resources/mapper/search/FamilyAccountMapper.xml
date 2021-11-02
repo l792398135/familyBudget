@@ -27,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createUser != null  and createUser != ''"> and create_user = #{createUser}</if>
             <if test="createTime != null "> and create_time = #{createTime}</if>
             ${params.dataScope}
-        </where>
+        </where> order by id desc
     </select>
     
     <select id="selectFamilyAccountById" parameterType="Long" resultMap="FamilyAccountResult">

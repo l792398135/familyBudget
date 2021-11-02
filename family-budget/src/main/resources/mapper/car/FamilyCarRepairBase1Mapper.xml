@@ -34,7 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="carRepairMileCall != null "> and car_repair_mile_call &lt;= #{carRepairMileCall}</if>
             <if test="effectiveFlag != null  and effectiveFlag != ''"> and effective_flag = #{effectiveFlag}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
-        </where>
+        </where> order by id desc
     </select>
 
     <select id="selectFamilyCarRepairBase1ById" parameterType="Long" resultMap="FamilyCarRepairBase1Result">

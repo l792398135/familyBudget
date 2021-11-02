@@ -27,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="params.beginTransferTime != null and params.beginTransferTime != '' and params.endTransferTime != null and params.endTransferTime != ''"> and transfer_time between #{params.beginTransferTime} and #{params.endTransferTime}</if>
             <if test="createUser != null  and createUser != ''"> and create_user = #{createUser}</if>
             <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
-        </where>
+        </where> order by id desc
     </select>
 
     <select id="getTramsferListByCheckDate"  resultMap="FamilyTransferAccountResult">

@@ -30,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="img != null  and img != ''"> and img = #{img}</if>
             <if test="createUser != null  and createUser != ''"> and create_user = #{createUser}</if>
             <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
-        </where>
+        </where> order by id desc
     </select>
     
     <select id="selectFamilyCheckDetailsById" parameterType="Long" resultMap="FamilyCheckDetailsResult">

@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="useMenber != null  and useMenber != ''"> and use_menber = #{useMenber}</if>
             <if test="params.beginBuyDate != null and params.beginBuyDate != '' and params.endBuyDate != null and params.endBuyDate != ''"> and buy_date between #{params.beginBuyDate} and #{params.endBuyDate}</if>
             <if test="responsibler != null  and responsibler != ''"> and responsibler = #{responsibler}</if>
-        </where>
+        </where> order by id desc
     </select>
     
     <select id="selectFamilyFixedAssetsById" parameterType="Long" resultMap="FamilyFixedAssetsResult">

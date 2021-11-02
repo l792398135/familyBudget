@@ -30,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="carMile != null "> and car_mile = #{carMile}</if>
             <if test="carId != null  and carId != ''"> and car_id = #{carId}</if>
             <if test="effectiveFlag != null  and effectiveFlag != ''"> and effective_flag = #{effectiveFlag}</if>
-        </where>
+        </where> order by id desc
     </select>
     
     <select id="selectFamilyCarMangecById" parameterType="Long" resultMap="FamilyCarMangecResult">

@@ -29,7 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="dictSort != null "> and dict_sort = #{dictSort}</if>
             <if test="dictLabel != null  and dictLabel != ''"> and dict_label = #{dictLabel}</if>
             <if test="controlFlag != null  and controlFlag != ''"> and control_flag = #{controlFlag}</if>
-        </where>
+        </where> order by id desc
     </select>
     
     <select id="selectFamilyFeeTypeById" parameterType="Long" resultMap="FamilyFeeTypeResult">
