@@ -48,7 +48,6 @@ public class SysAttachmentServiceImpl implements ISysAttachmentService
     @Override
     public List<SysAttachment> selectSysAttachmentList(SysAttachment sysAttachment)
     {
-        sysAttachment.setDelFlag(0);
         return sysAttachmentMapper.selectSysAttachmentList(sysAttachment);
     }
 
@@ -106,7 +105,13 @@ public class SysAttachmentServiceImpl implements ISysAttachmentService
     @Override
     public int deleteLogicSysAttachment(String ids) {
         String[] idsArr = Convert.toStrArray(ids);
-        return sysAttachmentMapper.deleteLogicSysAttachmentByIds(idsArr);
+        for (String s : idsArr) {
+            SysAttachment sysAttachment = new SysAttachment();
+            sysAttachment.setId(Integer.parseInt(s));
+            sysAttachment.setDelFlag(1);
+            sysAttachmentMapper.updateSysAttachment(sysAttachment);
+        }
+        return 1;
     }
 
     /**

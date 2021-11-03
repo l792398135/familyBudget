@@ -63,7 +63,8 @@ var table = {
                     dataType : "json",
                     data:{
                         "businessType" :businessType,
-                        "businessId" : businessId
+                        "businessId" : businessId,
+                        "delFlag":0
                     },
                     success : function(data) {
                         //layer.msg('操作成功！');
@@ -163,7 +164,7 @@ var table = {
                 if(dataKey == false){
                     layer.msg('暂未上传，无法下载！');
                 }else{
-                    window.location.href="/common/downloadImg?fileName="+dataKey;
+                    window.location.href="/common/downloadImg?fileName="+dataKey+"&delete=false";
                 }
             }
         },
