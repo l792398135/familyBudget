@@ -12,10 +12,7 @@
                         <ul>
                             <li>
                                 <label>业务类型：</label>
-                                <select name="businessType">
-                                    <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
-                                </select>
+                                <input type="text" name="businessType"/>
                             </li>
                             <li>
                                 <label>业务Id：</label>
@@ -34,6 +31,13 @@
                                 <input type="text" name="fileNameShow"/>
                             </li>
                             <li>
+                                <label>删除标识：</label>
+                                <select name="delFlag" th:with="type=${@dict.getType('sys_normal_disable')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
@@ -43,18 +47,12 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-<!--                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:attachment:add">-->
-<!--                    <i class="fa fa-plus"></i> 添加-->
-<!--                </a>-->
                 <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:attachment:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:attachment:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-<!--                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:attachment:export">-->
-<!--                    <i class="fa fa-download"></i> 导出-->
-<!--                </a>-->
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -65,6 +63,7 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('system:attachment:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:attachment:remove')}]];
+        var operatorCodeDatas = [[${@dict.getType('sys_normal_disable')}]];
         var prefix = ctx + "system/attachment";
 
         $(function() {
@@ -109,7 +108,10 @@
                 },
                 {
                     field: 'delFlag',
-                    title: '删除标识'
+                    title: '删除标识',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(operatorCodeDatas, value);
+                    }
                 },
                 {
                     title: '操作',

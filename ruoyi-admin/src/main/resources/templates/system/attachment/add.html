@@ -48,7 +48,10 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">删除标记：</label>
                 <div class="col-sm-8">
-                    <input name="delFlag" class="form-control" type="text">
+<!--                    <input name="delFlag" class="form-control" type="text">-->
+                    <select name="delFlag" class="form-control m-b" th:with="type=${@dict.getType('sys_normal_disable')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
                 </div>
             </div>
         </form>
