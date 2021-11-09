@@ -3,6 +3,8 @@ package com.ruoyi.car.service.impl;
 import com.ruoyi.base.controller.FamilyCarMangeController;
 import com.ruoyi.base.domain.FamilyCarMange;
 import com.ruoyi.base.mapper.FamilyCarMangeMapper;
+import com.ruoyi.car.domain.FamilyCarMangec;
+import com.ruoyi.car.mapper.FamilyCarMangecMapper;
 import com.ruoyi.common.utils.ShiroUtils;
 
 import java.util.Date;
@@ -32,6 +34,9 @@ public class FamilyCarRepairBase1ServiceImpl implements IFamilyCarRepairBase1Ser
 
     @Autowired
     private FamilyCarRepairBase1Mapper familyCarRepairBase1Mapper;
+
+    @Autowired
+    private FamilyCarMangecMapper familyCarMangecMapper;
 
     @Autowired
     private FamilyCarMangeMapper familyCarMangeMapper;
@@ -75,8 +80,33 @@ public class FamilyCarRepairBase1ServiceImpl implements IFamilyCarRepairBase1Ser
             }else{
                 item.setStatus("yajiankang");
             }
+            Long carRepairMileLast = item.getCarRepairMileLast();
+            Long carRepairMileCall = item.getCarRepairMileCall();
+            Long carRepairMile = item.getCarRepairMile();
+             if (carRepairMileCall!=0) {
+                 FamilyCarMangec familyCarMangec = new FamilyCarMangec();
+                 familyCarMangec.setCarCode(item.getCarCode());
+                 List<FamilyCarMangec> familyCarMangecs = familyCarMangecMapper.selectFamilyCarMangecList(familyCarMangec);
+                 if (!CollectionUtils.isEmpty(familyCarMangecs)){
+                     FamilyCarMangec familyCarMangec1 = familyCarMangecs.get(0);
+                     Long carMile = familyCarMangec1.getCarMile();
+                     long callMile = carRepairMileLast + carRepairMile;
+                     long startCallMile = callMile - carRepairMileCall;
+                     if (carMile>callMile){
+                         //危险
+                         item.setStatus("weixian");
+                     }else if (carMile<startCallMile){
+                         //健康
+                     }else{
+                         //亚健康
+                         if (!item.getStatus().equals("weixian")) {
+                             item.setStatus("yajiankang");
+                         }
+                     }
+                 }
+             }
+
             //状态
-//            FamilyCarRepairBase1 item =familyCarRepairBase11.get(i);
             Long id = item.getId();
             SysAttachment sysAttachment = new SysAttachment();
             sysAttachment.setBusinessId(String.valueOf(id));

@@ -64,9 +64,6 @@
                 <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="pay:pay:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="pay:pay:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="pay:pay:export">
                     <i class="fa fa-download"></i> 导出
                 </a>
@@ -94,9 +91,7 @@
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
                 modalName: "费用支出",
-                columns: [{
-                    checkbox: true
-                },
+                columns: [
                 {
                     field: 'id',
                     title: '',

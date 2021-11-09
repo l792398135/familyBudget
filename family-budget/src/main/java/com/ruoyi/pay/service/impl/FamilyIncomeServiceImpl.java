@@ -3,7 +3,10 @@ package com.ruoyi.pay.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.ShiroUtils;
+import com.ruoyi.pay.domain.FamilyPay;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.pay.mapper.FamilyIncomeMapper;
@@ -70,7 +73,16 @@ public class FamilyIncomeServiceImpl implements IFamilyIncomeService
     @Override
     public int updateFamilyIncome(FamilyIncome familyIncome)
     {
+        FamilyIncome familyIncome1 = familyIncomeMapper.selectFamilyIncomeById(familyIncome.getId());
+        dataOverProtect(familyIncome1);
         return familyIncomeMapper.updateFamilyIncome(familyIncome);
+    }
+
+    private void dataOverProtect(FamilyIncome familyPay) {
+        Date createDate = familyPay.getCreateDate();
+        if (DateUtils.differentDaysByMillisecond(new Date(), createDate) > 3) {
+            throw new BusinessException("创建时间已过3天,不允许操作");
+        }
     }
 
     /**
@@ -82,7 +94,14 @@ public class FamilyIncomeServiceImpl implements IFamilyIncomeService
     @Override
     public int deleteFamilyIncomeByIds(String ids)
     {
-        return familyIncomeMapper.deleteFamilyIncomeByIds(Convert.toStrArray(ids));
+        String[] strings = Convert.toStrArray(ids);
+        for (String string : strings) {
+            FamilyIncome familyIncome = familyIncomeMapper.selectFamilyIncomeById(Long.valueOf(string));
+            dataOverProtect(familyIncome);
+            familyIncomeMapper.deleteFamilyIncomeById(Long.valueOf(string));
+        }
+//        return familyIncomeMapper.deleteFamilyIncomeByIds(Convert.toStrArray(ids));
+        return 1;
     }
 
     /**

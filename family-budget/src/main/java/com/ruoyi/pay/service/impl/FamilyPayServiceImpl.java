@@ -3,6 +3,8 @@ package com.ruoyi.pay.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,6 +72,8 @@ public class FamilyPayServiceImpl implements IFamilyPayService
     @Override
     public int updateFamilyPay(FamilyPay familyPay)
     {
+        FamilyPay familyPay1 = familyPayMapper.selectFamilyPayById(familyPay.getId());
+        dataOverProtect(familyPay1);
         return familyPayMapper.updateFamilyPay(familyPay);
     }
 
@@ -82,7 +86,21 @@ public class FamilyPayServiceImpl implements IFamilyPayService
     @Override
     public int deleteFamilyPayByIds(String ids)
     {
-        return familyPayMapper.deleteFamilyPayByIds(Convert.toStrArray(ids));
+        String[] strings = Convert.toStrArray(ids);
+        for (String string : strings) {
+            FamilyPay familyPay = familyPayMapper.selectFamilyPayById(Long.valueOf(string));
+            dataOverProtect(familyPay);
+            familyPayMapper.deleteFamilyPayById(Long.valueOf(string));
+        }
+//        return familyPayMapper.deleteFamilyPayByIds(Convert.toStrArray(ids));
+        return 1;
+    }
+
+    private void dataOverProtect(FamilyPay familyPay) {
+        Date createDate = familyPay.getCreateDate();
+        if (DateUtils.differentDaysByMillisecond(new Date(), createDate) > 3) {
+            throw new BusinessException("创建时间已过3天,不允许操作");
+        }
     }
 
     /**
