@@ -1,14 +1,14 @@
 package com.ruoyi.search.service.impl;
 
-import com.ruoyi.pay.domain.FamilyFundCheck;
-import com.ruoyi.pay.domain.FamilyTransferAccount;
-import com.ruoyi.pay.mapper.*;
+import com.ruoyi.fixedasset.domain.FamilyFundCheck;
+import com.ruoyi.fixedasset.mapper.FamilyFundCheckMapper;
+import com.ruoyi.payincome.domain.FamilyTransferAccount;
+import com.ruoyi.payincome.mapper.*;
 import com.ruoyi.search.mapper.FamilyReportMapper;
 import com.ruoyi.search.service.IFamilyReportService;
 import com.ruoyi.search.vo.ChartVO;
 import com.ruoyi.search.vo.TopNVO;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

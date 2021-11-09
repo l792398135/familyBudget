@@ -1,5 +1,4 @@
-import com.ruoyi.search.utils.DesUtil;
-import sun.security.krb5.internal.crypto.Des;
+import com.ruoyi.fixedasset.utils.DesUtil;
 
 public class Test1 {
     public static void main(String[] args) {
