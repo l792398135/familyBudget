@@ -22,7 +22,7 @@
                                 <input type="text" class="time-input" placeholder="请选择收入日期" name="incomeDate"/>
                             </li>
                             <li>
-                                <label>收入类型编码：</label>
+                                <label>收入类型：</label>
                                 <select name="incomeTypeCode" th:with="type=${@dict.getType('income_type')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
