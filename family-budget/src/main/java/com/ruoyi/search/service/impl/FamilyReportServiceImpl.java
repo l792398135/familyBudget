@@ -75,6 +75,28 @@ public class FamilyReportServiceImpl implements IFamilyReportService {
     }
 
     @Override
+    public List<ChartVO> getPayBudget(String code) {
+        //查出code 对应的预算数据
+        List<Map<String, Object>> budgetList = familyReportMapper.getBudget(code);
+        //查出code 对应的实际数据
+        List<Map<String, Object>> realList = familyReportMapper.getPayReal(code);
+        budgetList.addAll(realList);
+        //组装数据
+        return getChartVOS(budgetList, "echarts-budget");
+    }
+
+    @Override
+    public List<ChartVO> getIncomeBudget(String code) {
+        //查出code 对应的预算数据
+        List<Map<String, Object>> budgetList = familyReportMapper.getBudget(code);
+        //查出code 对应的实际数据
+        List<Map<String, Object>> realList = familyReportMapper.getIncomeReal(code);
+        budgetList.addAll(realList);
+        //组装数据
+        return getChartVOS(budgetList, "echarts-budget");
+    }
+
+    @Override
     public Map<String, Object> getMonthData() {
         BigDecimal localMonthPay = familyReportMapper.getLocalMonthPay();
         BigDecimal preMonthIncome = familyReportMapper.getPreMonthIncome();

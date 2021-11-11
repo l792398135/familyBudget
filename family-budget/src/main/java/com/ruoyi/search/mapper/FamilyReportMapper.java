@@ -78,4 +78,10 @@ public interface FamilyReportMapper {
 
     List<TopNVO> getIncomeListByCheckDate(Date startTime);
 
+    @Select("select budget_date date_field,ifnull(budget_amount,0) cost_field,'当月预算' as menber from family_month_budget_details where dict_value =#{code} and budget_type =\"plan\"")
+    List<Map<String, Object>> getBudget(@Value("code")String code);
+    @Select("select date_format(pay_date , '%Y-%m') date_field,ifnull(sum(pay_cost ),0) cost_field ,'实际金额' as menber from family_pay where pay_type_code =#{code} group by date_format(pay_date , '%Y-%m')\n")
+    List<Map<String, Object>> getPayReal(@Value("code")String code);
+    @Select("select date_format(income_date , '%Y-%m') date_field,ifnull(sum(income_cost ),0) cost_field,'实际金额' as menber from family_income where income_type_code =#{code} group by date_format(income_date , '%Y-%m')\n")
+    List<Map<String, Object>> getIncomeReal(@Value("code")String code);
 }

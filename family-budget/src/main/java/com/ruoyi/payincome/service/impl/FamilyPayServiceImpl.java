@@ -92,7 +92,6 @@ public class FamilyPayServiceImpl implements IFamilyPayService
             dataOverProtect(familyPay);
             familyPayMapper.deleteFamilyPayById(Long.valueOf(string));
         }
-//        return familyPayMapper.deleteFamilyPayByIds(Convert.toStrArray(ids));
         return 1;
     }
 

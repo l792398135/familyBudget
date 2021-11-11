@@ -119,13 +119,7 @@ public class FamilyMonthBudgetServiceImpl implements IFamilyMonthBudgetService
         for (String string : strings) {
             FamilyMonthBudget familyMonthBudget = familyMonthBudgetMapper.selectFamilyMonthBudgetById(Long.parseLong(string));
             if (familyMonthBudget.getBudgetType().equals("plan")) {
-                FamilyMonthBudgetDetails budgetDetails = new FamilyMonthBudgetDetails();
-                budgetDetails.setBudgetDate(DateUtils.parseDateToStr("yyyy-MM", familyMonthBudget.getBudgetDate()));
-                budgetDetails.setBudgetType(familyMonthBudget.getBudgetType());
-                List<FamilyMonthBudgetDetails> familyMonthBudgetDetails = budgetDetailsMapper.selectFamilyMonthBudgetDetailsList(budgetDetails);
-                if (CollectionUtils.isNotEmpty(familyMonthBudgetDetails)){
-                    throw new BusinessException(DateUtils.parseDateToStr("yyyy-MM", familyMonthBudget.getBudgetDate())+"预算周期存在下级科目");
-                }
+                throw new BusinessException("计划预算不允许删除");
             }
         }
         return familyMonthBudgetMapper.deleteFamilyMonthBudgetByIds(strings);

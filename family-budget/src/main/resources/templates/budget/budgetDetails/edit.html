@@ -15,6 +15,16 @@
                 </div>
             </div>
         </div>
+        <div class="col-sm-6">
+            <div class="ibox-title" style="height:50px">
+                <h5 class="chartTitle1"></h5>
+            </div>
+            <div class="ibox float-e-margins" >
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-budget"></div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-budgetDetails-edit" th:object="${familyMonthBudgetDetails}">
@@ -39,13 +49,59 @@
             let dictType = details.dictType;
             let dictValue = details.dictValue;
             $(".chartTitle").text([[${chartTitle}]])
+            $(".chartTitle1").text([[${chartTitle1}]])
             if (dictType=="budget_type") {
                 $.operate.get1(ctx + "report" + "/getPay/" +dictValue, lineChart);
+                $.operate.get1(ctx + "report" + "/getPayBudget/" +dictValue, lineChart1);
             }
             if (dictType=="income_type"){
                 $.operate.get1(ctx + "report" + "/getIncome/" + dictValue, lineChart);
+                $.operate.get1(ctx + "report" + "/getIncomeBudget/" + dictValue, lineChart1);
             }
         })
+
+        function lineChart1(data){
+            if (data.data.length==0) return
+            var monthIncomeChart = echarts.init(document.getElementById("echarts-budget"));
+            monthIncomeChart.clear()
+            var tmp=[]
+            for (var i = 0; i < data.data.length; i++) {
+                temp = {
+                    name: data.data[i].name,
+                    type: "line",
+                    // stack :'Total',
+                    data: data.data[i].data.map(item=>item["dataNum"])
+                };
+                tmp.push(temp)
+            }
+            var legend =data.data.map(item=>item['name'])
+            var xAxisData = data.data[0].data.map(item=>item['dataName'])
+            option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: legend
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: xAxisData
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series:tmp
+            };
+            monthIncomeChart.setOption(option);
+            window.onresize = monthIncomeChart.resize;
+        }
 
         function lineChart(data){
             if (data.data.length==0) return
@@ -56,7 +112,7 @@
                 temp = {
                     name: data.data[i].name,
                     type: "line",
-                    // stack :'Total',
+                    stack :'Total',
                     data: data.data[i].data.map(item=>item["dataNum"])
                 };
                 tmp.push(temp)

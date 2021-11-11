@@ -1,8 +1,12 @@
 package com.ruoyi.payincome.service.impl;
 
+import java.util.Date;
 import java.util.List;
+
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.ShiroUtils;
+import com.ruoyi.payincome.domain.FamilyPay;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.payincome.mapper.FamilyTransferAccountMapper;
@@ -69,9 +73,17 @@ public class FamilyTransferAccountServiceImpl implements IFamilyTransferAccountS
     @Override
     public int updateFamilyTransferAccount(FamilyTransferAccount familyTransferAccount)
     {
+        FamilyTransferAccount familyTransferAccount1 = familyTransferAccountMapper.selectFamilyTransferAccountById(familyTransferAccount.getId());
+        dataOverProtect(familyTransferAccount1);
         return familyTransferAccountMapper.updateFamilyTransferAccount(familyTransferAccount);
     }
 
+    private void dataOverProtect(FamilyTransferAccount familyPay) {
+        Date createDate = familyPay.getCreateTime();
+        if (DateUtils.differentDaysByMillisecond(new Date(), createDate) > 3) {
+            throw new BusinessException("创建时间已过3天,不允许操作");
+        }
+    }
     /**
      * 批量删除转账
      * 
@@ -81,7 +93,13 @@ public class FamilyTransferAccountServiceImpl implements IFamilyTransferAccountS
     @Override
     public int deleteFamilyTransferAccountByIds(String ids)
     {
-        return familyTransferAccountMapper.deleteFamilyTransferAccountByIds(Convert.toStrArray(ids));
+        String[] strings = Convert.toStrArray(ids);
+        for (String string : strings) {
+            FamilyTransferAccount familyTransferAccount1 = familyTransferAccountMapper.selectFamilyTransferAccountById(Long.valueOf(string));
+            dataOverProtect(familyTransferAccount1);
+            familyTransferAccountMapper.deleteFamilyTransferAccountById(Long.valueOf(string));
+        }
+        return 1;
     }
 
     /**

@@ -42,12 +42,27 @@ public class FamilyReportController extends BaseController {
         return prefix + "/searchReport";
     }
 
-    @ApiOperation("")
     @GetMapping("/getPay/{code}")
     @ResponseBody
     public AjaxResult getPay(@PathVariable("code") String code)
     {
         List<ChartVO> monthData = familyReportService.getPay(code);
+        return AjaxResult.success(monthData);
+    }
+
+    @GetMapping("/getPayBudget/{code}")
+    @ResponseBody
+    public AjaxResult getPayBudget(@PathVariable("code") String code)
+    {
+        List<ChartVO> monthData = familyReportService.getPayBudget(code);
+        return AjaxResult.success(monthData);
+    }
+
+    @GetMapping("/getIncomeBudget/{code}")
+    @ResponseBody
+    public AjaxResult getIncomeBudget(@PathVariable("code") String code)
+    {
+        List<ChartVO> monthData = familyReportService.getIncomeBudget(code);
         return AjaxResult.success(monthData);
     }
 

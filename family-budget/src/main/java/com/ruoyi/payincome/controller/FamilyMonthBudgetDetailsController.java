@@ -104,6 +104,7 @@ public class FamilyMonthBudgetDetailsController extends BaseController
         String typeName = familyMonthBudgetDetails.getDictTypeName();
         String label = familyMonthBudgetDetails.getDictLabel();
         mmap.put("chartTitle",label+"的"+typeName);
+        mmap.put("chartTitle1",label+"的历史预算");
         return prefix + "/edit";
     }
 
