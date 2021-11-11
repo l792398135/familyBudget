@@ -156,22 +156,18 @@ public class FamilyReportServiceImpl implements IFamilyReportService {
             List<Map<String, Object>> value = stringListEntry.getValue();
             List<Map<String, Object>> objects = new ArrayList<>();
             for (String date_field : date_fields) {
-                for (Map<String, Object> stringObjectMap : value) {
-                    Object date_field1 = stringObjectMap.get("date_field");
-                    if (ObjectUtils.isEmpty(date_field1)) {
-                        Map<String, Object> tmp = new HashMap<>();
-                        tmp.put("dataName", date_field);
-                        tmp.put("dataNum", "0");
-                        objects.add(tmp);
-                    } else {
-                        String s = date_field1.toString();
-                        if (s.equals(date_field)) {
-                            Map<String, Object> tmp = new HashMap<>();
-                            tmp.put("dataName", date_field);
-                            tmp.put("dataNum", stringObjectMap.get("cost_field").toString());
-                            objects.add(tmp);
-                        }
-                    }
+                List<Map<String, Object>> dataName = value.stream().filter(r -> r.get("date_field").equals(date_field)).collect(Collectors.toList());
+                if (CollectionUtils.isNotEmpty(dataName)){
+                    Map<String, Object> tmp = new HashMap<>();
+                    Map<String, Object> data = dataName.get(0);
+                    tmp.put("dataName", date_field);
+                    tmp.put("dataNum", data.get("cost_field").toString());
+                    objects.add(tmp);
+                }else{
+                    Map<String, Object> tmp = new HashMap<>();
+                    tmp.put("dataName", date_field);
+                    tmp.put("dataNum", "0");
+                    objects.add(tmp);
                 }
             }
             ChartVO chartVO = new ChartVO();
