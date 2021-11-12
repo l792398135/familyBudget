@@ -56,9 +56,6 @@
                 <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="pay:transfer:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="pay:transfer:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -82,17 +79,11 @@
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
                 modalName: "转账",
-                columns: [{
-                    checkbox: true
-                },
+                columns: [
                 {
                     field: 'id',
                     title: '',
                     visible: false
-                },
-                {
-                    field: 'transferAccount',
-                    title: '转账金额'
                 },
                 {
                     field: 'transfer',
@@ -107,7 +98,10 @@
                     formatter: function(value, row, index) {
                        return $.table.selectDictLabel(accepterDatas, value);
                     }
-                },
+                },{
+                        field: 'transferAccount',
+                        title: '转账金额'
+                    },
                 {
                     field: 'remark',
                     title: '备注'

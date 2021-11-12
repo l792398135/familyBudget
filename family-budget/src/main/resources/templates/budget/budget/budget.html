@@ -19,7 +19,7 @@
                             </li>
                             <li>
                                 <label>预算周期：</label>
-                                <input type="text" class="time-input" placeholder="请选择预算周期" name="budgetDate"/>
+                                <input type="text"  placeholder="请选择预算周期" name="budgetDate"/>
                             </li>
                             <li class="select-time">
                                 <label>创建日期：</label>
@@ -27,10 +27,7 @@
                                 <span>-</span>
                                 <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateDate]"/>
                             </li>
-                            <li>
-                                <label>创建人员：</label>
-                                <input type="text" name="createUser"/>
-                            </li>
+
                              <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -47,9 +44,6 @@
                 <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="budget:budget:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="budget:budget:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -57,6 +51,8 @@
         </div>
     </div>
     <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: datetimepicker-js" />
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('budget:budget:edit')}]];
         var removeFlag = [[${@permission.hasPermi('budget:budget:remove')}]];
@@ -73,9 +69,7 @@
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
                 modalName: "月预算",
-                columns: [{
-                    checkbox: true
-                },
+                columns: [
                 {
                     field: 'id',
                     title: '',
@@ -105,15 +99,15 @@
                     title: '预算备注'
                 },
                 {
-                    field: 'createDate',
-                    title: '创建日期'
-                },
-                {
                     field: 'createUser',
                     title: '创建人员',
                     formatter: function(value, row, index) {
                         return $.table.selectDictLabel(createMenberDatas, value);
                     }
+                },
+                {
+                    field: 'createDate',
+                    title: '创建日期'
                 },
                 {
                     title: '操作',
@@ -133,6 +127,14 @@
             var url = prefix + '/detail/' + id;
             $.modal.openTab("预算明细", url);
         }
+
+        $("input[name='budgetDate']").datetimepicker({
+            format: "yyyy-mm",
+            startView: 'year',
+            minView:'year',
+            maxView:'year',
+            autoclose: true
+        });
     </script>
 </body>
 </html>

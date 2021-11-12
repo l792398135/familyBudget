@@ -64,9 +64,6 @@
                 <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="cost:income:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="cost:income:export">
-                    <i class="fa fa-download"></i> 导出
-                </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -91,9 +88,7 @@
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
                 modalName: "家庭收入",
-                columns: [{
-                    checkbox: true
-                },
+                columns: [
                 {
                     field: 'id',
                     title: '',

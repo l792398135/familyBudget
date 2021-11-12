@@ -75,7 +75,6 @@ public class FamilyMonthBudgetServiceImpl implements IFamilyMonthBudgetService
                 throw new BusinessException("这个周期的计划预算已经创建");
             }
         }
-
         FamilyFeeType familyFeeType = new FamilyFeeType();
         familyFeeType.setControlFlag("0");
         List<FamilyFeeType> familyFeeTypes = feeTypeService.selectFamilyFeeTypeList(familyFeeType);
