@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.child.mapper.FamilyChildPayMapper">
+    
+    <resultMap type="FamilyChildPay" id="FamilyChildPayResult">
+        <result property="id"    column="id"    />
+        <result property="payMenber"    column="pay_menber"    />
+        <result property="benefitChild"    column="benefit_child"    />
+        <result property="payCode"    column="pay_code"    />
+        <result property="payDetail"    column="pay_detail"    />
+        <result property="payAmount"    column="pay_amount"    />
+        <result property="payDate"    column="pay_date"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectFamilyChildPayVo">
+        select id, pay_menber, benefit_child, pay_code, pay_detail, pay_amount, pay_date, create_user, create_time from family_child_pay
+    </sql>
+
+    <select id="selectFamilyChildPayList" parameterType="FamilyChildPay" resultMap="FamilyChildPayResult">
+        <include refid="selectFamilyChildPayVo"/>
+        <where>  
+            <if test="payMenber != null  and payMenber != ''"> and pay_menber = #{payMenber}</if>
+            <if test="benefitChild != null  and benefitChild != ''"> and benefit_child = #{benefitChild}</if>
+            <if test="payCode != null  and payCode != ''"> and pay_code = #{payCode}</if>
+            <if test="payDate != null "> and pay_date = #{payDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectFamilyChildPayById" parameterType="Long" resultMap="FamilyChildPayResult">
+        <include refid="selectFamilyChildPayVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFamilyChildPay" parameterType="FamilyChildPay" useGeneratedKeys="true" keyProperty="id">
+        insert into family_child_pay
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="payMenber != null and payMenber != ''">pay_menber,</if>
+            <if test="benefitChild != null and benefitChild != ''">benefit_child,</if>
+            <if test="payCode != null and payCode != ''">pay_code,</if>
+            <if test="payDetail != null and payDetail != ''">pay_detail,</if>
+            <if test="payAmount != null">pay_amount,</if>
+            <if test="payDate != null">pay_date,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="payMenber != null and payMenber != ''">#{payMenber},</if>
+            <if test="benefitChild != null and benefitChild != ''">#{benefitChild},</if>
+            <if test="payCode != null and payCode != ''">#{payCode},</if>
+            <if test="payDetail != null and payDetail != ''">#{payDetail},</if>
+            <if test="payAmount != null">#{payAmount},</if>
+            <if test="payDate != null">#{payDate},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFamilyChildPay" parameterType="FamilyChildPay">
+        update family_child_pay
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="payMenber != null and payMenber != ''">pay_menber = #{payMenber},</if>
+            <if test="benefitChild != null and benefitChild != ''">benefit_child = #{benefitChild},</if>
+            <if test="payCode != null and payCode != ''">pay_code = #{payCode},</if>
+            <if test="payDetail != null and payDetail != ''">pay_detail = #{payDetail},</if>
+            <if test="payAmount != null">pay_amount = #{payAmount},</if>
+            <if test="payDate != null">pay_date = #{payDate},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFamilyChildPayById" parameterType="Long">
+        delete from family_child_pay where id = #{id}
+    </delete>
+
+    <delete id="deleteFamilyChildPayByIds" parameterType="String">
+        delete from family_child_pay where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

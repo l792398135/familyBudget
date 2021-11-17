@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改富文本数据')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-summernote-edit" th:object="${sysSummernote}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">业务类型：</label>
+                <div class="col-sm-8">
+                    <input name="businessType" th:field="*{businessType}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">业务id：</label>
+                <div class="col-sm-8">
+                    <input name="businessId" th:field="*{businessId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">文本：</label>
+                <div class="col-sm-8">
+                    <textarea name="summernote" class="form-control">[[*{summernote}]]</textarea>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">状态：</label>
+                <div class="col-sm-8">
+                    <select name="status" class="form-control m-b" th:with="type=${@dict.getType('sys_normal_disable')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{status}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">附件上传：</label>
+                <div class="col-sm-8">
+                    <input id="file-Portrait" type="file" multiple="multiple" name="file">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "system/summernote";
+        $("#form-summernote-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.ajax({
+                    cache : true,
+                    type : "POST",
+                    url : prefix + "/edit",
+                    data : $('#form-summernote-edit').serialize(),
+                    async : false,
+                    error : function(request) {
+                        $.modal.alertError("系统错误");
+                    },
+                    success : function(data) {
+                        var businessId = $("input[name=id]").val()
+                        $.file.uploadFile("file-Portrait","bill",businessId);
+                        $.operate.saveSuccess(data);
+                    }
+                });
+            }
+        }
+        $(function() {
+            var businessId = $("input[name='id']").val()
+            $.file.initEditFiles("file-Portrait","checkdetails",businessId);
+        });
+    </script>
+</body>
+</html>

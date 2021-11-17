@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.child.mapper.FamilyChildFundAgentMapper">
+    
+    <resultMap type="FamilyChildFundAgent" id="FamilyChildFundAgentResult">
+        <result property="id"    column="id"    />
+        <result property="costMenber"    column="cost_menber"    />
+        <result property="moneyAgent"    column="money_agent"    />
+        <result property="childCode"    column="child_code"    />
+        <result property="fundAmount"    column="fund_amount"    />
+        <result property="agentDate"    column="agent_date"    />
+        <result property="remark"    column="remark"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="businessId"    column="business_id"    />
+    </resultMap>
+
+    <sql id="selectFamilyChildFundAgentVo">
+        select id, cost_menber, money_agent, child_code, fund_amount, agent_date, remark, create_user, create_time,business_id from family_child_fund_agent
+    </sql>
+
+    <select id="selectFamilyChildFundAgentList" parameterType="FamilyChildFundAgent" resultMap="FamilyChildFundAgentResult">
+        <include refid="selectFamilyChildFundAgentVo"/>
+        <where>  
+            <if test="costMenber != null  and costMenber != ''"> and cost_menber = #{costMenber}</if>
+            <if test="moneyAgent != null  and moneyAgent != ''"> and money_agent = #{moneyAgent}</if>
+            <if test="childCode != null  and childCode != ''"> and child_code = #{childCode}</if>
+            <if test="agentDate != null "> and agent_date = #{agentDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectFamilyChildFundAgentById" parameterType="Long" resultMap="FamilyChildFundAgentResult">
+        <include refid="selectFamilyChildFundAgentVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFamilyChildFundAgent" parameterType="FamilyChildFundAgent" useGeneratedKeys="true" keyProperty="id">
+        insert into family_child_fund_agent
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="costMenber != null and costMenber != ''">cost_menber,</if>
+            <if test="moneyAgent != null and moneyAgent != ''">money_agent,</if>
+            <if test="childCode != null and childCode != ''">child_code,</if>
+            <if test="fundAmount != null">fund_amount,</if>
+            <if test="agentDate != null">agent_date,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="businessId != null">business_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="costMenber != null and costMenber != ''">#{costMenber},</if>
+            <if test="moneyAgent != null and moneyAgent != ''">#{moneyAgent},</if>
+            <if test="childCode != null and childCode != ''">#{childCode},</if>
+            <if test="fundAmount != null">#{fundAmount},</if>
+            <if test="agentDate != null">#{agentDate},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="businessId != null">#{businessId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFamilyChildFundAgent" parameterType="FamilyChildFundAgent">
+        update family_child_fund_agent
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="costMenber != null and costMenber != ''">cost_menber = #{costMenber},</if>
+            <if test="moneyAgent != null and moneyAgent != ''">money_agent = #{moneyAgent},</if>
+            <if test="childCode != null and childCode != ''">child_code = #{childCode},</if>
+            <if test="fundAmount != null">fund_amount = #{fundAmount},</if>
+            <if test="agentDate != null">agent_date = #{agentDate},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="businessId != null">business_id = #{businessId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFamilyChildFundAgentById" parameterType="Long">
+        delete from family_child_fund_agent where id = #{id}
+    </delete>
+
+    <delete id="deleteFamilyChildFundAgentByIds" parameterType="String">
+        delete from family_child_fund_agent where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
