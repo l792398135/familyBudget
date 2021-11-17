@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <th:block th:include="include :: header('Summernote富文本编辑器')" />
+    <th:block th:include="include :: summernote-css" />
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>孩子管理->使用指南</h5>
+                    <button id="edit" class="btn btn-primary btn-xs m-l-sm" onclick="edit()" type="button">编辑</button>
+                    <button id="save" class="btn btn-primary  btn-xs" onclick="save()" type="button">保存</button>
+                </div>
+                <div class="ibox-content" id="eg">
+
+                    <div class="click2edit wrapper">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: summernote-js" />
+<script>
+    var prefix = ctx + "system/summernote"
+    $(document).ready(function () {
+        $('.summernote').summernote({
+            toolbar: [
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['style', ['style']],
+                ['fontname', ['fontname','fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'hr']],
+                ['view', ['fullscreen', 'codeview']],
+                ['help', ['help']]
+            ],
+            lang: 'zh-CN',
+            focus: true
+        });
+        $.ajax({
+            cache : true,
+            type : "POST",
+            url : prefix + "/note",
+            data : {
+                businessType:"child",
+                businessId:"child_help"
+            },
+            async : false,
+            error : function(request) {
+                $.modal.alertError("系统错误");
+            },
+            success : function(data) {
+                $('.click2edit').summernote('code',data.data.summernote)
+                $('.click2edit').summernote('destroy');
+            }
+        });
+    });
+    var edit = function () {
+        $("#eg").addClass("no-padding");
+        $('.click2edit').summernote({
+            toolbar: [
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['style', ['style']],
+                ['fontname', ['fontname','fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'hr']],
+                ['view', ['fullscreen', 'codeview']],
+                ['help', ['help']]
+            ], callbacks: {
+                onImageUpload: function(files) {
+                   sendFile(files);
+                }
+            },
+            lang: 'zh-CN',
+            focus: true
+        });
+    };
+
+    function sendFile(files){
+        $.modal.alertError("暂不支持图片");
+    }
+
+    var save = function () {
+        $("#eg").removeClass("no-padding");
+        var aHTML = $('.click2edit').summernote('code');
+        $.ajax({
+            cache : true,
+            type : "POST",
+            url : prefix + "/add",
+            data : {
+                businessType:"孩子管理->使用指南",
+                businessId:"child_help",
+                summernote: aHTML
+            },
+            async : false,
+            error : function(request) {
+                $.modal.alertError("系统错误");
+            },
+            success : function(data) {
+                $('.click2edit').summernote('destroy');
+            }
+        });
+    };
+</script>
+</body>
+</html>

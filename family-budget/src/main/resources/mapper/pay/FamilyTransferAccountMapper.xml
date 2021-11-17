@@ -13,10 +13,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="transferTime"    column="transfer_time"    />
         <result property="createUser"    column="create_user"    />
         <result property="createTime"    column="create_time"    />
+        <result property="businessType"    column="business_type"    />
+        <result property="businessId"    column="business_id"    />
     </resultMap>
 
     <sql id="selectFamilyTransferAccountVo">
-        select id, transfer_account, transfer, accepter, remark, transfer_time, create_user, create_time from family_transfer_account
+        select id, transfer_account, transfer, accepter, remark, transfer_time, create_user, create_time ,business_type,business_id from family_transfer_account
     </sql>
 
     <select id="selectFamilyTransferAccountList" parameterType="FamilyTransferAccount" resultMap="FamilyTransferAccountResult">
@@ -41,7 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
         
-    <insert id="insertFamilyTransferAccount" parameterType="FamilyTransferAccount">
+    <insert id="insertFamilyTransferAccount" parameterType="FamilyTransferAccount" useGeneratedKeys="true" keyProperty="id">
         insert into family_transfer_account
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>
@@ -52,6 +54,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="transferTime != null">transfer_time,</if>
             <if test="createUser != null">create_user,</if>
             <if test="createTime != null">create_time,</if>
+            <if test="businessType != null">business_type,</if>
+            <if test="businessId != null">business_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -62,6 +66,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="transferTime != null">#{transferTime},</if>
             <if test="createUser != null">#{createUser},</if>
             <if test="createTime != null">#{createTime},</if>
+            <if test="businessType != null">#{businessType},</if>
+            <if test="businessId != null">#{businessId},</if>
          </trim>
     </insert>
 
@@ -75,6 +81,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="transferTime != null">transfer_time = #{transferTime},</if>
             <if test="createUser != null">create_user = #{createUser},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="businessType != null">business_type = #{businessType},</if>
+            <if test="businessId != null">business_id = #{businessId},</if>
         </trim>
         where id = #{id}
     </update>

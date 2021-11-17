@@ -7,6 +7,7 @@ import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.payincome.domain.FamilyPay;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.payincome.mapper.FamilyTransferAccountMapper;
@@ -97,6 +98,10 @@ public class FamilyTransferAccountServiceImpl implements IFamilyTransferAccountS
         for (String string : strings) {
             FamilyTransferAccount familyTransferAccount1 = familyTransferAccountMapper.selectFamilyTransferAccountById(Long.valueOf(string));
             dataOverProtect(familyTransferAccount1);
+            Long businessId = familyTransferAccount1.getBusinessId();
+            if (!ObjectUtils.isEmpty(businessId)){
+                throw new BusinessException("其他操作生成的记录，不允许此处修改！");
+            }
             familyTransferAccountMapper.deleteFamilyTransferAccountById(Long.valueOf(string));
         }
         return 1;

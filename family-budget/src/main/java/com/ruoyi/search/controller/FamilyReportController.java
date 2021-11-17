@@ -42,13 +42,6 @@ public class FamilyReportController extends BaseController {
         return prefix + "/searchReport";
     }
 
-    @GetMapping("/getPay/{code}")
-    @ResponseBody
-    public AjaxResult getPay(@PathVariable("code") String code)
-    {
-        List<ChartVO> monthData = familyReportService.getPay(code);
-        return AjaxResult.success(monthData);
-    }
 
     @GetMapping("/getPayBudget/{code}")
     @ResponseBody
@@ -74,6 +67,7 @@ public class FamilyReportController extends BaseController {
         List<TopNVO> peopleMoney = familyReportService.getPeopleMoney();
         return AjaxResult.success(peopleMoney);
     }
+
     @ApiOperation("查询收入明细")
     @GetMapping("/getIncome/{code}")
     @ResponseBody
@@ -82,6 +76,15 @@ public class FamilyReportController extends BaseController {
         List<ChartVO> monthData = familyReportService.getIncome(code);
         return AjaxResult.success(monthData);
     }
+
+    @GetMapping("/getPay/{code}")
+    @ResponseBody
+    public AjaxResult getPay(@PathVariable("code") String code)
+    {
+        List<ChartVO> monthData = familyReportService.getPay(code);
+        return AjaxResult.success(monthData);
+    }
+
 
     @ApiOperation("获取月费用")
     @GetMapping("/getMonthData")
