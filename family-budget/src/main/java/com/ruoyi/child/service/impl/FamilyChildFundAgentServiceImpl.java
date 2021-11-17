@@ -1,9 +1,13 @@
 package com.ruoyi.child.service.impl;
 
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.ShiroUtils;
+
+import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.payincome.domain.FamilyIncome;
 import com.ruoyi.payincome.domain.FamilyTransferAccount;
 import com.ruoyi.payincome.mapper.FamilyTransferAccountMapper;
 import com.ruoyi.system.mapper.SysDictDataMapper;
@@ -111,6 +115,7 @@ public class FamilyChildFundAgentServiceImpl implements IFamilyChildFundAgentSer
     {
         Long id = childFundAgent1.getId();
         FamilyChildFundAgent childFundAgent = childFundAgentMapper.selectFamilyChildFundAgentById(id);
+        dataOverProtect(childFundAgent);
         String moneyAgent = childFundAgent.getMoneyAgent();
         String costMenber = childFundAgent.getCostMenber();
         FamilyTransferAccount transferAccount = new FamilyTransferAccount();
@@ -121,6 +126,13 @@ public class FamilyChildFundAgentServiceImpl implements IFamilyChildFundAgentSer
             transferAccountMapper.updateFamilyTransferAccount(transferAccount);
         }
         return childFundAgentMapper.updateFamilyChildFundAgent(childFundAgent1);
+    }
+
+    private void dataOverProtect(FamilyChildFundAgent familyPay) {
+        Date createDate = familyPay.getCreateTime();
+        if (DateUtils.differentDaysByMillisecond(new Date(), createDate) > 3) {
+            throw new BusinessException("创建时间已过3天,不允许操作");
+        }
     }
 
     /**
@@ -135,6 +147,7 @@ public class FamilyChildFundAgentServiceImpl implements IFamilyChildFundAgentSer
         String[] strings = Convert.toStrArray(ids);
         for (String string : strings) {
             FamilyChildFundAgent familyChildFundAgent = childFundAgentMapper.selectFamilyChildFundAgentById(Long.valueOf(string));
+            dataOverProtect(familyChildFundAgent);
             if (ObjectUtils.isNotEmpty(familyChildFundAgent.getBusinessId())) {
                 transferAccountMapper.deleteFamilyTransferAccountById(familyChildFundAgent.getBusinessId());
             }
