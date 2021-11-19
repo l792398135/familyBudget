@@ -41,6 +41,12 @@ var table = {
                     language: 'zh', //设置语言
                     uploadUrl: '/common/upload',  //上传的地址
                     enctype: 'multipart/form-data',
+                    resizeImage: true,
+                    maxImageWidth: 200,
+                    maxImageHeight: 200,
+                    resizeQuality: 0.5,
+                    resizePreference: 'width',
+                    dropZoneEnabled: false,//是否显示拖拽区域
                     uploadAsync: true,
                     showUpload: false, //是否显示上传按钮
                     allowedFileExtensions : ['jpg','gif','png'],//接收的文件后缀
@@ -51,7 +57,35 @@ var table = {
                         actionUpload:'',//去除上传预览缩略图中的上传图片；
                         // actionZoom:'',   //去除上传预览缩略图中的查看详情预览的缩略图标。
                     }
-                });
+                })
+                    // .on('filepreupload', function(event, data, previewId, index) {
+                    // var form = data.form, files = data.files, extra = data.extra,
+                    //     response = data.response, reader = data.reader;
+                    // console.log('File pre upload triggered');
+                    // var newFiles=[]
+                    // for (let filesKey in files) {
+                    //     new html5ImgCompress(files[filesKey], {
+                    //         before: function(file) {
+                    //             console.log('单张: 压缩前...');
+                    //         },
+                    //         done: function (file, base64) {
+                    //             console.log('单张: 压缩成功...');
+                    //             newFiles.push(dataURLtoFile(base64,))
+                    //         },
+                    //         fail: function(file) {
+                    //             console.log('单张: 压缩失败...');
+                    //         },
+                    //         complete: function(file) {
+                    //             console.log('单张: 压缩完成...');
+                    //         },
+                    //         notSupport: function(file) {
+                    //             alert('浏览器不支持！');
+                    //         }
+                    //     });
+                    // }
+                    // data.files=newFiles
+                // }
+                // );
             },
 
             //初始化编辑附件
@@ -127,9 +161,16 @@ var table = {
             //执行上传附件
             uploadFile : function(ctrlName,businessType,businessId){
                 var control = $('#' + ctrlName);
+
                 var file = control.val();
                 if(file != '' ){
+
                     control.fileinput("upload");
+                    control.on('filepreupload', function(event, data, previewId, index) {
+                        var form = data.form, files = data.files, extra = data.extra,
+                            response = data.response, reader = data.reader;
+                        console.log('File pre upload triggered');
+                    });
                     control.on("fileuploaded", function(event, outData,
                                                         previewId, index) {
                         var result = outData.response;
@@ -1878,3 +1919,17 @@ modal_status = {
     FAIL: "error",
     WARNING: "warning"
 };
+
+function dataURLtoFile(dataurl, filename) { //将base64转换为文件
+    var arr = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, {
+        type: mime
+    });
+}

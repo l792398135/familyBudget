@@ -6,6 +6,8 @@ import java.util.List;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.ShiroUtils;
+import com.ruoyi.payincome.domain.FamilyTransferAccount;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.payincome.mapper.FamilyPayMapper;
@@ -90,6 +92,10 @@ public class FamilyPayServiceImpl implements IFamilyPayService
         for (String string : strings) {
             FamilyPay familyPay = familyPayMapper.selectFamilyPayById(Long.valueOf(string));
             dataOverProtect(familyPay);
+            Long businessId = familyPay.getBusinessId();
+            if (!ObjectUtils.isEmpty(businessId)){
+                throw new BusinessException("其他操作生成的记录，不允许此处修改！");
+            }
             familyPayMapper.deleteFamilyPayById(Long.valueOf(string));
         }
         return 1;

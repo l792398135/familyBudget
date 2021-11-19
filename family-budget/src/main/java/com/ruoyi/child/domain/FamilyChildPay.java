@@ -18,6 +18,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 public class FamilyChildPay extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
+    private Long businessId;
     private List<String> imgUrls;
 
     public List<String> getImgUrls() {
@@ -59,7 +60,15 @@ public class FamilyChildPay extends BaseEntity
     @Excel(name = "创建人")
     private String createUser;
 
-    public void setId(Long id) 
+    public Long getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(Long businessId) {
+        this.businessId = businessId;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }

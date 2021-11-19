@@ -67,7 +67,7 @@ spring:
   http:
       multipart:
         max-file-size: 10MB
-        max-request-size: 10MB
+        max-request-size: 20MB
   # 服务模块
   devtools:
     restart:

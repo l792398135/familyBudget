@@ -14,10 +14,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="operatorCode"    column="operator_code"    />
         <result property="bookkeeperCode"    column="bookkeeper_code"    />
         <result property="createDate"    column="create_date"    />
+        <result property="businessType"    column="business_type"    />
+        <result property="businessId"    column="business_id"    />
     </resultMap>
 
     <sql id="selectFamilyPayVo">
-        select id, pay_menber, pay_date, pay_cost, pay_type_code, pay_detail, operator_code, bookkeeper_code, create_date from family_pay
+        select id, pay_menber, pay_date, pay_cost, pay_type_code, pay_detail, operator_code, bookkeeper_code, create_date,business_type,business_id from family_pay
     </sql>
 
     <select id="selectFamilyPayList" parameterType="FamilyPay" resultMap="FamilyPayResult">
@@ -48,6 +50,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="operatorCode != null and operatorCode != ''">operator_code,</if>
             <if test="bookkeeperCode != null and bookkeeperCode != ''">bookkeeper_code,</if>
             <if test="createDate != null">create_date,</if>
+            <if test="businessType != null">business_type,</if>
+            <if test="businessId != null">business_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="payMenber != null">#{payMenber},</if>
@@ -58,6 +62,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="operatorCode != null and operatorCode != ''">#{operatorCode},</if>
             <if test="bookkeeperCode != null and bookkeeperCode != ''">#{bookkeeperCode},</if>
             <if test="createDate != null">#{createDate},</if>
+            <if test="businessType != null">#{businessType},</if>
+            <if test="businessId != null">#{businessId},</if>
          </trim>
     </insert>
 
@@ -72,6 +78,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="operatorCode != null and operatorCode != ''">operator_code = #{operatorCode},</if>
             <if test="bookkeeperCode != null and bookkeeperCode != ''">bookkeeper_code = #{bookkeeperCode},</if>
             <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="businessType != null">business_type = #{businessType},</if>
+            <if test="businessId != null">business_id = #{businessId},</if>
         </trim>
         where id = #{id}
     </update>

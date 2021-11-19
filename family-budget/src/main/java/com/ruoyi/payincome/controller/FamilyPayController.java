@@ -2,6 +2,9 @@ package com.ruoyi.payincome.controller;
 
 import java.util.List;
 
+import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.payincome.domain.FamilyTransferAccount;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -110,6 +113,11 @@ public class FamilyPayController extends BaseController
     @ResponseBody
     public AjaxResult editSave(FamilyPay familyPay)
     {
+        FamilyPay familyPay1 = familyPayService.selectFamilyPayById(familyPay.getId());
+        Long businessId = familyPay1.getBusinessId();
+        if (!ObjectUtils.isEmpty(businessId)){
+            throw new BusinessException("其他操作生成的记录，不允许此处修改！");
+        }
         return toAjax(familyPayService.updateFamilyPay(familyPay));
     }
 

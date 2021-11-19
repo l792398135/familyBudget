@@ -1,9 +1,17 @@
 package com.ruoyi.child.service.impl;
 
+import com.ruoyi.child.domain.FamilyChildFundAgent;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.ShiroUtils;
+
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.payincome.domain.FamilyPay;
+import com.ruoyi.payincome.mapper.FamilyPayMapper;
+import com.ruoyi.system.mapper.SysDictDataMapper;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.child.mapper.FamilyChildPayMapper;
@@ -27,6 +35,11 @@ public class FamilyChildPayServiceImpl implements IFamilyChildPayService
     @Autowired
     private FamilyChildPayMapper familyChildPayMapper;
 
+    @Autowired
+    private FamilyPayMapper payMapper;
+
+    @Autowired
+    private SysDictDataMapper dictDataMapper;
     /**
      * 查询宝贝支出
      * 
@@ -54,7 +67,7 @@ public class FamilyChildPayServiceImpl implements IFamilyChildPayService
             Long id = item.getId();
             SysAttachment sysAttachment = new SysAttachment();
             sysAttachment.setBusinessId(String.valueOf(id));
-            sysAttachment.setBusinessType("businessType");
+            sysAttachment.setBusinessType("childPay");
             sysAttachment.setDelFlag(0);
             List<SysAttachment> sysAttachments = sysAttachmentMapper.selectSysAttachmentList(sysAttachment);
             if (sysAttachments!=null) {
@@ -78,6 +91,24 @@ public class FamilyChildPayServiceImpl implements IFamilyChildPayService
         familyChildPay.setCreateTime(DateUtils.getNowDate());
         familyChildPay.setCreateUser(ShiroUtils.getLoginName());
         familyChildPayMapper.insertFamilyChildPay(familyChildPay);
+        //
+        FamilyPay familyPay = new FamilyPay();
+        familyPay.setPayMenber(familyChildPay.getPayMenber());
+        familyPay.setPayDate(familyChildPay.getPayDate());
+        familyPay.setPayCost(familyChildPay.getPayAmount());
+        familyPay.setPayTypeCode("child");
+        familyPay.setOperatorCode(ShiroUtils.getLoginName());
+        familyPay.setBookkeeperCode(ShiroUtils.getLoginName());
+        familyPay.setCreateDate(new Date());
+        familyPay.setBusinessType("孩子管理->宝贝支出");
+        familyPay.setBusinessId(familyChildPay.getId());
+        String remark =dictDataMapper.selectDictLabel("family_menber",familyChildPay.getPayMenber())
+                +"为宝贝"+dictDataMapper.selectDictLabel("child_code",familyChildPay.getBenefitChild())
+                +"购买"+dictDataMapper.selectDictLabel("child_pay_code",familyChildPay.getPayCode());
+        familyPay.setPayDetail(remark);
+        payMapper.insertFamilyPay(familyPay);
+        familyChildPay.setBusinessId(familyPay.getId());
+        familyChildPayMapper.updateFamilyChildPay(familyChildPay);
         return familyChildPay.getId();
     }
 
@@ -90,6 +121,13 @@ public class FamilyChildPayServiceImpl implements IFamilyChildPayService
     @Override
     public int updateFamilyChildPay(FamilyChildPay familyChildPay)
     {
+        FamilyChildPay familyChildPay1 = familyChildPayMapper.selectFamilyChildPayById(familyChildPay.getId());
+        dataOverProtect(familyChildPay1);
+        FamilyPay familyPay = new FamilyPay();
+        familyPay.setPayDate(familyChildPay.getPayDate());
+        familyPay.setPayCost(familyChildPay.getPayAmount());
+        familyPay.setId(familyChildPay1.getBusinessId());
+        payMapper.updateFamilyPay(familyPay);
         return familyChildPayMapper.updateFamilyChildPay(familyChildPay);
     }
 
@@ -102,9 +140,23 @@ public class FamilyChildPayServiceImpl implements IFamilyChildPayService
     @Override
     public int deleteFamilyChildPayByIds(String ids)
     {
+        String[] strings = Convert.toStrArray(ids);
+        for (String string : strings) {
+            FamilyChildPay familyChildPay = familyChildPayMapper.selectFamilyChildPayById(Long.valueOf(string));
+            dataOverProtect(familyChildPay);
+            if (ObjectUtils.isNotEmpty(familyChildPay.getBusinessId())) {
+                payMapper.deleteFamilyPayById(familyChildPay.getBusinessId());
+            }
+        }
         return familyChildPayMapper.deleteFamilyChildPayByIds(Convert.toStrArray(ids));
     }
 
+    private void dataOverProtect(FamilyChildPay familyPay) {
+        Date createDate = familyPay.getCreateTime();
+        if (DateUtils.differentDaysByMillisecond(new Date(), createDate) > 3) {
+            throw new BusinessException("创建时间已过3天,不允许操作");
+        }
+    }
     /**
      * 删除宝贝支出信息
      * 

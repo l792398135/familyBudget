@@ -34,7 +34,6 @@ public class SysSummernoteController extends BaseController
     @Autowired
     private ISysSummernoteService sysSummernoteService;
 
-    @RequiresPermissions("system:summernote:view")
     @GetMapping()
     public String summernote()
     {
@@ -58,7 +57,6 @@ public class SysSummernoteController extends BaseController
     /**
      * 查询富文本数据列表
      */
-    @RequiresPermissions("system:summernote:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(SysSummernote sysSummernote)
@@ -71,7 +69,6 @@ public class SysSummernoteController extends BaseController
     /**
      * 导出富文本数据列表
      */
-    @RequiresPermissions("system:summernote:export")
     @Log(title = "富文本数据", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -94,7 +91,6 @@ public class SysSummernoteController extends BaseController
     /**
      * 新增保存富文本数据
      */
-    @RequiresPermissions("system:summernote:add")
     @Log(title = "富文本数据", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -117,7 +113,6 @@ public class SysSummernoteController extends BaseController
     /**
      * 修改保存富文本数据
      */
-    @RequiresPermissions("system:summernote:edit")
     @Log(title = "富文本数据", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -129,7 +124,6 @@ public class SysSummernoteController extends BaseController
     /**
      * 删除富文本数据
      */
-    @RequiresPermissions("system:summernote:remove")
     @Log(title = "富文本数据", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

@@ -17,7 +17,9 @@ import com.ruoyi.common.core.domain.BaseEntity;
 public class FamilyPay extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
+    private String businessType;
 
+    private Long businessId;
     /**  */
     private Long id;
 
@@ -55,7 +57,23 @@ public class FamilyPay extends BaseEntity
     @Excel(name = "创建日期", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
 
-    public void setId(Long id) 
+    public Long getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(Long businessId) {
+        this.businessId = businessId;
+    }
+
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }

@@ -2,6 +2,7 @@ package com.ruoyi.payincome.service;
 
 import java.util.List;
 import com.ruoyi.payincome.domain.FamilyPay;
+import com.ruoyi.payincome.domain.FamilyTransferAccount;
 
 /**
  * 费用支出Service接口

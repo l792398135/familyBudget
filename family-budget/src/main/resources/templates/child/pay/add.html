@@ -81,7 +81,7 @@
                     },
                     success : function(data) {
                         var businessId = data.data;
-                        $.file.uploadFile("file-Portrait","test",businessId);
+                        $.file.uploadFile("file-Portrait","childPay",businessId);
                         $.operate.saveSuccess(data);
                     }
                 });

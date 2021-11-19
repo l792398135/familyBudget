@@ -90,7 +90,7 @@ public class FamilyChildFundAgentServiceImpl implements IFamilyChildFundAgentSer
             transferAccount.setTransferTime(childFundAgent.getAgentDate());
             transferAccount.setCreateUser(childFundAgent.getCreateUser());
             transferAccount.setCreateTime(childFundAgent.getCreateTime());
-            transferAccount.setBusinessType("tranfer_account");
+            transferAccount.setBusinessType("孩子管理->资金代管");
             transferAccount.setBusinessId(childFundAgent.getId());
             String remark ="出资人"+dictDataMapper.selectDictLabel("family_menber",costMenber)
                     +"转账给"+dictDataMapper.selectDictLabel("family_menber",moneyAgent)

@@ -82,7 +82,7 @@
                     },
                     success : function(data) {
                         var businessId = $("input[name=id]").val()
-                        $.file.uploadFile("file-Portrait","bill",businessId);
+                        $.file.uploadFile("file-Portrait","childPay",businessId);
                         $.operate.saveSuccess(data);
                     }
                 });
@@ -96,7 +96,7 @@
         });
         $(function() {
             var businessId = $("input[name='id']").val()
-            $.file.initEditFiles("file-Portrait","checkdetails",businessId);
+            $.file.initEditFiles("file-Portrait","childPay",businessId);
         });
     </script>
 </body>
