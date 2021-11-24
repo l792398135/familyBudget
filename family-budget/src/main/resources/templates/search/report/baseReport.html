@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>统计</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link href="../static/css/animate.min.css" th:href="@{/css/animate.min.css}" rel="stylesheet"/>
+    <link href="../static/css/style.min.css" th:href="@{/css/style.min.css}" rel="stylesheet"/>
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content">
+
+    <div class="row">
+        <div class="col-sm-2">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5 class="m-b-md">本月支出(元)</h5>
+                    <h4 class="no-margins" id="localMonthPay">0.00</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5 class="m-b-md">本月收入(元)</h5>
+                    <h4 class="no-margins" id="localMonthIncome">0.00</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5 class="m-b-md">本月支出预算(元)</h5>
+                    <h4 class="no-margins" id="localMonthBudeget">0.00</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5 class="m-b-md">本月收入预算(元)</h5>
+                    <h4 class="no-margins" id="localMonthBudgetIncome">0.00</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5 class="m-b-md">上月收入(元)</h5>
+                    <h4 class="no-margins" id="preMonthIncome">0.00</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5 class="m-b-md">固定资产(万)</h5>
+                    <h4 class="no-margins" id="fixedAssets">0.00</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5 class="m-b-md">盘点金额(元)</h5>
+                    <h4 class="no-margins" id="checkFund">0.00</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5 class="m-b-md">资金净额(元)</h5>
+                    <h4 class="no-margins" id="fundNet">0.00</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/ajax/libs/flot/jquery.flot.js}"></script>
+<th:block th:include="include :: echarts-js" />
+<!--<th:block th:include="include :: sparkline-js" />-->
+<th:block th:include="include :: footer" />
+<script type="text/javascript">
+    var prefix = ctx + "report";
+    function getMonthData(data) {
+        if (data.data.localMonthPay!=null){$("#localMonthPay").text(data.data.localMonthPay)}
+        if (data.data.preMonthIncome!=null){$("#preMonthIncome").text(data.data.preMonthIncome)}
+        if (data.data.localMonthBudget!=null){$("#localMonthBudeget").text(data.data.localMonthBudget)}
+        if (data.data.localMonthBudgetIncome!=null){$("#localMonthBudgetIncome").text(data.data.localMonthBudgetIncome)}
+        if (data.data.localMonthIncome!=null){$("#localMonthIncome").text(data.data.localMonthIncome)}
+        if (data.data.fixedAssets!=null){$("#fixedAssets").text(data.data.fixedAssets)}
+        if (data.data.checkFund!=null){$("#checkFund").text(data.data.checkFund)}
+        if (data.data.fundNet!=null){$("#fundNet").text(data.data.fundNet)}
+    }
+
+    $(function() {
+        $.operate.get1(prefix + "/getMonthData",getMonthData);
+    })
+</script>
+</body>
+</html>

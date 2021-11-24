@@ -42,6 +42,11 @@ public class FamilyReportController extends BaseController {
         return prefix + "/searchReport";
     }
 
+    @GetMapping("/base")
+    public String baseReport()
+    {
+        return prefix + "/baseReport";
+    }
 
     @GetMapping("/getPayBudget/{code}")
     @ResponseBody

@@ -47,15 +47,6 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="base:feeType:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="base:feeType:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="base:feeType:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
                 <a class="btn btn-warning" onclick="refresh()" shiro:hasPermission="base:feeType:export">
                     <i class="fa fa-refresh"></i> 同步
                 </a>
@@ -96,19 +87,10 @@
                 exportUrl: prefix + "/export",
                 modalName: "费用类型",
                 columns: [{
-                    checkbox: true
-                },
-                {
                     field: 'id',
                     title: '',
                     visible: false
                 },
-
-                {
-                    field: 'dictType',
-                    title: '类型编码'
-                },
-
                 {
                     field: 'dictTypeName',
                     title: '类型名称'
