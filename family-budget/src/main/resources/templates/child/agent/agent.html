@@ -48,12 +48,6 @@
                 <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="child:agent:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="child:agent:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="child:agent:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
