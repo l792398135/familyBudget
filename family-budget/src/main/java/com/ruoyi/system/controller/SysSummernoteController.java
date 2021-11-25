@@ -46,6 +46,18 @@ public class SysSummernoteController extends BaseController
         return   "child/teach";
     }
 
+    @GetMapping("/help")
+    public String helpNote()
+    {
+        return   "note/help";
+    }
+
+    @GetMapping("/log")
+    public String logNote()
+    {
+        return   "note/log";
+    }
+
     @PostMapping("/note")
     @ResponseBody
     public AjaxResult querySummernote(SysSummernote sysSummernote)

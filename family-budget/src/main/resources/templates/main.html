@@ -13,14 +13,82 @@
 
 <body class="gray-bg">
 <div class="wrapper wrapper-content">
-    <h1>首页改造中，移到报表查询</h1>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>我的通知</h5>
+                </div>
+                <div class="ibox-content" id="mytodo">
+<!--                    <div class="alert">-->
+<!--                        <a style="float: left" onclick="doConfirm(2131)"> RuoYi是一个很棒的后台UI框架</a>-->
+<!--                        <span style="float: right"> 2021年11月23日</span>-->
+<!--                        <span style="float: right;margin-right: 30px"> 框架</span>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
 <script th:src="@{/ajax/libs/flot/jquery.flot.js}"></script>
 <th:block th:include="include :: echarts-js" />
-<!--<th:block th:include="include :: sparkline-js" />-->
 <th:block th:include="include :: footer" />
+<script>
+    var prefix = ctx + "system/todo";
+
+    $(document).ready(function () {
+        listMytodo()
+    })
+
+    function listMytodo() {
+        $.ajax({
+            cache : true,
+            type : "POST",
+            url : prefix + "/listtodo",
+            async : false,
+            error : function(request) {
+                $.modal.alertError("系统错误");
+            },
+            success : function(data) {
+                var html =''
+                data.data.map(item=>{
+                    var title = item['title']
+                    var id = item['id']
+                    var content = item['content']
+                    var createTime = item['createTime']
+                    html=html+" <div class=\"alert\">\n" +
+                        " <a style=\"float: left\" onclick=\"doConfirm("+id+")\"> "+content+"</a>\n" +
+                        " <span style=\"float: right\"> "+createTime.split(" ")[0]+"</span>\n" +
+                        " <span style=\"float: right;margin-right: 30px\">"+title+"</span>\n" +
+                        "</div>"
+                })
+                $("#mytodo").html(html)
+            }
+        });
+    }
+
+    function doConfirm(data) {
+        $.modal.confirm("确认已处理或将处理！",function () {
+            doIt(data)
+        });
+    }
+
+    function  doIt(data) {
+        $.ajax({
+            cache : true,
+            type : "POST",
+            url : prefix + "/doedit",
+            data : {"id":data,"doFlag":"Y"},
+            async : false,
+            error : function(request) {
+                $.modal.alertError("系统错误");
+            },
+            success : function(data) {
+                listMytodo()
+            }})
+    }
 </script>
 </body>
 </html>
