@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.FamilyMyTodoMapper">
+    
+    <resultMap type="FamilyMyTodo" id="FamilyMyTodoResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="content"    column="content"    />
+        <result property="doFlag"    column="do_flag"    />
+        <result property="responsibler"    column="responsibler"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="doTime"    column="do_time"    />
+    </resultMap>
+
+    <sql id="selectFamilyMyTodoVo">
+        select id, title, content, do_flag, responsibler, create_user, create_time,do_time from family_my_todo
+    </sql>
+
+    <select id="selectFamilyMyTodoList" parameterType="FamilyMyTodo" resultMap="FamilyMyTodoResult">
+        <include refid="selectFamilyMyTodoVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="content != null  and content != ''"> and content like concat('%', #{content}, '%')</if>
+            <if test="doFlag != null  and doFlag != ''"> and do_flag = #{doFlag}</if>
+            <if test="responsibler != null  and responsibler != ''"> and responsibler = #{responsibler}</if>
+            <if test="createUser != null  and createUser != ''"> and create_user = #{createUser}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+        </where>
+    </select>
+
+    <select id="selectMyTodoList" parameterType="FamilyMyTodo" resultMap="FamilyMyTodoResult">
+        <include refid="selectFamilyMyTodoVo"/>
+        <where>
+            <if test="doFlag != null  and doFlag != ''"> and do_flag = #{doFlag}</if>
+            <if test="responsibler != null  and responsibler != ''"> and responsibler = #{responsibler}</if>
+        </where>
+        order by create_time desc limit 5
+    </select>
+    
+    <select id="selectFamilyMyTodoById" parameterType="Long" resultMap="FamilyMyTodoResult">
+        <include refid="selectFamilyMyTodoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFamilyMyTodo" parameterType="FamilyMyTodo" useGeneratedKeys="true" keyProperty="id">
+        insert into family_my_todo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="content != null">content,</if>
+            <if test="doFlag != null">do_flag,</if>
+            <if test="responsibler != null">responsibler,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="content != null">#{content},</if>
+            <if test="doFlag != null">#{doFlag},</if>
+            <if test="responsibler != null">#{responsibler},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFamilyMyTodo" parameterType="FamilyMyTodo">
+        update family_my_todo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="doFlag != null">do_flag = #{doFlag},</if>
+            <if test="responsibler != null">responsibler = #{responsibler},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="doTime != null">do_time = #{doTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFamilyMyTodoById" parameterType="Long">
+        delete from family_my_todo where id = #{id}
+    </delete>
+
+    <delete id="deleteFamilyMyTodoByIds" parameterType="String">
+        delete from family_my_todo where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
