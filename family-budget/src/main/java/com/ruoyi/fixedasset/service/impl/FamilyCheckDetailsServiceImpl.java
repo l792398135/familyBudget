@@ -81,19 +81,23 @@ public class FamilyCheckDetailsServiceImpl implements IFamilyCheckDetailsService
     @Override
     public Long insertFamilyCheckDetails(FamilyCheckDetails familyCheckDetails)
     {
-        FamilyFundCheck familyFundCheck = new FamilyFundCheck();
-        familyFundCheck.setCheckCode(familyCheckDetails.getCheckCode());
-        List<FamilyFundCheck> familyFundChecks = familyFundCheckService.selectFamilyFundCheckList(familyFundCheck);
-        if (familyFundChecks.size()>0){
-            String lockFlag = familyFundChecks.get(0).getLockFlag();
-            if ("Y".equals(lockFlag)){
-                throw new BusinessException("这个盘点已经锁定,不可修改,删除,新增！");
-            }
-        }
+        checkFundLock(familyCheckDetails.getCheckCode());
         familyCheckDetails.setCreateTime(DateUtils.getNowDate());
         familyCheckDetails.setCreateUser(ShiroUtils.getLoginName());
         int i = familyCheckDetailsMapper.insertFamilyCheckDetails(familyCheckDetails);
         return familyCheckDetails.getId();
+    }
+
+    private void checkFundLock(String checkCode) {
+        FamilyFundCheck familyFundCheck = new FamilyFundCheck();
+        familyFundCheck.setCheckCode(checkCode);
+        List<FamilyFundCheck> familyFundChecks = familyFundCheckService.selectFamilyFundCheckList(familyFundCheck);
+        if (familyFundChecks.size() > 0) {
+            String lockFlag = familyFundChecks.get(0).getLockFlag();
+            if ("Y".equals(lockFlag)) {
+                throw new BusinessException("这个盘点已经锁定,不可修改,删除,新增！");
+            }
+        }
     }
 
     /**
@@ -105,15 +109,7 @@ public class FamilyCheckDetailsServiceImpl implements IFamilyCheckDetailsService
     @Override
     public int updateFamilyCheckDetails(FamilyCheckDetails familyCheckDetails)
     {
-        FamilyFundCheck familyFundCheck = new FamilyFundCheck();
-        familyFundCheck.setCheckCode(familyCheckDetails.getCheckCode());
-        List<FamilyFundCheck> familyFundChecks = familyFundCheckService.selectFamilyFundCheckList(familyFundCheck);
-        if (familyFundChecks.size()>0){
-            String lockFlag = familyFundChecks.get(0).getLockFlag();
-            if ("Y".equals(lockFlag)){
-                throw new BusinessException("这个盘点已经锁定,不可修改,删除,新增！");
-            }
-        }
+        checkFundLock(familyCheckDetails.getCheckCode());
         return familyCheckDetailsMapper.updateFamilyCheckDetails(familyCheckDetails);
     }
 
@@ -130,15 +126,7 @@ public class FamilyCheckDetailsServiceImpl implements IFamilyCheckDetailsService
         String[] strings = Convert.toStrArray(ids);
         for (String string : strings) {
             FamilyCheckDetails familyCheckDetails = familyCheckDetailsMapper.selectFamilyCheckDetailsById(Long.valueOf(string));
-            FamilyFundCheck familyFundCheck = new FamilyFundCheck();
-            familyFundCheck.setCheckCode(familyCheckDetails.getCheckCode());
-            List<FamilyFundCheck> familyFundChecks = familyFundCheckService.selectFamilyFundCheckList(familyFundCheck);
-            if (familyFundChecks.size()>0){
-                String lockFlag = familyFundChecks.get(0).getLockFlag();
-                if ("Y".equals(lockFlag)){
-                    throw new BusinessException("这个盘点已经锁定,不可修改,删除,新增！");
-                }
-            }
+            checkFundLock(familyCheckDetails.getCheckCode());
         }
         return familyCheckDetailsMapper.deleteFamilyCheckDetailsByIds(Convert.toStrArray(ids));
     }

@@ -84,11 +84,15 @@ public class FamilyFundCheckServiceImpl implements IFamilyFundCheckService
     @Override
     public int updateFamilyFundCheck(FamilyFundCheck familyFundCheck)
     {
-        FamilyFundCheck familyFundCheck1 = familyFundCheckMapper.selectFamilyFundCheckById(familyFundCheck.getId());
-        if ("Y".equals(familyFundCheck1.getLockFlag())){
+        checkLock(familyFundCheck.getId());
+        return familyFundCheckMapper.updateFamilyFundCheck(familyFundCheck);
+    }
+
+    private void checkLock(Long id) {
+        FamilyFundCheck familyFundCheck1 = familyFundCheckMapper.selectFamilyFundCheckById(id);
+        if ("Y".equals(familyFundCheck1.getLockFlag())) {
             throw new BusinessException("这个盘点已经锁定,不可修改,删除！");
         }
-        return familyFundCheckMapper.updateFamilyFundCheck(familyFundCheck);
     }
 
     /**
@@ -102,10 +106,7 @@ public class FamilyFundCheckServiceImpl implements IFamilyFundCheckService
     {
         String[] strings = Convert.toStrArray(ids);
         for (String string : strings) {
-            FamilyFundCheck familyFundCheck = familyFundCheckMapper.selectFamilyFundCheckById(Long.valueOf(string));
-            if ("Y".equals(familyFundCheck.getLockFlag())){
-                throw new BusinessException("这个盘点已经锁定,不可修改,删除！");
-            }
+            checkLock(Long.valueOf(string));
         }
         return familyFundCheckMapper.deleteFamilyFundCheckByIds(Convert.toStrArray(ids));
     }
