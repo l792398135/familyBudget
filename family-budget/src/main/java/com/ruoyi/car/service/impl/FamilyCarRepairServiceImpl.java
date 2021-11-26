@@ -4,6 +4,7 @@ import com.ruoyi.car.domain.FamilyCarMangec;
 import com.ruoyi.car.domain.FamilyCarRepairBase1;
 import com.ruoyi.car.mapper.FamilyCarMangecMapper;
 import com.ruoyi.car.mapper.FamilyCarRepairBase1Mapper;
+import com.ruoyi.child.domain.FamilyChildFundAgent;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.ShiroUtils;
 
@@ -14,6 +15,7 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.payincome.domain.FamilyPay;
 import com.ruoyi.payincome.mapper.FamilyPayMapper;
 import com.ruoyi.system.mapper.SysDictDataMapper;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.shiro.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -152,6 +154,8 @@ public class FamilyCarRepairServiceImpl implements IFamilyCarRepairService
     @Override
     public int updateFamilyCarRepair(FamilyCarRepair familyCarRepair)
     {
+        FamilyCarRepair familyCarRepair1 = familyCarRepairMapper.selectFamilyCarRepairById(familyCarRepair.getId());
+        dataOverProtect(familyCarRepair1);
         return familyCarRepairMapper.updateFamilyCarRepair(familyCarRepair);
     }
 
@@ -164,9 +168,20 @@ public class FamilyCarRepairServiceImpl implements IFamilyCarRepairService
     @Override
     public int deleteFamilyCarRepairByIds(String ids)
     {
+        String[] strings = Convert.toStrArray(ids);
+        for (String string : strings) {
+            FamilyCarRepair familyCarRepair = familyCarRepairMapper.selectFamilyCarRepairById(Long.valueOf(string));
+            dataOverProtect(familyCarRepair);
+        }
         return familyCarRepairMapper.deleteFamilyCarRepairByIds(Convert.toStrArray(ids));
     }
 
+    private void dataOverProtect(FamilyCarRepair familyPay) {
+        Date createDate = familyPay.getCreateTime();
+        if (DateUtils.differentDaysByMillisecond(new Date(), createDate) > 3) {
+            throw new BusinessException("创建时间已过3天,不允许操作");
+        }
+    }
     /**
      * 删除车辆维护费用信息
      * 

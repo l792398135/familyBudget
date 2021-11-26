@@ -1,6 +1,8 @@
 package com.ruoyi.fixedasset.controller;
 
 import java.util.List;
+
+import com.ruoyi.common.exception.BusinessException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -130,7 +132,6 @@ public class FamilyFundCheckController extends BaseController
     public String detail(@PathVariable("id") Long id, ModelMap mmap)
     {
         mmap.put("check", familyFundCheckService.selectCheckById(id));
-//        mmap.put("dictList", dictTypeService.selectDictTypeAll());
         return "cost/checkdetails/checkdetails";
     }
 }

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('盘点设置列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: bootstrap-table-editable-js" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('base:fundCheck:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('base:fundCheck:remove')}]];
+        var statusDatas = [[${@dict.getType('sys_normal_disable')}]];
+        var createUserDatas = [[${@dict.getType('family_menber')}]];
+        var prefix = ctx + "base/fundCheck";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "盘点设置",
+                showSearch: false,
+                showRefresh: false,
+                showToggle: false,
+                showColumns: false,
+                showPageGo: true,
+                onEditableSave: onEditableSave,
+                columns: [{
+                    field: 'id',
+                    title: '',
+                    visible: false
+                },
+                {
+                    field: 'checkCode',
+                    title: '盘点编码'
+                },
+                {
+                    field: 'checkName',
+                    title: '盘点名称'
+                },
+                {
+                    field: 'remark',
+                    title: '备注'
+                },
+                {
+                    field: 'status',
+                    title: '状态',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(statusDatas, value);
+                    }
+                },
+                {
+                    field: 'lockFlag',
+                    title: '是否锁定',
+                    editable : {
+                        type : 'select',
+                        title : '锁定',
+                        source : [{
+                            value : 'Y',
+                            text : "是"
+                        }, {
+                            value : 'N',
+                            text : "否"
+                        }]
+                    }
+                },
+                {
+                    field: 'startTime',
+                    title: '启用时间'
+                },
+                {
+                    field: 'createUser',
+                    title: '创建人',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(createUserDatas, value);
+                    }
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间'
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function onEditableSave (field, row, rowIndex, oldValue, $el) {
+            alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
+            var data = "{'id':"+row["id"]+",'"+field+"':'"+row[field]+"'}"
+            $.ajax({
+                cache : true,
+                type : "POST",
+                dataType: "json",
+                url : prefix + "/edit",
+                data : {"id":row["id"],"lockFlag":row[field]},
+                async : false,
+                error : function(request) {
+                    $.modal.alertError("系统错误");
+                },
+                success : function(data) {
+                    $.operate.saveSuccess(data);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

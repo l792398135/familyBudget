@@ -3,8 +3,11 @@ package com.ruoyi.fixedasset.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.ShiroUtils;
+import com.ruoyi.fixedasset.domain.FamilyFundCheck;
+import com.ruoyi.fixedasset.service.IFamilyFundCheckService;
 import com.ruoyi.system.domain.SysAttachment;
 import com.ruoyi.system.mapper.SysAttachmentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,8 @@ public class FamilyCheckDetailsServiceImpl implements IFamilyCheckDetailsService
     @Autowired
     private FamilyCheckDetailsMapper familyCheckDetailsMapper;
 
+    @Autowired
+    private IFamilyFundCheckService familyFundCheckService;
     @Autowired
     private SysAttachmentMapper sysAttachmentMapper;
     /**
@@ -76,6 +81,15 @@ public class FamilyCheckDetailsServiceImpl implements IFamilyCheckDetailsService
     @Override
     public Long insertFamilyCheckDetails(FamilyCheckDetails familyCheckDetails)
     {
+        FamilyFundCheck familyFundCheck = new FamilyFundCheck();
+        familyFundCheck.setCheckCode(familyCheckDetails.getCheckCode());
+        List<FamilyFundCheck> familyFundChecks = familyFundCheckService.selectFamilyFundCheckList(familyFundCheck);
+        if (familyFundChecks.size()>0){
+            String lockFlag = familyFundChecks.get(0).getLockFlag();
+            if ("Y".equals(lockFlag)){
+                throw new BusinessException("这个盘点已经锁定,不可修改,删除,新增！");
+            }
+        }
         familyCheckDetails.setCreateTime(DateUtils.getNowDate());
         familyCheckDetails.setCreateUser(ShiroUtils.getLoginName());
         int i = familyCheckDetailsMapper.insertFamilyCheckDetails(familyCheckDetails);
@@ -91,6 +105,15 @@ public class FamilyCheckDetailsServiceImpl implements IFamilyCheckDetailsService
     @Override
     public int updateFamilyCheckDetails(FamilyCheckDetails familyCheckDetails)
     {
+        FamilyFundCheck familyFundCheck = new FamilyFundCheck();
+        familyFundCheck.setCheckCode(familyCheckDetails.getCheckCode());
+        List<FamilyFundCheck> familyFundChecks = familyFundCheckService.selectFamilyFundCheckList(familyFundCheck);
+        if (familyFundChecks.size()>0){
+            String lockFlag = familyFundChecks.get(0).getLockFlag();
+            if ("Y".equals(lockFlag)){
+                throw new BusinessException("这个盘点已经锁定,不可修改,删除,新增！");
+            }
+        }
         return familyCheckDetailsMapper.updateFamilyCheckDetails(familyCheckDetails);
     }
 
@@ -103,6 +126,20 @@ public class FamilyCheckDetailsServiceImpl implements IFamilyCheckDetailsService
     @Override
     public int deleteFamilyCheckDetailsByIds(String ids)
     {
+
+        String[] strings = Convert.toStrArray(ids);
+        for (String string : strings) {
+            FamilyCheckDetails familyCheckDetails = familyCheckDetailsMapper.selectFamilyCheckDetailsById(Long.valueOf(string));
+            FamilyFundCheck familyFundCheck = new FamilyFundCheck();
+            familyFundCheck.setCheckCode(familyCheckDetails.getCheckCode());
+            List<FamilyFundCheck> familyFundChecks = familyFundCheckService.selectFamilyFundCheckList(familyFundCheck);
+            if (familyFundChecks.size()>0){
+                String lockFlag = familyFundChecks.get(0).getLockFlag();
+                if ("Y".equals(lockFlag)){
+                    throw new BusinessException("这个盘点已经锁定,不可修改,删除,新增！");
+                }
+            }
+        }
         return familyCheckDetailsMapper.deleteFamilyCheckDetailsByIds(Convert.toStrArray(ids));
     }
 

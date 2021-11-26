@@ -1,8 +1,12 @@
 package com.ruoyi.fixedasset.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.child.domain.FamilyChildPay;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.ShiroUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.fixedasset.mapper.FamilyFundCheckMapper;
@@ -80,6 +84,10 @@ public class FamilyFundCheckServiceImpl implements IFamilyFundCheckService
     @Override
     public int updateFamilyFundCheck(FamilyFundCheck familyFundCheck)
     {
+        FamilyFundCheck familyFundCheck1 = familyFundCheckMapper.selectFamilyFundCheckById(familyFundCheck.getId());
+        if ("Y".equals(familyFundCheck1.getLockFlag())){
+            throw new BusinessException("这个盘点已经锁定,不可修改,删除！");
+        }
         return familyFundCheckMapper.updateFamilyFundCheck(familyFundCheck);
     }
 
@@ -92,6 +100,13 @@ public class FamilyFundCheckServiceImpl implements IFamilyFundCheckService
     @Override
     public int deleteFamilyFundCheckByIds(String ids)
     {
+        String[] strings = Convert.toStrArray(ids);
+        for (String string : strings) {
+            FamilyFundCheck familyFundCheck = familyFundCheckMapper.selectFamilyFundCheckById(Long.valueOf(string));
+            if ("Y".equals(familyFundCheck.getLockFlag())){
+                throw new BusinessException("这个盘点已经锁定,不可修改,删除！");
+            }
+        }
         return familyFundCheckMapper.deleteFamilyFundCheckByIds(Convert.toStrArray(ids));
     }
 

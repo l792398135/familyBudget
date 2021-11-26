@@ -1,25 +1,22 @@
-package com.ruoyi.fixedasset.domain;
+package com.ruoyi.base.domain;
 
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * 盘点对象 family_fund_check
+ * 盘点设置对象 family_fund_check
  * 
  * @author ruoyi
- * @date 2021-09-22
+ * @date 2021-11-26
  */
-public class FamilyFundCheck extends BaseEntity
+public class FamilyFundCheck2 extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
-
-    /** 是否锁定 */
-    @Excel(name = "是否锁定")
-    private String lockFlag;
 
     /**  */
     private Long id;
@@ -36,24 +33,20 @@ public class FamilyFundCheck extends BaseEntity
     @Excel(name = "状态")
     private String status;
 
+    /** 是否锁定 */
+    @Excel(name = "是否锁定")
+    private String lockFlag;
+
     /** 启用时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Excel(name = "启用时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "启用时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date startTime;
 
     /** 创建人 */
     @Excel(name = "创建人")
     private String createUser;
 
-    public String getLockFlag() {
-        return lockFlag;
-    }
-
-    public void setLockFlag(String lockFlag) {
-        this.lockFlag = lockFlag;
-    }
-
-    public void setId(Long id)
+    public void setId(Long id) 
     {
         this.id = id;
     }
@@ -89,6 +82,15 @@ public class FamilyFundCheck extends BaseEntity
     {
         return status;
     }
+    public void setLockFlag(String lockFlag) 
+    {
+        this.lockFlag = lockFlag;
+    }
+
+    public String getLockFlag() 
+    {
+        return lockFlag;
+    }
     public void setStartTime(Date startTime) 
     {
         this.startTime = startTime;
@@ -116,6 +118,7 @@ public class FamilyFundCheck extends BaseEntity
             .append("checkName", getCheckName())
             .append("remark", getRemark())
             .append("status", getStatus())
+            .append("lockFlag", getLockFlag())
             .append("startTime", getStartTime())
             .append("createUser", getCreateUser())
             .append("createTime", getCreateTime())
