@@ -59,20 +59,6 @@ public class FamilyPayController extends BaseController
     }
 
     /**
-     * 导出费用支出列表
-     */
-    @RequiresPermissions("pay:pay:export")
-    @Log(title = "费用支出", businessType = BusinessType.EXPORT)
-    @PostMapping("/export")
-    @ResponseBody
-    public AjaxResult export(FamilyPay familyPay)
-    {
-        List<FamilyPay> list = familyPayService.selectFamilyPayList(familyPay);
-        ExcelUtil<FamilyPay> util = new ExcelUtil<FamilyPay>(FamilyPay.class);
-        return util.exportExcel(list, "费用支出数据");
-    }
-
-    /**
      * 新增费用支出
      */
     @GetMapping("/add")

@@ -55,20 +55,6 @@ public class FamilyIncomeController extends BaseController
     }
 
     /**
-     * 导出家庭收入列表
-     */
-    @RequiresPermissions("cost:income:export")
-    @Log(title = "家庭收入", businessType = BusinessType.EXPORT)
-    @PostMapping("/export")
-    @ResponseBody
-    public AjaxResult export(FamilyIncome familyIncome)
-    {
-        List<FamilyIncome> list = familyIncomeService.selectFamilyIncomeList(familyIncome);
-        ExcelUtil<FamilyIncome> util = new ExcelUtil<FamilyIncome>(FamilyIncome.class);
-        return util.exportExcel(list, "家庭收入数据");
-    }
-
-    /**
      * 新增家庭收入
      */
     @GetMapping("/add")

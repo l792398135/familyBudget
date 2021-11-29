@@ -52,11 +52,5 @@ public interface IFamilyPayService
      */
     public int deleteFamilyPayByIds(String ids);
 
-    /**
-     * 删除费用支出信息
-     * 
-     * @param id 费用支出主键
-     * @return 结果
-     */
-    public int deleteFamilyPayById(Long id);
+
 }

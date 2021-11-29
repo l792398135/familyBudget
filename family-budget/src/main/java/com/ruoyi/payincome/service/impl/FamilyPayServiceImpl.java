@@ -107,16 +107,4 @@ public class FamilyPayServiceImpl implements IFamilyPayService
             throw new BusinessException("创建时间已过3天,不允许操作");
         }
     }
-
-    /**
-     * 删除费用支出信息
-     * 
-     * @param id 费用支出主键
-     * @return 结果
-     */
-    @Override
-    public int deleteFamilyPayById(Long id)
-    {
-        return familyPayMapper.deleteFamilyPayById(id);
-    }
 }
