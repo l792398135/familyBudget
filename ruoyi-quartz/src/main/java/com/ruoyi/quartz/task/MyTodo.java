@@ -15,6 +15,7 @@ public class MyTodo {
 
     @Autowired
     private IFamilyMyTodoService todoService;
+
     public void everyPayAndIncome(String responser)
     {
         String[] split = responser.split(",");
@@ -30,4 +31,21 @@ public class MyTodo {
             todoService.insertFamilyMyTodo(familyMyTodo);
         }
     }
+
+    public void doMonthBudget(String responser)
+    {
+        String[] split = responser.split(",");
+        for (String responsibler : split) {
+            FamilyMyTodo familyMyTodo = new FamilyMyTodo();
+            familyMyTodo.setDoFlag("N");
+            familyMyTodo.setCreateUser("admin");
+            familyMyTodo.setCreateTime(new Date());
+            familyMyTodo.setResponsibler(responsibler);
+            familyMyTodo.setTitle("月度预算");
+            String format = DateFormatUtils.format(new Date(), "yyyy年MM月");
+            familyMyTodo.setContent("请填写"+format+"的月度预算！");
+            todoService.insertFamilyMyTodo(familyMyTodo);
+        }
+    }
+
 }

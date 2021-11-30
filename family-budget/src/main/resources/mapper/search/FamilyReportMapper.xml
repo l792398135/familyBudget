@@ -52,13 +52,18 @@ order by num
     </select>
 
     <select id="topN3" resultType="com.ruoyi.search.vo.TopNVO">
--- # 当月支出排行
-select dict.dict_label name ,tmp.men code ,tmp.sum num from (
-select pay_menber men,sum(pay_cost ) sum from family_pay fp
-where date_format(pay_date ,'%Y-%m') = date_format(curdate() ,'%Y-%m')
-group by pay_menber
-) tmp left join sys_dict_data dict on tmp.men =dict.dict_value  and dict.dict_type = "family_menber"
-order by num
+    select dict.dict_label name ,tmp.men code ,tmp.sum num from (
+        select tmp0.men men,sum(tmp0.sum) sum from (
+            select pay_menber men,sum(pay_cost ) sum from family_pay fp
+            where date_format(pay_date ,'%Y-%m') = date_format(curdate() ,'%Y-%m')
+            group by pay_menber
+            union all
+            select transfer ,transfer_account  from family_transfer_account fta where   date_format(transfer_time ,'%Y-%m') = date_format(curdate() ,'%Y-%m')  and business_id is null
+            union  all
+            select accepter ,-transfer_account   from family_transfer_account fta where   date_format(transfer_time ,'%Y-%m') = date_format(curdate() ,'%Y-%m')  and business_id is null
+        ) tmp0 group by tmp0.men
+    ) tmp left join sys_dict_data dict on tmp.men =dict.dict_value  and dict.dict_type = "family_menber"
+    order by num
     </select>
 
     <select id="topN4" resultType="com.ruoyi.search.vo.TopNVO">

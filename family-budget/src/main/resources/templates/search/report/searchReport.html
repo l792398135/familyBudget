@@ -26,11 +26,11 @@
                             <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                         </select>
                     </div>
-                    <div class="col-sm-3" style="float:right">
-                        <a class="btn btn-danger btn-sm" onclick="closeItem()">
-                            <i class="fa fa-reply-all"></i> 关闭
-                        </a>
-                    </div>
+<!--                    <div class="col-sm-3" style="float:right">-->
+<!--                        <a class="btn btn-danger btn-sm" onclick="closeItem()">-->
+<!--                            <i class="fa fa-reply-all"></i> 关闭-->
+<!--                        </a>-->
+<!--                    </div>-->
                 </div>
             </div>
             <div class="ibox-content">
@@ -50,11 +50,6 @@
                         <select name="incomeTypeCode" class="form-control" th:with="type=${@dict.getType('income_type')}">
                             <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                         </select>
-                    </div>
-                    <div class="col-sm-3" style="float:right">
-                        <a class="btn btn-danger btn-sm" onclick="closeItem()">
-                            <i class="fa fa-reply-all"></i> 关闭
-                        </a>
                     </div>
                 </div>
             </div>
