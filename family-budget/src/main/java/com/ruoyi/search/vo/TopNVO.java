@@ -10,7 +10,17 @@ public class TopNVO implements Serializable {
 
     private String num;
 
+    private String chartId;
+
     public TopNVO() {
+    }
+
+    public String getChartId() {
+        return chartId;
+    }
+
+    public void setChartId(String chartId) {
+        this.chartId = chartId;
     }
 
     public String getName() {

@@ -82,7 +82,107 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>本月支出排行(元)</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-localMonthPay"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>本月收入排行(元)</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-localMonthIncome"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>上月收入排行(元)</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-preMonthIncome"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>本月支出科目排行(元)</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-topN4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
 
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>本月经办人排行(元)</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-localMonthOperatorCount"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>本月记录人排行(元)</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-localMonthBookkeeperCount"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>月度支出(元)</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-month-pay"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>月度收入(元)</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-month-income"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>现金排行(元)</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-month-people"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
@@ -103,7 +203,201 @@
         if (data.data.fundNet!=null){$("#fundNet").text(data.data.fundNet)}
     }
 
+    function commonBar(data){
+        if (data.data.length==0) return
+        var chart = echarts.init(document.getElementById(data.data[0].chartId));
+        option = {
+            color: ["#5470c6"],
+            xAxis: [{
+                type: 'value',
+                axisLabel: {
+                    margin: 10,
+                    interval: 1,
+                    rotate:45,  //字体倾斜度数
+                }
+            }],
+            yAxis: {
+                type: 'category',
+                data: data.data.map(item=>item['name'])
+            },
+            label: {
+                show: true,
+                position: 'right',
+                textStyle: { //数值样式
+                    color: 'black',
+                    fontSize: 16,
+                    fontWeight: 600
+                }
+            },
+            series: [
+                {
+                    data: data.data.map(item=>item['num']),
+                    type: 'bar'
+                }
+            ],grid:{
+                left:'20',
+                containLabel:true
+            }
+        };
+        chart.setOption(option);
+        window.onresize = chart.resize;
+
+    }
+
+    function localMonthPayCode(data){
+        var chart = echarts.init(document.getElementById("echarts-topN4"));
+        option = {
+            color: ["#5470c6"],
+            xAxis: [{
+                type: 'value',
+                axisLabel: {
+                    margin: 10,
+                    interval: 1,
+                    rotate:45,
+                }
+            }],
+            yAxis: {
+                type: 'category',
+                axisLabel :{
+                    interval:0
+                },
+                data: data.data.map(item=>item['name'])
+            },
+            dataZoom: [
+                {
+                    type: 'slider',
+                    show: true,
+                    yAxisIndex: [0],
+                    left: '93%',
+                    start: 70, //数据窗口范围的起始百分比
+                    end: 100
+                },
+                {
+                    type: 'inside',
+                    yAxisIndex: [0],
+                    start: 0,
+                    end: 36
+                }
+            ],
+            label: {
+                show: true,
+                position: 'right',
+                textStyle: { //数值样式
+                    color: 'black',
+                    fontSize: 16,
+                    fontWeight: 600
+                }
+            },
+            series: [
+                {
+                    data: data.data.map(item=>item['num']),
+                    type: 'bar'
+                }
+            ],
+            grid:{
+                left:'20',
+                containLabel:true
+            }
+        };
+        chart.setOption(option);
+        window.onresize = chart.resize;
+    }
+
+
+    function monthPayChart(data){
+        var monthPayChart = echarts.init(document.getElementById("echarts-month-pay"));
+        monthPayOption = {
+            color: ["#5470c6"],
+            xAxis: {
+                type: 'category',
+                data: data.data.map(item=>item['date_field'])
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    data: data.data.map(item=>item['cost_field']),
+                    type: 'bar'
+                }
+            ],
+            dataZoom: [{
+                type: 'slider',
+                show: true,
+                xAxisIndex: [0],
+                left: '9%',
+                bottom: -5,
+                start: 0,
+                end: 100 //初始化滚动条
+            }],
+            label: {
+                show: true, //开启显示
+                position: 'top', //在上方显示
+                textStyle: { //数值样式
+                    color: 'black',
+                    fontSize: 16,
+                    fontWeight: 600
+                }
+            },grid:{
+                left:'20',
+                containLabel:true
+            }
+        };
+        monthPayChart.setOption(monthPayOption);
+        window.onresize = monthPayChart.resize;
+    }
+    function monthIncomeChart(data){
+        var monthIncomeChart = echarts.init(document.getElementById("echarts-month-income"));
+        monthIncomeOption = {
+            color: ["#5470c6"],
+            xAxis: {
+                type: 'category',
+                data: data.data.map(item=>item['date_field'])
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    data: data.data.map(item=>item['cost_field']),
+                    type: 'bar'
+                }
+            ],
+            dataZoom: [{
+                type: 'slider',
+                show: true,
+                xAxisIndex: [0],
+                left: '9%',
+                bottom: -5,
+                start: 0,
+                end: 100 //初始化滚动条
+            }],
+            label: {
+                show: true, //开启显示
+                position: 'top', //在上方显示
+                textStyle: { //数值样式
+                    color: 'black',
+                    fontSize: 16,
+                    fontWeight: 600
+                }
+            },grid:{
+                left:'20',
+                containLabel:true
+            }
+        };
+        monthIncomeChart.setOption(monthIncomeOption);
+        window.onresize = monthIncomeChart.resize;
+    }
     $(function() {
+        $.operate.get1(prefix + "/getPeopleMoney",commonBar);
+        $.operate.get1(prefix + "/getTopN/localMonthPay",commonBar);
+        $.operate.get1(prefix + "/getTopN/preMonthIncome",commonBar);
+        $.operate.get1(prefix + "/getTopN/localMonthIncome",commonBar);
+        $.operate.get1(prefix + "/getTopN/localMonthPayCode",localMonthPayCode);
+        $.operate.get1(prefix + "/getTopN/localMonthOperatorCount",commonBar);
+        $.operate.get1(prefix + "/getTopN/localMonthBookkeeperCount",commonBar);
+        $.operate.get1(prefix + "/getMonthPayChart",monthPayChart);
+        $.operate.get1(prefix + "/getMonthIncomeChart",monthIncomeChart);
         $.operate.get1(prefix + "/getMonthData",getMonthData);
     })
 </script>

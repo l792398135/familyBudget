@@ -69,11 +69,15 @@
     var prefix = ctx + "report";
     function queryPay(){
         let jQuery = $("[name='payTypeCode']").val();
+        var monthIncomeChart = echarts.init(document.getElementById("echarts-pay"))
+        monthIncomeChart.clear()
         $.operate.get1(prefix + "/getPay/"+jQuery,lineChart);
     }
 
     function queryIncome() {
         let jQuery = $("[name='incomeTypeCode']").val();
+        var monthIncomeChart = echarts.init(document.getElementById("echarts-income"))
+        monthIncomeChart.clear()
         $.operate.get1(prefix + "/getIncome/"+jQuery,lineChart);
     }
 

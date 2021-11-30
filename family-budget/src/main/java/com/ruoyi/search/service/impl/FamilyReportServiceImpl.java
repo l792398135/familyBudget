@@ -69,6 +69,7 @@ public class FamilyReportServiceImpl implements IFamilyReportService {
                 }
             }
             r.setNum(num.toString());
+            r.setChartId("echarts-month-people");
             return r;
         }).collect(Collectors.toList());
         return collect;

@@ -58,34 +58,6 @@ var table = {
                         // actionZoom:'',   //去除上传预览缩略图中的查看详情预览的缩略图标。
                     }
                 })
-                    // .on('filepreupload', function(event, data, previewId, index) {
-                    // var form = data.form, files = data.files, extra = data.extra,
-                    //     response = data.response, reader = data.reader;
-                    // console.log('File pre upload triggered');
-                    // var newFiles=[]
-                    // for (let filesKey in files) {
-                    //     new html5ImgCompress(files[filesKey], {
-                    //         before: function(file) {
-                    //             console.log('单张: 压缩前...');
-                    //         },
-                    //         done: function (file, base64) {
-                    //             console.log('单张: 压缩成功...');
-                    //             newFiles.push(dataURLtoFile(base64,))
-                    //         },
-                    //         fail: function(file) {
-                    //             console.log('单张: 压缩失败...');
-                    //         },
-                    //         complete: function(file) {
-                    //             console.log('单张: 压缩完成...');
-                    //         },
-                    //         notSupport: function(file) {
-                    //             alert('浏览器不支持！');
-                    //         }
-                    //     });
-                    // }
-                    // data.files=newFiles
-                // }
-                // );
             },
 
             //初始化编辑附件
