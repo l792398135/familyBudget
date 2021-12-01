@@ -7,6 +7,7 @@ import com.ruoyi.payincome.mapper.*;
 import com.ruoyi.search.mapper.FamilyReportMapper;
 import com.ruoyi.search.service.IFamilyReportService;
 import com.ruoyi.search.vo.ChartVO;
+import com.ruoyi.search.vo.ChildFundVO;
 import com.ruoyi.search.vo.TopNVO;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -95,6 +96,11 @@ public class FamilyReportServiceImpl implements IFamilyReportService {
         budgetList.addAll(realList);
         //组装数据
         return getChartVOS(budgetList, "echarts-budget");
+    }
+
+    @Override
+    public List<ChildFundVO> babyAgentAmountList() {
+        return familyReportMapper.babyAgentAmountList();
     }
 
     @Override

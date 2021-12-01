@@ -104,5 +104,15 @@ select dict.dict_label name ,tmp1.op code ,tmp1.count num,'echarts-localMonthBoo
 order by num
     </select>
 
+    <select id="babyAgentAmountList" resultType="com.ruoyi.search.vo.ChildFundVO">
+    select t1.agent_code agentCode,t1.child_code childCode,t1.amount,dict.dict_label agentName,dict1.dict_label childName from (
+        select t.money_agent agent_code,t.child_code child_code,sum(t.sum) amount from (
+        select money_agent,child_code,sum(fund_amount ) sum from family_child_fund_agent fcfa group by money_agent ,child_code
+        union all
+        select pay_menber,benefit_child ,-sum(pay_amount ) from family_child_pay fcp group by pay_menber ,benefit_child
+        ) t group by t.money_agent,t.child_code
+    ) t1 left join sys_dict_data dict on t1.agent_code =dict.dict_value  and dict.dict_type = "family_menber"
+    left join sys_dict_data dict1 on t1.child_code =dict1.dict_value  and dict1.dict_type = "child_code"
+    </select>
 
 </mapper>

@@ -1,6 +1,7 @@
 package com.ruoyi.search.mapper;
 
 
+import com.ruoyi.search.vo.ChildFundVO;
 import com.ruoyi.search.vo.TopNVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -84,4 +85,6 @@ public interface FamilyReportMapper {
     List<Map<String, Object>> getPayReal(@Value("code")String code);
     @Select("select date_format(income_date , '%Y-%m') date_field,ifnull(sum(income_cost ),0) cost_field,'实际金额' as menber from family_income where income_type_code =#{code} group by date_format(income_date , '%Y-%m')\n")
     List<Map<String, Object>> getIncomeReal(@Value("code")String code);
+
+    List<ChildFundVO> babyAgentAmountList();
 }

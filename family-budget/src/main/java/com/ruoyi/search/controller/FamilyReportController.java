@@ -4,6 +4,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.search.service.IFamilyReportService;
 import com.ruoyi.search.vo.ChartVO;
+import com.ruoyi.search.vo.ChildFundVO;
 import com.ruoyi.search.vo.TopNVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -123,6 +124,15 @@ public class FamilyReportController extends BaseController {
     public AjaxResult getMonthIncomeChart()
     {
         List<Map<String, Object>> monthData = familyReportService.getMonthIncomeChart();
+        return AjaxResult.success(monthData);
+    }
+
+    @ApiOperation("宝贝代管金额列表")
+    @GetMapping("/babyAgentAmountList")
+    @ResponseBody
+    public AjaxResult babyAgentAmountList()
+    {
+        List<ChildFundVO> monthData = familyReportService.babyAgentAmountList();
         return AjaxResult.success(monthData);
     }
 

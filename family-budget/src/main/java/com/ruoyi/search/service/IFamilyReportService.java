@@ -1,6 +1,7 @@
 package com.ruoyi.search.service;
 
 import com.ruoyi.search.vo.ChartVO;
+import com.ruoyi.search.vo.ChildFundVO;
 import com.ruoyi.search.vo.TopNVO;
 
 import java.util.List;
@@ -55,4 +56,6 @@ public interface IFamilyReportService {
      * @return
      */
     List<ChartVO> getIncomeBudget(String code);
+
+    List<ChildFundVO> babyAgentAmountList();
 }

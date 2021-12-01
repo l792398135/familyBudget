@@ -55,8 +55,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
         <div class="col-sm-2">
             <div class="ibox">
                 <div class="ibox-content">
@@ -83,7 +81,30 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>宝贝代管金额</h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-hover no-margins">
+                        <thead>
+                        <tr>
+                            <th>代管人</th>
+                            <th>归属的宝贝</th>
+                            <th>剩余金额(元)</th>
+                        </tr>
+                        </thead>
+                        <tbody id="childAgentAmount">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>本月支出排行(元)</h5>
@@ -93,7 +114,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>本月收入排行(元)</h5>
@@ -103,19 +124,7 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>上月收入排行(元)</h5>
-                </div>
-                <div class="ibox-content">
-                    <div class="echarts" id="echarts-preMonthIncome"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>本月支出科目排行(元)</h5>
@@ -125,10 +134,7 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>本月经办人排行(元)</h5>
@@ -138,13 +144,23 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>本月记录人排行(元)</h5>
                 </div>
                 <div class="ibox-content">
                     <div class="echarts" id="echarts-localMonthBookkeeperCount"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>上月收入排行(元)</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-preMonthIncome"></div>
                 </div>
             </div>
         </div>
@@ -172,7 +188,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>现金排行(元)</h5>
@@ -388,6 +404,15 @@
         monthIncomeChart.setOption(monthIncomeOption);
         window.onresize = monthIncomeChart.resize;
     }
+
+    function babyAgentAmountList(data){
+        var html =""
+        data.data.map(item=>html+="<tr><td>"+item['agentName']+"</td>"
+        +"<td>"+item['childName']+"</td>"
+        +"<td>"+item['amount']+"</td></tr>")
+        $("#childAgentAmount").html(html)
+    }
+
     $(function() {
         $.operate.get1(prefix + "/getPeopleMoney",commonBar);
         $.operate.get1(prefix + "/getTopN/localMonthPay",commonBar);
@@ -399,6 +424,7 @@
         $.operate.get1(prefix + "/getMonthPayChart",monthPayChart);
         $.operate.get1(prefix + "/getMonthIncomeChart",monthIncomeChart);
         $.operate.get1(prefix + "/getMonthData",getMonthData);
+        $.operate.get1(prefix + "/babyAgentAmountList",babyAgentAmountList);
     })
 </script>
 </body>
