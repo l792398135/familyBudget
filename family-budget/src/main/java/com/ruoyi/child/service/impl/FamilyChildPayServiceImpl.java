@@ -98,7 +98,7 @@ public class FamilyChildPayServiceImpl implements IFamilyChildPayService
         familyPay.setPayCost(familyChildPay.getPayAmount());
         familyPay.setPayTypeCode("child");
         familyPay.setOperatorCode(ShiroUtils.getLoginName());
-        familyPay.setBookkeeperCode(ShiroUtils.getLoginName());
+        familyPay.setBookkeeperCode(familyChildPay.getPayMenber());
         familyPay.setCreateDate(new Date());
         familyPay.setBusinessType("孩子管理->宝贝支出");
         familyPay.setBusinessId(familyChildPay.getId());
