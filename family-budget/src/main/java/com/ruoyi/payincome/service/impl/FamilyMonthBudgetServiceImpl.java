@@ -69,11 +69,9 @@ public class FamilyMonthBudgetServiceImpl implements IFamilyMonthBudgetService
         Date budgetDate = familyMonthBudget.getBudgetDate();
         String budgetType = familyMonthBudget.getBudgetType();
         //查询预算周期是否已经创建
-        if (budgetType.equals("plan")) {
-            List<FamilyMonthBudget> familyMonthBudgets = familyMonthBudgetMapper.selectFamilyMonthBudgetList(familyMonthBudget);
-            if (CollectionUtils.isNotEmpty(familyMonthBudgets)){
-                throw new BusinessException("这个周期的计划预算已经创建");
-            }
+        List<FamilyMonthBudget> familyMonthBudgets = familyMonthBudgetMapper.selectFamilyMonthBudgetList(familyMonthBudget);
+        if (CollectionUtils.isNotEmpty(familyMonthBudgets)){
+            throw new BusinessException("这个周期的此类型预算已经创建");
         }
         FamilyFeeType familyFeeType = new FamilyFeeType();
         familyFeeType.setControlFlag("0");

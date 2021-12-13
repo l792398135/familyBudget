@@ -10,7 +10,8 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">支出成员：</label>
                 <div class="col-sm-8">
-                    <select name="payMenber" class="form-control m-b" th:with="type=${@dict.getType('family_menber')}">
+                    <select name="payMenber" class="form-control m-b" th:with="type=${@dict.getType('family_menber')}"
+                            onchange="changeBooker(this.options[this.options.selectedIndex].value)" >
                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                     </select>
                 </div>
@@ -76,7 +77,9 @@
         });
         $("input[name='payDate']").val(new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate())
 
-
+        function changeBooker(data){
+            $("#operatorCode").val(data);
+        }
     </script>
 </body>
 </html>

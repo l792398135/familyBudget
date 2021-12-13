@@ -54,19 +54,6 @@ public class FamilyMonthBudgetController extends BaseController
         return getDataTable(list);
     }
 
-    /**
-     * 导出月预算列表
-     */
-    @RequiresPermissions("budget:budget:export")
-    @Log(title = "月预算", businessType = BusinessType.EXPORT)
-    @PostMapping("/export")
-    @ResponseBody
-    public AjaxResult export(FamilyMonthBudget familyMonthBudget)
-    {
-        List<FamilyMonthBudget> list = familyMonthBudgetService.selectFamilyMonthBudgetList(familyMonthBudget);
-        ExcelUtil<FamilyMonthBudget> util = new ExcelUtil<FamilyMonthBudget>(FamilyMonthBudget.class);
-        return util.exportExcel(list, "月预算数据");
-    }
 
     /**
      * 新增月预算
