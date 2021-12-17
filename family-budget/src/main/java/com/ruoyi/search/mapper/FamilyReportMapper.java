@@ -61,10 +61,10 @@ public interface FamilyReportMapper {
     @Select("select sum(pay_cost) from family_pay where pay_date> #{statTime}")
     BigDecimal getFundCheckPay(Date startTime);
 
-    @Select("select  date_format(pay_date ,'%Y-%m' ) date_field,sum(pay_cost) cost_field from family_pay fp group by  date_format(pay_date ,'%Y-%m' )  order by date_field ")
+    @Select("select  date_format(pay_date ,'%Y-%m' ) date_field,sum(pay_cost) cost_field,'月支出' as menber from family_pay fp group by  date_format(pay_date ,'%Y-%m' )  order by date_field ")
     List<Map<String, Object>> getMonthPayChart();
 
-    @Select("select  date_format(income_date ,'%Y-%m' ) date_field,sum(income_cost ) cost_field  from family_income fi group by date_format(income_date ,'%Y-%m' ) order by date_field")
+    @Select("select  date_format(income_date ,'%Y-%m' ) date_field,sum(income_cost ) cost_field,'月收入' as menber  from family_income fi group by date_format(income_date ,'%Y-%m' ) order by date_field")
     List<Map<String, Object>> getMonthIncomeChart();
 
     @Select("select date_format(pay_date ,'%Y-%m') date_field,pay_menber menber,sum(pay_cost ) cost_field from family_pay  where pay_type_code =#{code} group by date_format(pay_date ,'%Y-%m'),pay_menber ")

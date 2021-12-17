@@ -58,4 +58,8 @@ public interface IFamilyReportService {
     List<ChartVO> getIncomeBudget(String code);
 
     List<ChildFundVO> babyAgentAmountList();
+
+    List<ChartVO> getIncomeAndPay();
+
+    List<ChartVO> localMoneyData();
 }

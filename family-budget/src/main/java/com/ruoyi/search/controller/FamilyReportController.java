@@ -91,6 +91,14 @@ public class FamilyReportController extends BaseController {
         return AjaxResult.success(monthData);
     }
 
+    @GetMapping("/getIncomeAndPay")
+    @ResponseBody
+    public AjaxResult getIncomeAndPay()
+    {
+        List<ChartVO> monthData = familyReportService.getIncomeAndPay();
+        return AjaxResult.success(monthData);
+    }
+
 
     @ApiOperation("获取月费用")
     @GetMapping("/getMonthData")
@@ -101,30 +109,22 @@ public class FamilyReportController extends BaseController {
         return AjaxResult.success(monthData);
     }
 
+    @ApiOperation("获取月度数据")
+    @GetMapping("/localMoneyData")
+    @ResponseBody
+    public AjaxResult localMoneyData()
+    {
+        List<ChartVO> monthData = familyReportService.localMoneyData();
+        return AjaxResult.success(monthData);
+    }
+
+
     @ApiOperation("获取排行")
     @GetMapping("/getTopN/{type}")
     @ResponseBody
     public AjaxResult getTopN(@PathVariable("type") String type){
         List<TopNVO> topN = familyReportService.getTopN(type);
         return AjaxResult.success(topN);
-    }
-
-    @ApiOperation("月度支出条形图")
-    @GetMapping("/getMonthPayChart")
-    @ResponseBody
-    public AjaxResult getMonthPayChart()
-    {
-        List<Map<String, Object>> monthData = familyReportService.getMonthPayChart();
-        return AjaxResult.success(monthData);
-    }
-
-    @ApiOperation("月度支出条形图")
-    @GetMapping("/getMonthIncomeChart")
-    @ResponseBody
-    public AjaxResult getMonthIncomeChart()
-    {
-        List<Map<String, Object>> monthData = familyReportService.getMonthIncomeChart();
-        return AjaxResult.success(monthData);
     }
 
     @ApiOperation("宝贝代管金额列表")

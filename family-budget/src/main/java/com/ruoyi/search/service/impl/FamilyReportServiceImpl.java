@@ -104,6 +104,53 @@ public class FamilyReportServiceImpl implements IFamilyReportService {
     }
 
     @Override
+    public List<ChartVO> getIncomeAndPay() {
+        List<Map<String, Object>> monthIncomeChart = familyReportMapper.getMonthIncomeChart();
+        List<Map<String, Object>> monthPayChart = familyReportMapper.getMonthPayChart();
+        monthIncomeChart.addAll(monthPayChart);
+        return getChartVOS(monthIncomeChart, "echarts-incomepay");
+    }
+
+    @Override
+    public List<ChartVO> localMoneyData() {
+        //收入
+        List<TopNVO> topNVOS = familyReportMapper.topN1();
+        //支出
+        List<TopNVO> topNVOS1 = familyReportMapper.topN3();
+
+        List<ChartVO> results =new ArrayList<>();
+
+        List<TopNVO> list = new ArrayList<>();
+        list.addAll(topNVOS);
+        list.addAll(topNVOS1);
+        Set<String> nameSet = list.stream().map(r -> {
+            return r.getName();
+        }).collect(Collectors.toSet());
+
+        for (String s : nameSet) {
+            List<TopNVO> sIncome = topNVOS.stream().filter(r -> s.equals(r.getName())).collect(Collectors.toList());
+            List<TopNVO> sPay = topNVOS1.stream().filter(r -> s.equals(r.getName())).collect(Collectors.toList());
+            BigDecimal income =new BigDecimal(0);
+            BigDecimal pay =new BigDecimal(0);
+            if (sIncome.size()>0){
+                income = new BigDecimal(sIncome.get(0).getNum());
+            }
+            if (sPay.size()>0){
+                pay= new BigDecimal(sPay.get(0).getNum());
+            }
+            ChartVO chartVO = new ChartVO();
+            chartVO.setName(s);
+            Map<String, BigDecimal> dataMap = new HashMap<>();
+            dataMap.put("benifit",income.subtract(pay));
+            dataMap.put("pay",pay.negate() );
+            dataMap.put("income",income);
+            chartVO.setData(dataMap);
+            results.add(chartVO);
+        }
+        return results;
+    }
+
+    @Override
     public Map<String, Object> getMonthData() {
         BigDecimal localMonthPay = familyReportMapper.getLocalMonthPay();
         BigDecimal preMonthIncome = familyReportMapper.getPreMonthIncome();
@@ -207,6 +254,7 @@ public class FamilyReportServiceImpl implements IFamilyReportService {
         }
         return result;
     }
+
 
     @Override
     public List<ChartVO> getIncome(String code) {
