@@ -12,6 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="carRepairMile"    column="car_repair_mile"    />
         <result property="carRepairCycleLast"    column="car_repair_cycle_last"    />
         <result property="carRepairMileLast"    column="car_repair_mile_last"    />
+        <result property="carNextRepairTime"    column="car_next_repair_time"    />
         <result property="carRepairCycleCall"    column="car_repair_cycle_call"    />
         <result property="carRepairMileCall"    column="car_repair_mile_call"    />
         <result property="effectiveFlag"    column="effective_flag"    />
@@ -22,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectFamilyCarRepairBase1Vo">
-        select id, car_code, car_repair_code, car_repair_cycle, car_repair_mile, car_repair_cycle_last, car_repair_mile_last, car_repair_cycle_call, car_repair_mile_call, effective_flag, status, remark, create_time, create_user from family_car_repair_base
+        select id, car_code, car_repair_code, car_repair_cycle, car_repair_mile, car_repair_cycle_last, car_repair_mile_last,car_next_repair_time, car_repair_cycle_call, car_repair_mile_call, effective_flag, status, remark, create_time, create_user from family_car_repair_base
     </sql>
 
     <select id="selectFamilyCarRepairBase1List" parameterType="FamilyCarRepairBase1" resultMap="FamilyCarRepairBase1Result">
@@ -51,6 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="carRepairMile != null">car_repair_mile,</if>
             <if test="carRepairCycleLast != null">car_repair_cycle_last,</if>
             <if test="carRepairMileLast != null">car_repair_mile_last,</if>
+            <if test="carNextRepairTime != null">car_next_repair_time,</if>
             <if test="carRepairCycleCall != null">car_repair_cycle_call,</if>
             <if test="carRepairMileCall != null">car_repair_mile_call,</if>
             <if test="effectiveFlag != null">effective_flag,</if>
@@ -66,6 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="carRepairMile != null">#{carRepairMile},</if>
             <if test="carRepairCycleLast != null">#{carRepairCycleLast},</if>
             <if test="carRepairMileLast != null">#{carRepairMileLast},</if>
+            <if test="carNextRepairTime != null">#{carNextRepairTime},</if>
             <if test="carRepairCycleCall != null">#{carRepairCycleCall},</if>
             <if test="carRepairMileCall != null">#{carRepairMileCall},</if>
             <if test="effectiveFlag != null">#{effectiveFlag},</if>
@@ -85,6 +88,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="carRepairMile != null">car_repair_mile = #{carRepairMile},</if>
             <if test="carRepairCycleLast != null">car_repair_cycle_last = #{carRepairCycleLast},</if>
             <if test="carRepairMileLast != null">car_repair_mile_last = #{carRepairMileLast},</if>
+            <if test="carNextRepairTime != null">car_next_repair_time = #{carNextRepairTime},</if>
             <if test="carRepairCycleCall != null">car_repair_cycle_call = #{carRepairCycleCall},</if>
             <if test="carRepairMileCall != null">car_repair_mile_call = #{carRepairMileCall},</if>
             <if test="effectiveFlag != null">effective_flag = #{effectiveFlag},</if>

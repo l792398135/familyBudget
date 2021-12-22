@@ -55,20 +55,6 @@ public class FamilyCarMangecController extends BaseController
     }
 
     /**
-     * 导出车辆管理基础数据列表
-     */
-    @RequiresPermissions("car:carMange:export")
-    @Log(title = "车辆管理基础数据", businessType = BusinessType.EXPORT)
-    @PostMapping("/export")
-    @ResponseBody
-    public AjaxResult export(FamilyCarMangec familyCarMangec)
-    {
-        List<FamilyCarMangec> list = familyCarMangecService.selectFamilyCarMangecList(familyCarMangec);
-        ExcelUtil<FamilyCarMangec> util = new ExcelUtil<FamilyCarMangec>(FamilyCarMangec.class);
-        return util.exportExcel(list, "车辆管理基础数据数据");
-    }
-
-    /**
      * 新增车辆管理基础数据
      */
     @GetMapping("/add")

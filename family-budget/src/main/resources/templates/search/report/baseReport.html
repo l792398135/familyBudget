@@ -78,7 +78,7 @@
         <div class="col-sm-8">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>本月收入支出(元)</h5>
+                    <h5>本月人员收入支出(元)</h5>
                 </div>
                 <div class="ibox-content">
                     <div class="echarts" id="echarts-monthdata"></div>
@@ -107,26 +107,7 @@
             </div>
         </div>
     </div>
-<!--        <div class="col-sm-4">-->
-<!--            <div class="ibox float-e-margins">-->
-<!--                <div class="ibox-title">-->
-<!--                    <h5>本月支出排行(元)</h5>-->
-<!--                </div>-->
-<!--                <div class="ibox-content">-->
-<!--                    <div class="echarts" id="echarts-localMonthPay"></div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="col-sm-4">-->
-<!--            <div class="ibox float-e-margins">-->
-<!--                <div class="ibox-title">-->
-<!--                    <h5>本月收入排行(元)</h5>-->
-<!--                </div>-->
-<!--                <div class="ibox-content">-->
-<!--                    <div class="echarts" id="echarts-localMonthIncome"></div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+
         <div class="col-sm-8">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -193,7 +174,6 @@
     var prefix = ctx + "report";
     function getMonthData(data) {
         if (data.data.localMonthPay!=null){$("#localMonthPay").text(data.data.localMonthPay)}
-        if (data.data.preMonthIncome!=null){$("#preMonthIncome").text(data.data.preMonthIncome)}
         if (data.data.localMonthBudget!=null){$("#localMonthBudeget").text(data.data.localMonthBudget)}
         if (data.data.localMonthBudgetIncome!=null){$("#localMonthBudgetIncome").text(data.data.localMonthBudgetIncome)}
         if (data.data.localMonthIncome!=null){$("#localMonthIncome").text(data.data.localMonthIncome)}

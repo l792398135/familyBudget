@@ -54,6 +54,8 @@ public class FamilyCarRepairBase1 extends BaseEntity
     @Excel(name = "上次保养里程")
     private Long carRepairMileLast;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date carNextRepairTime;
     /** 周期剩余天报警 */
     @Excel(name = "周期剩余天报警")
     private Long carRepairCycleCall;
@@ -72,7 +74,15 @@ public class FamilyCarRepairBase1 extends BaseEntity
     /** 创建人 */
     private String createUser;
 
-    public void setId(Long id) 
+    public Date getCarNextRepairTime() {
+        return carNextRepairTime;
+    }
+
+    public void setCarNextRepairTime(Date carNextRepairTime) {
+        this.carNextRepairTime = carNextRepairTime;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }
