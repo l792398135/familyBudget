@@ -135,16 +135,6 @@
         <div class="col-sm-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>本月经办人排行(元)</h5>
-                </div>
-                <div class="ibox-content">
-                    <div class="echarts" id="echarts-localMonthOperatorCount"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
                     <h5>本月记录人排行(元)</h5>
                 </div>
                 <div class="ibox-content">
@@ -402,7 +392,6 @@
     $(function() {
         $.operate.get1(prefix + "/getPeopleMoney",commonBar);
         $.operate.get1(prefix + "/getTopN/localMonthPayCode",localMonthPayCode);
-        $.operate.get1(prefix + "/getTopN/localMonthOperatorCount",commonBar);
         $.operate.get1(prefix + "/getTopN/localMonthBookkeeperCount",commonBar);
         $.operate.get1(prefix + "/getMonthData",getMonthData);
         $.operate.get1(prefix + "/babyAgentAmountList",babyAgentAmountList);

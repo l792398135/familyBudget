@@ -29,13 +29,6 @@
                                 </select>
                             </li>
                             <li>
-                                <label>经办人：</label>
-                                <select name="operatorCode" th:with="type=${@dict.getType('family_menber')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
                                 <label>记账人：</label>
                                 <select name="bookkeeperCode" th:with="type=${@dict.getType('family_menber')}">
                                     <option value="">所有</option>
