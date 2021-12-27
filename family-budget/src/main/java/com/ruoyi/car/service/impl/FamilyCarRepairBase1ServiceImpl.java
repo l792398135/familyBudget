@@ -65,47 +65,64 @@ public class FamilyCarRepairBase1ServiceImpl implements IFamilyCarRepairBase1Ser
         for (int i = 0; i <familyCarRepairBase11.size() ; i++) {
             //状态
             FamilyCarRepairBase1 item = familyCarRepairBase11.get(i);
+            //上次保养日期
             Date carRepairCycleLast = item.getCarRepairCycleLast();
+            //周期剩余天报警
             Long carRepairCycleCall = item.getCarRepairCycleCall();
+            //保养周期(月)
             Long carRepairCycle = item.getCarRepairCycle();
             Date calledDate = DateUtils.addMonths(carRepairCycleLast, carRepairCycle.intValue());
-            int midInt = DateUtils.differentDaysByMillisecond(carRepairCycleLast, calledDate);
-            int startInt =midInt-carRepairCycleCall.intValue();
-            int accInt = DateUtils.differentDaysByMillisecond(carRepairCycleLast, new Date());
+            //下次保养时间
+            Date carNextRepairTime = item.getCarNextRepairTime();
+            if (carNextRepairTime!=null){
+                int midInt = DateUtils.differentDaysByMillisecond(new Date(), carNextRepairTime);
+                if (midInt<=0){
+                    item.setStatus("weixian");
+                }else {
+                    if (midInt>carRepairCycleCall){
+                        item.setStatus("jiankang");
+                    }else {
+                        item.setStatus("yajiankang");
+                    }
+                }
+            }else {
+                int midInt = DateUtils.differentDaysByMillisecond(carRepairCycleLast, calledDate);
+                int startInt = midInt - carRepairCycleCall.intValue();
+                int accInt = DateUtils.differentDaysByMillisecond(carRepairCycleLast, new Date());
 
-            if (accInt<startInt){
-                item.setStatus("jiankang");
-            }else if (accInt>midInt){
-                item.setStatus("weixian");
-            }else{
-                item.setStatus("yajiankang");
+                if (accInt < startInt) {
+                    item.setStatus("jiankang");
+                } else if (accInt > midInt) {
+                    item.setStatus("weixian");
+                } else {
+                    item.setStatus("yajiankang");
+                }
+                Long carRepairMileLast = item.getCarRepairMileLast();
+                Long carRepairMileCall = item.getCarRepairMileCall();
+                Long carRepairMile = item.getCarRepairMile();
+                if (carRepairMileCall != 0) {
+                    FamilyCarMangec familyCarMangec = new FamilyCarMangec();
+                    familyCarMangec.setCarCode(item.getCarCode());
+                    List<FamilyCarMangec> familyCarMangecs = familyCarMangecMapper.selectFamilyCarMangecList(familyCarMangec);
+                    if (!CollectionUtils.isEmpty(familyCarMangecs)) {
+                        FamilyCarMangec familyCarMangec1 = familyCarMangecs.get(0);
+                        Long carMile = familyCarMangec1.getCarMile();
+                        long callMile = carRepairMileLast + carRepairMile;
+                        long startCallMile = callMile - carRepairMileCall;
+                        if (carMile > callMile) {
+                            //危险
+                            item.setStatus("weixian");
+                        } else if (carMile < startCallMile) {
+                            //健康
+                        } else {
+                            //亚健康
+                            if (!item.getStatus().equals("weixian")) {
+                                item.setStatus("yajiankang");
+                            }
+                        }
+                    }
+                }
             }
-            Long carRepairMileLast = item.getCarRepairMileLast();
-            Long carRepairMileCall = item.getCarRepairMileCall();
-            Long carRepairMile = item.getCarRepairMile();
-             if (carRepairMileCall!=0) {
-                 FamilyCarMangec familyCarMangec = new FamilyCarMangec();
-                 familyCarMangec.setCarCode(item.getCarCode());
-                 List<FamilyCarMangec> familyCarMangecs = familyCarMangecMapper.selectFamilyCarMangecList(familyCarMangec);
-                 if (!CollectionUtils.isEmpty(familyCarMangecs)){
-                     FamilyCarMangec familyCarMangec1 = familyCarMangecs.get(0);
-                     Long carMile = familyCarMangec1.getCarMile();
-                     long callMile = carRepairMileLast + carRepairMile;
-                     long startCallMile = callMile - carRepairMileCall;
-                     if (carMile>callMile){
-                         //危险
-                         item.setStatus("weixian");
-                     }else if (carMile<startCallMile){
-                         //健康
-                     }else{
-                         //亚健康
-                         if (!item.getStatus().equals("weixian")) {
-                             item.setStatus("yajiankang");
-                         }
-                     }
-                 }
-             }
-
             //状态
             Long id = item.getId();
             SysAttachment sysAttachment = new SysAttachment();
