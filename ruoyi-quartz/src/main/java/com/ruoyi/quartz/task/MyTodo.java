@@ -48,4 +48,20 @@ public class MyTodo {
         }
     }
 
+    public void doRecordCarMiles(String responser)
+    {
+        String[] split = responser.split(",");
+        for (String responsibler : split) {
+            FamilyMyTodo familyMyTodo = new FamilyMyTodo();
+            familyMyTodo.setDoFlag("N");
+            familyMyTodo.setCreateUser("admin");
+            familyMyTodo.setCreateTime(new Date());
+            familyMyTodo.setResponsibler(responsibler);
+            familyMyTodo.setTitle("车辆");
+            String format = DateFormatUtils.format(new Date(), "yyyy年MM月dd日");
+            familyMyTodo.setContent("请填写"+format+"车辆里程，检查车辆状态");
+            todoService.insertFamilyMyTodo(familyMyTodo);
+        }
+    }
+
 }
