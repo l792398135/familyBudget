@@ -11,22 +11,22 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <label>支出成员：</label>
+                                <label>入账成员：</label>
                                 <select name="payMenber" th:with="type=${@dict.getType('family_menber')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
                             <li>
-                                <label>支出金额：</label>
+                                <label>退款金额：</label>
                                 <input type="text"  name="payCost"/>
                             </li>
                             <li>
-                                <label>支出日期：</label>
+                                <label>退款日期：</label>
                                 <input type="text" class="time-input" placeholder="请选择支出日期" name="payDate"/>
                             </li>
                             <li>
-                                <label>支出类型：</label>
+                                <label>退款类型：</label>
                                 <select name="payTypeCode" th:with="type=${@dict.getType('budget_type')}">
                                     <option value="">所有</option>
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
@@ -72,7 +72,7 @@
         var payTypeCodeDatas = [[${@dict.getType('budget_type')}]];
         var operatorCodeDatas = [[${@dict.getType('family_menber')}]];
         var bookkeeperCodeDatas = [[${@dict.getType('family_menber')}]];
-        var prefix = ctx + "pay/pay";
+        var prefix = ctx + "refund";
 
         $(function() {
             var options = {
@@ -90,29 +90,29 @@
                 },
                 {
                     field: 'payMenber',
-                    title: '支出成员',
+                    title: '入账成员',
                     formatter: function(value, row, index) {
                        return $.table.selectDictLabel(payMenberDatas, value);
                     }
                 },
                 {
                     field: 'payDate',
-                    title: '支出日期'
+                    title: '退款日期'
                 },
                 {
                     field: 'payCost',
-                    title: '支出金额'
+                    title: '退款金额'
                 },
                 {
                     field: 'payTypeCode',
-                    title: '支出类型',
+                    title: '退款类型',
                     formatter: function(value, row, index) {
                        return $.table.selectDictLabel(payTypeCodeDatas, value);
                     }
                 },
                 {
                     field: 'payDetail',
-                    title: '支出明细'
+                    title: '退款明细'
                 },
                 {
                     field: 'bookkeeperCode',

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.payincome.mapper.FamilyPayMapper">
+<mapper namespace="com.ruoyi.payincome.mapper.FamilyRefundMapper">
     
     <resultMap type="FamilyPay" id="FamilyPayResult">
         <result property="id"    column="id"    />
@@ -25,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectFamilyPayList" parameterType="FamilyPay" resultMap="FamilyPayResult">
         <include refid="selectFamilyPayVo"/>
         <where>
-            pay_cost <![CDATA[>=]]> 0
+            pay_cost <![CDATA[<]]> 0
             <if test="payMenber != null  and payMenber != ''"> and pay_menber = #{payMenber}</if>
             <if test="payDate != null "> and pay_date = #{payDate}</if>
             <if test="payTypeCode != null  and payTypeCode != ''"> and pay_type_code = #{payTypeCode}</if>
