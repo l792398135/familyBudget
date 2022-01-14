@@ -100,6 +100,9 @@ public class FamilyAccountServiceImpl implements IFamilyAccountService
     {
         if (StringUtils.isNotEmpty(familyAccount.getPassword())) {
             familyAccount.setPassword(DesUtil.encrypt(familyAccount.getSaltPassword(), familyAccount.getPassword()));
+        }else{
+            familyAccount.setPassword(null);
+            familyAccount.setSaltPassword(null);
         }
         return familyAccountMapper.updateFamilyAccount(familyAccount);
     }
