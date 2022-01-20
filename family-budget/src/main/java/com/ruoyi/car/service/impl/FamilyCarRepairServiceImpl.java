@@ -130,11 +130,15 @@ public class FamilyCarRepairServiceImpl implements IFamilyCarRepairService
                 familyPay.setPayMenber(familyCarRepair.getPayMenber());
                 familyPay.setOperatorCode(familyCarRepair.getPayMenber());
                 familyPay.setBookkeeperCode(familyCarRepair.getCreateUser());
+                familyPay.setBusinessType("车辆保养管理->保养");
+                familyPay.setBusinessId(familyCarRepair.getId());
                 String carMange = dictDataMapper.selectDictLabel("car_manage", carCode);
                 String carRepair = dictDataMapper.selectDictLabel("car_repair", carRepairCode);
 
                 familyPay.setPayDetail(carMange +"车在"+carMile+"公里进行" +carRepair +"维修");
                 payMapper.insertFamilyPay(familyPay);
+                familyCarRepair.setBusinessId(familyPay.getId());
+                familyCarRepairMapper.updateFamilyCarRepair(familyCarRepair);
             }else{
                 throw new BusinessException("请先刷新保养科目！");
             }
@@ -156,6 +160,11 @@ public class FamilyCarRepairServiceImpl implements IFamilyCarRepairService
     {
         FamilyCarRepair familyCarRepair1 = familyCarRepairMapper.selectFamilyCarRepairById(familyCarRepair.getId());
         dataOverProtect(familyCarRepair1);
+        FamilyPay familyPay = new FamilyPay();
+        familyPay.setPayDate(familyCarRepair.getPayDate());
+        familyPay.setPayCost(familyCarRepair.getCarCost());
+        familyPay.setId(familyCarRepair1.getBusinessId());
+        payMapper.updateFamilyPay(familyPay);
         return familyCarRepairMapper.updateFamilyCarRepair(familyCarRepair);
     }
 
@@ -172,6 +181,9 @@ public class FamilyCarRepairServiceImpl implements IFamilyCarRepairService
         for (String string : strings) {
             FamilyCarRepair familyCarRepair = familyCarRepairMapper.selectFamilyCarRepairById(Long.valueOf(string));
             dataOverProtect(familyCarRepair);
+            if (ObjectUtils.isNotEmpty(familyCarRepair.getBusinessId())) {
+                payMapper.deleteFamilyPayById(familyCarRepair.getBusinessId());
+            }
         }
         return familyCarRepairMapper.deleteFamilyCarRepairByIds(Convert.toStrArray(ids));
     }

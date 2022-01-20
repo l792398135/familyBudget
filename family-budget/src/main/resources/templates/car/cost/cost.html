@@ -60,6 +60,7 @@
         var carCodeDatas = [[${@dict.getType('car_manage')}]];
         var carRepairCodeDatas = [[${@dict.getType('car_repair')}]];
         var payMenberDatas = [[${@dict.getType('family_menber')}]];
+        var createUserDatas = [[${@dict.getType('family_menber')}]];
         var prefix = ctx + "car/cost";
 
         $(function() {
@@ -117,7 +118,10 @@
 
                 {
                     field: 'createUser',
-                    title: '创建人'
+                    title: '创建人',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(createUserDatas, value);
+                    }
                 },
 
                 {

@@ -46,6 +46,8 @@ public class FamilyCarRepair extends BaseEntity
     @Excel(name = "支出人")
     private String payMenber;
 
+    private Long businessId;
+
     /** 支出日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "支出日期", width = 30, dateFormat = "yyyy-MM-dd")
@@ -55,7 +57,15 @@ public class FamilyCarRepair extends BaseEntity
     @Excel(name = "创建人")
     private String createUser;
 
-    public void setId(Long id) 
+    public Long getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(Long businessId) {
+        this.businessId = businessId;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }

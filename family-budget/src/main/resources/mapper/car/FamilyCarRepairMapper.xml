@@ -14,10 +14,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="remark"    column="remark"    />
         <result property="createUser"    column="create_user"    />
         <result property="createTime"    column="create_time"    />
+        <result property="businessId"    column="business_id"    />
     </resultMap>
 
     <sql id="selectFamilyCarRepairVo">
-        select id, car_code, car_repair_code, car_cost, pay_menber, pay_date, remark, create_user, create_time from family_car_repair
+        select id, car_code, car_repair_code, car_cost, pay_menber, pay_date, remark, create_user, create_time,business_id from family_car_repair
     </sql>
 
     <select id="selectFamilyCarRepairList" parameterType="FamilyCarRepair" resultMap="FamilyCarRepairResult">
@@ -47,6 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="remark != null">remark,</if>
             <if test="createUser != null">create_user,</if>
             <if test="createTime != null">create_time,</if>
+            <if test="businessId != null">business_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="carCode != null">#{carCode},</if>
@@ -57,6 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="remark != null">#{remark},</if>
             <if test="createUser != null">#{createUser},</if>
             <if test="createTime != null">#{createTime},</if>
+            <if test="businessId != null">#{businessId},</if>
          </trim>
     </insert>
 
@@ -71,6 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="remark != null">remark = #{remark},</if>
             <if test="createUser != null">create_user = #{createUser},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="businessId != null">business_id = #{businessId},</if>
         </trim>
         where id = #{id}
     </update>
