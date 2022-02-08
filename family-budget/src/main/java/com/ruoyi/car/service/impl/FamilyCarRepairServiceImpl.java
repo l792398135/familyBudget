@@ -15,6 +15,7 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.payincome.domain.FamilyPay;
 import com.ruoyi.payincome.mapper.FamilyPayMapper;
 import com.ruoyi.system.mapper.SysDictDataMapper;
+import com.ruoyi.system.service.ISysConfigService;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.shiro.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,7 +136,7 @@ public class FamilyCarRepairServiceImpl implements IFamilyCarRepairService
                 String carMange = dictDataMapper.selectDictLabel("car_manage", carCode);
                 String carRepair = dictDataMapper.selectDictLabel("car_repair", carRepairCode);
 
-                familyPay.setPayDetail(carMange +"车在"+carMile+"公里进行" +carRepair +"维修");
+                familyPay.setPayDetail(carMange +"车在"+carMile+"公里进行" +carRepair +"采购");
                 payMapper.insertFamilyPay(familyPay);
                 familyCarRepair.setBusinessId(familyPay.getId());
                 familyCarRepairMapper.updateFamilyCarRepair(familyCarRepair);
@@ -188,9 +189,13 @@ public class FamilyCarRepairServiceImpl implements IFamilyCarRepairService
         return familyCarRepairMapper.deleteFamilyCarRepairByIds(Convert.toStrArray(ids));
     }
 
+    @Autowired
+    private ISysConfigService configService;
+
     private void dataOverProtect(FamilyCarRepair familyPay) {
         Date createDate = familyPay.getCreateTime();
-        if (DateUtils.differentDaysByMillisecond(new Date(), createDate) > 3) {
+        if ("true".equals(configService.selectConfigByKey("sys.delorupdate.timelimit"))
+                &&DateUtils.differentDaysByMillisecond(new Date(), createDate) > 3) {
             throw new BusinessException("创建时间已过3天,不允许操作");
         }
     }

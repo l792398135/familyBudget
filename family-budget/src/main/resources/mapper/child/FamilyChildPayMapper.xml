@@ -29,6 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payCode != null  and payCode != ''"> and pay_code = #{payCode}</if>
             <if test="payDate != null "> and pay_date = #{payDate}</if>
         </where>
+        order by id desc
     </select>
     
     <select id="selectFamilyChildPayById" parameterType="Long" resultMap="FamilyChildPayResult">

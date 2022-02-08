@@ -11,6 +11,7 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.payincome.domain.FamilyPay;
 import com.ruoyi.payincome.mapper.FamilyPayMapper;
 import com.ruoyi.system.mapper.SysDictDataMapper;
+import com.ruoyi.system.service.ISysConfigService;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -151,9 +152,13 @@ public class FamilyChildPayServiceImpl implements IFamilyChildPayService
         return familyChildPayMapper.deleteFamilyChildPayByIds(Convert.toStrArray(ids));
     }
 
+    @Autowired
+    private ISysConfigService configService;
+
     private void dataOverProtect(FamilyChildPay familyPay) {
         Date createDate = familyPay.getCreateTime();
-        if (DateUtils.differentDaysByMillisecond(new Date(), createDate) > 3) {
+        if ("true".equals(configService.selectConfigByKey("sys.delorupdate.timelimit"))
+                &&DateUtils.differentDaysByMillisecond(new Date(), createDate) > 3) {
             throw new BusinessException("创建时间已过3天,不允许操作");
         }
     }

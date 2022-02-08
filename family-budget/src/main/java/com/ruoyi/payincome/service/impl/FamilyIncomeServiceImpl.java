@@ -6,6 +6,7 @@ import java.util.List;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.ShiroUtils;
+import com.ruoyi.system.service.ISysConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.payincome.mapper.FamilyIncomeMapper;
@@ -77,9 +78,13 @@ public class FamilyIncomeServiceImpl implements IFamilyIncomeService
         return familyIncomeMapper.updateFamilyIncome(familyIncome);
     }
 
+    @Autowired
+    private ISysConfigService configService;
+
     private void dataOverProtect(FamilyIncome familyPay) {
         Date createDate = familyPay.getCreateDate();
-        if (DateUtils.differentDaysByMillisecond(new Date(), createDate) > 3) {
+        if ( "true".equals(configService.selectConfigByKey("sys.delorupdate.timelimit"))
+                &&DateUtils.differentDaysByMillisecond(new Date(), createDate) > 3) {
             throw new BusinessException("创建时间已过3天,不允许操作");
         }
     }
