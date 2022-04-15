@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('车辆管理基础数据列表')" />
+    <th:block th:include="include :: bootstrap-editable-css" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -67,6 +68,7 @@
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
                 modalName: "车辆管理基础数据",
+                onEditableSave: onEditableSave,
                 columns: [{
                     field: 'id',
                     title: '',
@@ -140,6 +142,10 @@
         function detail(id) {
             var url = prefix + '/detail/' + id;
             $.modal.openTab("保养科目明细", url);
+        }
+
+        function onEditableSave (field, row, oldValue, $el) {
+            $.operate.edit(row["id"]);
         }
     </script>
 </body>

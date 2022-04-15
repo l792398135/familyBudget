@@ -135,16 +135,6 @@
         <div class="col-sm-4">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>本月记录人排行(元)</h5>
-                </div>
-                <div class="ibox-content">
-                    <div class="echarts" id="echarts-localMonthBookkeeperCount"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
                     <h5>现金排行(元)</h5>
                 </div>
                 <div class="ibox-content">
@@ -170,7 +160,6 @@
         if (data.data.fixedAssets!=null){$("#fixedAssets").text(data.data.fixedAssets)}
         if (data.data.checkFund!=null){$("#checkFund").text(data.data.checkFund)}
         if (data.data.fundNet!=null){$("#fundNet").text(data.data.fundNet)}
-
     }
 
     function commonBar(data){
@@ -392,7 +381,7 @@
     $(function() {
         $.operate.get1(prefix + "/getPeopleMoney",commonBar);
         $.operate.get1(prefix + "/getTopN/localMonthPayCode",localMonthPayCode);
-        $.operate.get1(prefix + "/getTopN/localMonthBookkeeperCount",commonBar);
+        // $.operate.get1(prefix + "/getTopN/localMonthBookkeeperCount",commonBar);
         $.operate.get1(prefix + "/getMonthData",getMonthData);
         $.operate.get1(prefix + "/babyAgentAmountList",babyAgentAmountList);
         $.operate.get1(prefix + "/getIncomeAndPay",lineChart);
