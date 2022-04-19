@@ -145,7 +145,22 @@
         }
 
         function onEditableSave (field, row, oldValue, $el) {
-            $.operate.edit(row["id"]);
+            alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
+            var data = "{'id':"+row["id"]+",'"+field+"':'"+row[field]+"'}"
+            $.ajax({
+                cache : true,
+                type : "POST",
+                dataType: "json",
+                url : prefix + "/edit",
+                data : {"id":row["id"],"carMile":row[field]},
+                async : false,
+                error : function(request) {
+                    $.modal.alertError("系统错误");
+                },
+                success : function(data) {
+                    $.operate.saveSuccess(data);
+                }
+            });
         }
     </script>
 </body>

@@ -63,8 +63,10 @@
         $("input[name='incomeDate']").datetimepicker({
             format: "yyyy-mm-dd",
             minView: "month",
+            todayBtn: true,
             autoclose: true
         });
+        $("input[name='incomeDate']").val(new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate())
 
     </script>
 </body>
