@@ -69,9 +69,11 @@
                         $.modal.alertError("系统错误");
                     },
                     success : function(data) {
+                        if ($("#file-Portrait")[0].files.length == 0){
+                            $.operate.saveSuccess(data);
+                        }
                         var businessId = $("input[name=id]").val()
                         $.file.uploadFile("file-Portrait","carRepair",businessId);
-                        $.operate.saveSuccess(data);
                     }
                 });
             }

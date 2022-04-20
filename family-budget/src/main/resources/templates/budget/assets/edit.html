@@ -122,8 +122,10 @@
                     },
                     success : function(data) {
                         var businessId = $("input[name=id]").val()
+                        if ($("#file-Portrait")[0].files.length == 0){
+                            $.operate.saveSuccess(data);
+                        }
                         $.file.uploadFile("file-Portrait","budgetassets",businessId);
-                        $.operate.saveSuccess(data);
                     }
                 });
             }

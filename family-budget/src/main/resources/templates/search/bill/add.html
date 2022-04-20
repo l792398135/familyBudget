@@ -60,9 +60,11 @@
                         $.modal.alertError("系统错误");
                     },
                     success : function(data) {
+                        if ($("#file-Portrait")[0].files.length == 0){
+                            $.operate.saveSuccess(data);
+                        }
                         var businessId = data.data;
                         $.file.uploadFile("file-Portrait","bill",businessId);
-                        $.operate.saveSuccess(data);
                     }
                 });
             }

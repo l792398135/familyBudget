@@ -143,6 +143,15 @@ var table = {
                             response = data.response, reader = data.reader;
                         console.log('File pre upload triggered');
                     });
+                    control.on('fileerror', function(event, data, msg) {
+                        console.log(data.id);
+                        console.log(data.index);
+                        console.log(data.file);
+                        console.log(data.reader);
+                        console.log(data.files);
+                        // 获取信息
+                        alert(msg);
+                    });
                     control.on("fileuploaded", function(event, outData,
                                                         previewId, index) {
                         var result = outData.response;
@@ -166,6 +175,7 @@ var table = {
                             error : function(request) {
                             },
                             success : function(data) {
+                                $.operate.saveSuccess(data);
                             }
                         });
                     })
@@ -1410,6 +1420,11 @@ var table = {
                     $.modal.alertError(result.msg);
                 }
                 $.modal.closeLoading();
+            },
+
+            saveSuccess2: function (result) {
+                $.modal.alertError(result.msg);
+                $.modal.close();
             },
             // 成功回调执行事件（父窗体静默更新）
             successCallback: function(result) {
