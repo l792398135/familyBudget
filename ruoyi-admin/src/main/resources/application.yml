@@ -145,10 +145,10 @@ swagger:
 aliyun:
   oss:
     file:
-      endpoint: "你的节点"
-      keyid: "开启oss服务生成秘钥的keyid"
-      keysecret: "生成秘钥的密码"
-      bucketname: "自己创建bucket的名称"
+      endpoint: 'oss-cn-beijing.aliyuncs.com'
+      accessKeyId: 'LTAI5tK86vBtXPyB7o9625VV'
+      accessKeySecret: 'GddAw15yKA69nXTegMp8X9GNg2tRno'
+      bucketName: 'family-finance-lxw'
 
 #数据库备份
 export:
@@ -158,3 +158,7 @@ export:
     password: Lxw123456
     database: 'family_budget_cost'
     savepath: 'd:/save'
+
+
+
+

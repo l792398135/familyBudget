@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.uuid.IdUtils;
+import com.ruoyi.system.service.IOssService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -38,6 +41,9 @@ public class CommonController
 
     @Autowired
     private ServerConfig serverConfig;
+
+    @Autowired
+    private IOssService ossService;
     /**
      * 通用下载请求
      * 
@@ -108,11 +114,9 @@ public class CommonController
         JSONObject ajax = new JSONObject();
         try
         {
-            // 上传文件路径
-            String filePath = RuoYiConfig.getUploadPath();
-            // 上传并返回新文件名称
-            String fileName = FileUploadUtils.upload(filePath, file);
-            String url = serverConfig.getUrl() + fileName;
+            String url = ossService.uploadFileAvatar(file);
+            String fileName = file.getOriginalFilename();
+            fileName = Constants.RESOURCE_FILE_PREFIX + "/" +DateUtils.datePath() + "/" + IdUtils.fastUUID() + "." + fileName;
             ajax.put("filePath", url);
             ajax.put("fileNameReal", fileName);
             ajax.put("fileNameShow", file.getOriginalFilename());
