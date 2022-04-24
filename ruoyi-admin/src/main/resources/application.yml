@@ -147,7 +147,7 @@ aliyun:
     file:
       endpoint: 'oss-cn-beijing.aliyuncs.com'
       accessKeyId: 'LTAI5tK86vBtXPyB7o9625VV'
-      accessKeySecret: 'GddAw15yKA69nXTegMp8X9GNg2tRno'
+      accessKeySecret: '***'
       bucketName: 'family-finance-lxw'
 
 #数据库备份
@@ -155,7 +155,7 @@ export:
   database:
     ip: 'rm-bp19up4mlc018hgwl5o.mysql.rds.aliyuncs.com'
     username: liuxingwu
-    password: Lxw123456
+    password: ***
     database: 'family_budget_cost'
     savepath: 'd:/save'
 
