@@ -25,7 +25,8 @@ public class FamilyIncomeServiceImpl implements IFamilyIncomeService
 {
     @Autowired
     private FamilyIncomeMapper familyIncomeMapper;
-
+    @Autowired
+    private ISysConfigService configService;
     /**
      * 查询家庭收入
      * 
@@ -78,8 +79,7 @@ public class FamilyIncomeServiceImpl implements IFamilyIncomeService
         return familyIncomeMapper.updateFamilyIncome(familyIncome);
     }
 
-    @Autowired
-    private ISysConfigService configService;
+
 
     private void dataOverProtect(FamilyIncome familyPay) {
         Date createDate = familyPay.getCreateDate();
