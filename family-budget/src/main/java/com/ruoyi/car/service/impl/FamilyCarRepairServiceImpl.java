@@ -118,10 +118,10 @@ public class FamilyCarRepairServiceImpl implements IFamilyCarRepairService
             familyCarRepairBase1.setCarRepairCode(carRepairCode);
             List<FamilyCarRepairBase1> familyCarRepairBase1s = familyCarRepairBase1Mapper.selectFamilyCarRepairBase1List(familyCarRepairBase1);
             if (!CollectionUtils.isEmpty(familyCarRepairBase1s)){
-                FamilyCarRepairBase1 familyCarRepairBase11 = familyCarRepairBase1s.get(0);
-                familyCarRepairBase11.setCarRepairMileLast(carMile);
-                familyCarRepairBase11.setCarRepairCycleLast(payDate);
-                familyCarRepairBase1Mapper.updateFamilyCarRepairBase1(familyCarRepairBase11);
+//                FamilyCarRepairBase1 familyCarRepairBase11 = familyCarRepairBase1s.get(0);
+//                familyCarRepairBase11.setCarRepairMileLast(carMile);
+//                familyCarRepairBase11.setCarRepairCycleLast(payDate);
+//                familyCarRepairBase1Mapper.updateFamilyCarRepairBase1(familyCarRepairBase11);
 
                 FamilyPay familyPay = new FamilyPay();
                 familyPay.setPayCost(familyCarRepair.getCarCost());
